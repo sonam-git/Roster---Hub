@@ -1,28 +1,54 @@
-# Pass JWT to Resolver with Context (Server-side)
+# Roster Hub
 
-In this demo, you will verify if a token is valid and carry
+This project is a soccer team management system built using the MERN stack (MongoDB, Express.js, React.js, Node.js). It includes authentication using JWT, MongoDB for the database, React for the frontend, and a GraphQL API.
 
-## Instructions
+## Features
 
-* Run `npm install` and `npm run seed` to set up the database.
+* User authentication using JWT
+* MongoDB for storing user and player information
+* React frontend for user interface
+* GraphQL API for querying and mutating data
+* Players can create an account by signing up
+* Players can add their information such as name, jersey number, position, and phone number
+* Players can see other players' information and endorse their skills
 
-* Open [server.js](server/server.js) and explain the following:
+## Technologies Used
 
-  * We can add another option to our Apollo Server configuration called `context`, which is a lot like middleware in Express.
+* MongoDB: MongoDB is used as the database to store user and player information.
+* Express.js: Express.js is used to build the backend server and handle HTTP requests.
+* React.js: React.js is used to build the frontend user interface.
+* Node.js: Node.js is used as the backend runtime environment.
+* GraphQL: GraphQL is used as the API query language to interact with the backend.
+* JWT (JSON Web Tokens): JWT is used for user authentication.
 
-  * This will allow us to intercept any request to the server and check if there's a valid JWT before the request gets to the resolver.
+## Setup Instructions
+1. Clone the repositiory :https://github.com/sonam-git/Roster---Hub.git
+2. Navigate to the project directory: cd Roster---Hub
+3. Install dependencies for both the backend and frontend:
+cd backend
+npm install
+cd ../frontend
+npm install
+4. or Npm run Develop
 
-* Open [auth.js](server/utils/auth.js) and explain the `authMiddleware` function:
 
-  * Whenever we make a request to our server, we will check if there's a token with the request and attempt to verify and decode it if there is.
+## License & Copyright ©
 
-  * We use the `return` statement to return the `req` object, either modified with user data or not modified at all, and the request will continue to go to its intended resolver function.
+```md
+Any individual who obtains a copy of the software and its associated documentation files (referred to as the "Software") is granted permission, without any cost, to use, copy, modify, merge, publish, distribute, sublicense, and/or sell the Software. There are no restrictions on dealing with the Software, including the aforementioned rights. This permission is also extended to those individuals to whom the Software is provided. However, it is essential that the copyright notice and this permission notice are included in all copies or significant portions of the Software.
 
-* Open [resolvers.js](server/schemas/resolvers.js) and explain the following:
+The Software is provided on an "as is" basis, without any warranty of any kind, whether expressed or implied. This includes, but is not limited to, warranties of merchantability, fitness for a particular purpose, and non-infringement. Under no circumstances shall the authors or copyright holders be held liable for any claim, damages, or other liabilities arising from the use of the Software, regardless of whether it is an action of contract, tort, or any other legal theory.
 
-  * Any time we need to implement authentication on a query or mutation, we can add a third parameter called `context` to the resolver function.
+In summary, this permission grants the freedom to use, modify, distribute, and sell the Software without charge. However, it is crucial to include the copyright notice and permission statement when distributing the Software. It is also important to note that the Software is provided without warranties, and the authors or copyright holders bear no responsibility for any claims or damages that may arise from its use.
+```
+  
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
 
-  * The `context` object is whatever has been returned from our `authMiddleware` function, so it may or may not include a `user` property depending on the status of the JSON Web Token.
 
-  * If there is a `user` property, we can assume the user's token has been verified and the `user` property now holds data about the user that we stored in the token itself.
+## Author
+
+Follow me on Github at [Sonam J Sherpa](https://github.com/sonam-git). Additional questions or concerns? feel free to contact me [Sonam J Sherpa](sherpa.sjs@gmail.com).
+
+### Copyright © 2023 [Sonam J Sherpa](https://github.com/sonam-git)
+
 
