@@ -47,6 +47,7 @@ const Profile = () => {
     <div>
        <div className="my-4 p-4" style={{ border: '1px dotted #1a1a1a' }}>
         <UserProfile profile={profile} />
+      
 
       </div>
       <h2 className="card-header">

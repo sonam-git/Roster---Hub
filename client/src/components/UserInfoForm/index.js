@@ -35,8 +35,6 @@ const UserInfoForm = ({ profileId }) => {
 
   return (
     <div>
-      <h4>Add More Information</h4>
-
       {Auth.loggedIn() ? (
         <form
           className="flex-row justify-center justify-space-between-md align-center"
