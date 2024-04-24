@@ -29,7 +29,8 @@ cd backend
 npm install
 cd ../frontend
 npm install
-4. or Npm run Develop
+(or Navigate to the root folder and simply npm i )
+4. then npm run develop
 
 
 ## License & Copyright ©

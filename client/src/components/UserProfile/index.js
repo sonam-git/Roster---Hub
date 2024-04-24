@@ -1,14 +1,8 @@
-import React, { useState } from "react";
-import UserInfoForm from "../UserInfoForm";
-import Auth from "../../utils/auth";
+import React from "react";
+
 
 const UserProfile = ({ profile }) => {
-  const [showForm, setShowForm] = useState(false);
-
-  const toggleForm = () => {
-    setShowForm(!showForm);
-  };
-
+  
   return (
     <>
     <h1>Player's Profile</h1>
@@ -16,12 +10,6 @@ const UserProfile = ({ profile }) => {
       <h4>Jersey Number: {profile.jerseyNumber}</h4>
       <h4>Position: {profile.position}</h4>
       <h4>Contact: {profile.phoneNumber}</h4>
-      {Auth.loggedIn() && Auth.getProfile().data._id === profile._id && (
-        <div>
-          <button onClick={toggleForm}>Add More Information</button>
-          {showForm && <UserInfoForm />}
-        </div>
-      )}
     </>
   );
 };
