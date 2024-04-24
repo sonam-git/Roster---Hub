@@ -1,34 +1,30 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useMutation } from "@apollo/client";
 
-import { ADD_SKILL} from '../../utils/mutations';
+import { ADD_SKILL } from "../../utils/mutations";
 
-
-import Auth from '../../utils/auth';
+import Auth from "../../utils/auth";
 
 const SkillForm = ({ profileId }) => {
-  const [skill, setSkill] = useState('');
-
+  const [skill, setSkill] = useState("");
 
   const [addSkill, { error }] = useMutation(ADD_SKILL);
-  
+
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
     try {
       // add skills
-     await addSkill({
-        variables: { profileId, skill},
+      await addSkill({
+        variables: { profileId, skill },
       });
 
-        // Clear input after successful submission
-        setSkill('');
-    
+      // Clear input after successful submission
+      setSkill("");
     } catch (err) {
       console.error(err);
     }
-    
   };
 
   return (
@@ -47,11 +43,10 @@ const SkillForm = ({ profileId }) => {
               className="form-input w-100"
               onChange={(event) => setSkill(event.target.value)}
             />
-        
           </div>
           <div className="col-12 col-lg-3">
             <button className="btn btn-info btn-block py-3" type="submit">
-             Endorse Skill
+              Endorse Skill
             </button>
           </div>
           {error && (
@@ -62,7 +57,7 @@ const SkillForm = ({ profileId }) => {
         </form>
       ) : (
         <p>
-          You need to be logged in to add information. Please{' '}
+          You need to be logged in to add information. Please{" "}
           <Link to="/login">Login</Link> or <Link to="/signup">Signup.</Link>
         </p>
       )}

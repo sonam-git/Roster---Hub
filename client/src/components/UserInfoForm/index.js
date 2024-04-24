@@ -3,18 +3,15 @@ import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 
 import { ADD_INFO} from '../../utils/mutations';
-import { QUERY_ME } from '../../utils/queries';
 
 import Auth from '../../utils/auth';
 
-const UserInfoForm = () => {
+const UserInfoForm = ({profileId}) => {
     const [jerseyNumber, setJerseyNumber] = useState('');
     const [position, setPosition] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
 
-    const [addInfo, { error }] = useMutation(ADD_INFO, {
-      refetchQueries: [{ query: QUERY_ME }],
-    });
+    const [addInfo, { error }] = useMutation(ADD_INFO);
   
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -23,6 +20,7 @@ const UserInfoForm = () => {
       // add information
      await addInfo({
         variables: {
+          profileId,
           jerseyNumber: parseInt(jerseyNumber),
           position,
           phoneNumber,
@@ -69,7 +67,7 @@ const UserInfoForm = () => {
             />
         
           </div>
-          <div className="col-12 col-lg-9">
+          <div className="col-12 col-lg-3">
             <button className="btn btn-info btn-block py-3" type="submit">
              Add Info
             </button>

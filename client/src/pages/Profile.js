@@ -11,6 +11,7 @@ import { QUERY_SINGLE_PROFILE, QUERY_ME } from "../utils/queries";
 import Auth from "../utils/auth";
 import UserProfile from "../components/UserProfile";
 import MyProfile from "../components/MyProfile"
+import UserInfoForm from "../components/UserInfoForm";
 
 const Profile = () => {
   const { profileId } = useParams();
@@ -65,6 +66,9 @@ const Profile = () => {
 
       <div className="my-4 p-4" style={{ border: "1px dotted #1a1a1a" }}>
         <SkillForm profileId={profile._id} />
+      </div>
+      <div className="my-4 p-4" style={{ border: "1px dotted #1a1a1a" }}>
+      <UserInfoForm profileId={profile._id}/>
       </div>
     </div>
   );
