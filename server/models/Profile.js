@@ -36,7 +36,7 @@ const profileSchema = new Schema({
   phoneNumber: {
     type: String,
     required: false,
-  },
+  }
 });
 
 // set up pre-save middleware to create password

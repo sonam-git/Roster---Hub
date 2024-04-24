@@ -4,6 +4,7 @@ import { useMutation } from '@apollo/client';
 
 import { ADD_SKILL} from '../../utils/mutations';
 
+
 import Auth from '../../utils/auth';
 
 const SkillForm = ({ profileId }) => {
@@ -20,6 +21,9 @@ const SkillForm = ({ profileId }) => {
      await addSkill({
         variables: { profileId, skill},
       });
+
+        // Clear input after successful submission
+        setSkill('');
     
     } catch (err) {
       console.error(err);
@@ -47,7 +51,7 @@ const SkillForm = ({ profileId }) => {
           </div>
           <div className="col-12 col-lg-3">
             <button className="btn btn-info btn-block py-3" type="submit">
-             Add Info
+             Endorse Skill
             </button>
           </div>
           {error && (

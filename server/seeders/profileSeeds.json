@@ -1,0 +1,43 @@
+[
+  {
+    "name": "Brian Kernighan",
+    "email": "bkernighan@techfriends.dev",
+    "password": "password01",
+    "skills": ["AWK", "AMPL", "Unix"],
+    "jerseyNumber": "10",
+    "position" : "Attacking Mid",
+    "phoneNumber" : "123456"
+  },
+  {
+    "name": "Max Kanat-Alexander",
+    "email": "mkanatalexander@techfriends.dev",
+    "password": "password02",
+    "skills": ["Java", "Perl", "Apache", "Python"],
+    "jerseyNumber": "1",
+    "position" : "Goal Keeper",
+    "phoneNumber" : "128456"
+  },
+  {
+    "name": "Amiko",
+    "email": "amiko@techfriends.dev",
+    "password": "password03",
+    "skills": ["NodeJS", "MySQL", "MongoDB", "React", "CSS-in-JS"],
+    "jerseyNumber": "4",
+    "position" : "Defender",
+    "phoneNumber" : "163456"
+  },
+  {
+    "name": "Kent Beck",
+    "email": "kbeck@techfriends.dev",
+    "password": "password04",
+    "skills": [
+      "Test-Driven Development",
+      "Extreme Programming",
+      "Software Design Patterns",
+      "JUnit"
+    ],
+    "jerseyNumber": "9",
+    "position" : "Striker",
+    "phoneNumber" : "128856"
+  }
+]

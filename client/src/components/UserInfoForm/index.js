@@ -3,30 +3,35 @@ import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 
 import { ADD_INFO} from '../../utils/mutations';
+import { QUERY_ME } from '../../utils/queries';
 
 import Auth from '../../utils/auth';
 
-const UserInfoForm = ({ profileId }) => {
+const UserInfoForm = () => {
     const [jerseyNumber, setJerseyNumber] = useState('');
     const [position, setPosition] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
 
-
-  const [addInfo, { error }] = useMutation(ADD_INFO);
+    const [addInfo, { error }] = useMutation(ADD_INFO, {
+      refetchQueries: [{ query: QUERY_ME }],
+    });
   
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      // add skills
+      // add information
      await addInfo({
-        variables: { 
-            profileId, 
-            jerseyNumber,
-            position,
-            phoneNumber},
+        variables: {
+          jerseyNumber: parseInt(jerseyNumber),
+          position,
+          phoneNumber,
+        },
       });
     
+    setJerseyNumber('')
+    setPosition('')
+    setPhoneNumber('')
     } catch (err) {
       console.error(err);
     }
@@ -46,18 +51,21 @@ const UserInfoForm = ({ profileId }) => {
               value={jerseyNumber}
               className="form-input w-100"
               onChange={(event) => setJerseyNumber(event.target.value)}
+              required
             />
-                <input
+            <input
               placeholder="Player's Position"
               value={position}
               className="form-input w-100"
               onChange={(event) => setPosition(event.target.value)}
+              required
             />
-                <input
+            <input
               placeholder="Phone Number"
               value={phoneNumber}
               className="form-input w-100"
               onChange={(event) => setPhoneNumber(event.target.value)}
+              required
             />
         
           </div>

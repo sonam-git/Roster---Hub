@@ -13,8 +13,10 @@ export const ADD_PROFILE = gql`
 `;
 
 export const ADD_INFO = gql`
-mutation addInfo($profileId: ID!, $jerseyNumber: Int!, $position: String!, $phoneNumber: String) {
-  addInfo(profileId:$profileId, jerseyNumber: $jerseyNumber, position: $position, phoneNumber: $phoneNumber){
+mutation addInfo($profileId: ID!, $jerseyNumber: Int!, $position: String!, $phoneNumber: String!) {
+  addInfo(profileId: $profileId, jerseyNumber: $jerseyNumber, position: $position, phoneNumber: $phoneNumber) {
+    _id
+    name
     jerseyNumber
     position
     phoneNumber

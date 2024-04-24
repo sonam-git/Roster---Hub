@@ -43,11 +43,13 @@ const resolvers = {
       const token = signToken(profile);
       return { token, profile };
     },
+
     addInfo: async (parent, { profileId, jerseyNumber, position, phoneNumber }, context) => {
       // Check if the user is logged in
       if (context.user) {
         // Check if the profile exists
         const profile = await Profile.findById(profileId);
+        console.log(profile)
         if (!profile) {
           throw new Error('Profile not found!');
         }
@@ -65,6 +67,7 @@ const resolvers = {
         throw new AuthenticationError('You need to be logged in!');
       }
     },
+
     // Add a third argument to the resolver to access data in our `context`
     addSkill: async (parent, { profileId, skill}, context) => {
       // If context has a `user` property, that means the user executing this mutation has a valid JWT and is logged in
@@ -74,7 +77,8 @@ const resolvers = {
           {
             $addToSet: { 
               skills: skill,
-             }
+             },
+             
           },
           {
             new: true,

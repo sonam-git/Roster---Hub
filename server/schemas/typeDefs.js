@@ -28,7 +28,7 @@ const typeDefs = gql`
     addProfile(name: String!, email: String!, password: String! ): Auth
     login(email: String!, password: String!): Auth
 
-    addInfo(prfileId: ID!, jerseyNumber: Int, position: String, phoneNumber: String): Profile
+    addInfo(profileId: ID!, jerseyNumber: Int!, position: String!, phoneNumber: String!): Profile
 
     addSkill(profileId: ID!, skill: String!): Profile
     removeProfile: Profile
