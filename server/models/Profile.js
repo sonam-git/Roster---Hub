@@ -19,12 +19,6 @@ const profileSchema = new Schema({
     required: true,
     minlength: 5,
   },
-  skills: [
-    {
-      type: String,
-      trim: true,
-    },
-  ],
   jerseyNumber: {
     type: Number,
     required: false,
@@ -36,7 +30,14 @@ const profileSchema = new Schema({
   phoneNumber: {
     type: String,
     required: false,
-  }
+  },
+  skills: [
+    {
+        type: Schema.Types.ObjectId,
+        ref: 'Skill'
+      }
+   
+  ]
 });
 
 // set up pre-save middleware to create password

@@ -1,4 +1,4 @@
 const Profile = require('./Profile');
-const SkillSchema = require('./SkillSchema')
+const Skill = require('./Skill')
 
-module.exports = { Profile, SkillSchema };
+module.exports = { Profile, Skill};

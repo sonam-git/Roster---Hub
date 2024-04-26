@@ -10,15 +10,16 @@ const MyProfile = () => {
 
   if (loading) return <div>Loading...</div>;
 
-  const profile = data?.me;
-
+  const me = data?.me;
+  
+  
   return (
     <>
-      <h1>Player's Profile</h1>
-      <h4>Name: {profile.name}</h4>
-      {profile.jerseyNumber && <h4>Jersey Number: {profile.jerseyNumber}</h4>}
-      {profile.position && <h4>Position: {profile.position}</h4>}
-      {profile.phoneNumber && <h4>Contact: {profile.phoneNumber}</h4>}
+      <h1>Your Profile</h1>
+      <h4>Name: {me.name}</h4>
+      {me.jerseyNumber && <h4>Jersey Number: {me.jerseyNumber}</h4>}
+      {me.position && <h4>Position: {me.position}</h4>}
+      {me.phoneNumber && <h4>Contact: {me.phoneNumber}</h4>}
     </>
   );
 };

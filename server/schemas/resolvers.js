@@ -1,27 +1,27 @@
-const { AuthenticationError } = require('apollo-server-express');
-const { Profile } = require('../models');
-const { signToken } = require('../utils/auth');
+const { AuthenticationError } = require("apollo-server-express");
+const { Profile, Skill } = require("../models");
+const { signToken } = require("../utils/auth");
 
 const resolvers = {
   Query: {
     profiles: async () => {
-      return Profile.find();
+      return Profile.find().populate("skills");
     },
 
     profile: async (parent, { profileId }) => {
-      return Profile.findOne({ _id: profileId });
+      return Profile.findOne({ _id: profileId }).populate("skills");
     },
-    // By adding context to our query, we can retrieve the logged in user without specifically searching for them
+    //By adding context to our query, we can retrieve the logged in user without specifically searching for them
     me: async (parent, args, context) => {
       if (context.user) {
-        return Profile.findOne({ _id: context.user._id });
+        return Profile.findById({ _id: context.user._id }).populate("skills");
       }
-      throw new AuthenticationError('You need to be logged in!');
+      throw new AuthenticationError("You need to be logged in!");
     },
   },
 
   Mutation: {
-    addProfile: async (parent, { name, email, password}) => {
+    addProfile: async (parent, { name, email, password }) => {
       const profile = await Profile.create({ name, email, password });
       const token = signToken(profile);
 
@@ -31,82 +31,77 @@ const resolvers = {
       const profile = await Profile.findOne({ email });
 
       if (!profile) {
-        throw new AuthenticationError('No profile with this email found!');
+        throw new AuthenticationError("No profile with this email found!");
       }
 
       const correctPw = await profile.isCorrectPassword(password);
 
       if (!correctPw) {
-        throw new AuthenticationError('Incorrect password!');
+        throw new AuthenticationError("Incorrect password!");
       }
 
       const token = signToken(profile);
       return { token, profile };
     },
 
-    addInfo: async (parent, { profileId, jerseyNumber, position, phoneNumber }, context) => {
+    addInfo: async (
+      parent,
+      { profileId, jerseyNumber, position, phoneNumber },
+      context
+    ) => {
       // Check if the user is logged in
       if (context.user) {
         // Check if the profile exists
         const profile = await Profile.findById(profileId);
-        console.log(profile)
         if (!profile) {
-          throw new Error('Profile not found!');
+          throw new Error("Profile not found!");
         }
-  
+
         // Update the profile with the additional information
         profile.jerseyNumber = jerseyNumber;
         profile.position = position;
         profile.phoneNumber = phoneNumber;
-  
+
         // Save the updated profile
         await profile.save();
-  
+
         return profile;
       } else {
-        throw new AuthenticationError('You need to be logged in!');
+        throw new AuthenticationError("You need to be logged in!");
       }
     },
 
-    // Add a third argument to the resolver to access data in our `context`
-    addSkill: async (parent, { profileId, skill}, context) => {
-      // If context has a `user` property, that means the user executing this mutation has a valid JWT and is logged in
+    addSkill: async (parent, { profileId, skillText }, context) => {
       if (context.user) {
-        return Profile.findOneAndUpdate(
+        if (skillText.trim() === "") {
+          throw new Error("skilltext must not be empty");
+        }
+        const skill = await Skill.create({
+          skillText,
+          skillAuthor: context.user.name,
+          createdAt: new Date().toISOString(),
+        });
+
+        await Profile.findOneAndUpdate(
           { _id: profileId },
-          {
-            $addToSet: { 
-              skills: skill,
-             },
-             
-          },
-          {
-            new: true,
-            runValidators: true,
-          }
+          { $addToSet: { skills: skill._id } }
         );
+
+        return skill;
       }
-      // If user attempts to execute this mutation and isn't logged in, throw an error
-      throw new AuthenticationError('You need to be logged in!');
+      throw new AuthenticationError("You need to be logged in!");
     },
 
-    // Set up mutation so a logged in user can only remove their profile and no one else's
-    removeProfile: async (parent, args, context) => {
-      if (context.user) {
-        return Profile.findOneAndDelete({ _id: context.user._id });
+    removeSkill: async (parent, { skillId }, context) => {
+      if (!context.user) {
+        throw new AuthenticationError("You need to be logged in!");
       }
-      throw new AuthenticationError('You need to be logged in!');
-    },
-    // Make it so a logged in user can only remove a skill from their own profile
-    removeSkill: async (parent, { skill }, context) => {
-      if (context.user) {
-        return Profile.findOneAndUpdate(
-          { _id: context.user._id },
-          { $pull: { skills: skill } },
-          { new: true }
-        );
+      try {
+        return Skill.findOneAndDelete({ _id: skillId });
+      } catch (error) {
+        console.error("Error deleting skill:", error);
+        throw new Error("Error deleting Skill.");
       }
-      throw new AuthenticationError('You need to be logged in!');
     },
   },
 };

@@ -17,7 +17,7 @@ const SkillForm = ({ profileId }) => {
     try {
       // add skills
       await addSkill({
-        variables: { profileId, skill },
+        variables: { profileId, skillText: skill },
       });
 
       // Clear input after successful submission

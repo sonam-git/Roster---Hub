@@ -8,7 +8,7 @@ import { QUERY_PROFILES } from '../utils/queries';
 const Home = () => {
   const { loading, data } = useQuery(QUERY_PROFILES);
   const profiles = data?.profiles || [];
-
+ 
   return (
     <main>
       <div className="flex-row justify-center">

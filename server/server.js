@@ -13,7 +13,7 @@ const server = new ApolloServer({
   resolvers,
   context: authMiddleware,
 });
-
+// bodyparser middlewares
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 

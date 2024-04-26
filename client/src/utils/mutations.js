@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const ADD_PROFILE = gql`
   mutation addProfile($name: String!, $email: String!, $password: String!) {
@@ -7,33 +7,49 @@ export const ADD_PROFILE = gql`
       profile {
         _id
         name
+        skills {
+          skillText
+          skillAuthor
+          _id
+          createdAt
+        }
       }
     }
   }
 `;
 
 export const ADD_INFO = gql`
-mutation addInfo($profileId: ID!, $jerseyNumber: Int!, $position: String!, $phoneNumber: String!) {
-  addInfo(profileId: $profileId, jerseyNumber: $jerseyNumber, position: $position, phoneNumber: $phoneNumber) {
-    _id
-    name
-    jerseyNumber
-    position
-    phoneNumber
-  }
-}
-`;
-
-export const ADD_SKILL = gql`
-  mutation addSkill($profileId: ID!, $skill: String! ) {
-    addSkill(profileId: $profileId, skill: $skill ) {
+  mutation addInfo(
+    $profileId: ID!
+    $jerseyNumber: Int!
+    $position: String!
+    $phoneNumber: String!
+  ) {
+    addInfo(
+      profileId: $profileId
+      jerseyNumber: $jerseyNumber
+      position: $position
+      phoneNumber: $phoneNumber
+    ) {
       _id
       name
-      skills
+      jerseyNumber
+      position
+      phoneNumber
     }
   }
 `;
 
+export const ADD_SKILL = gql`
+  mutation addSkill($profileId: ID!, $skillText: String!) {
+    addSkill(profileId: $profileId, skillText: $skillText) {
+      _id
+      skillText
+      skillAuthor
+      createdAt
+    }
+  }
+`;
 
 export const LOGIN_USER = gql`
   mutation login($email: String!, $password: String!) {
@@ -48,11 +64,12 @@ export const LOGIN_USER = gql`
 `;
 
 export const REMOVE_SKILL = gql`
-  mutation removeSkill($skill: String!) {
-    removeSkill(skill: $skill) {
+  mutation removeSkill($skillId: ID!) {
+    removeSkill(skillId: $skillId) {
       _id
-      name
-      skills
+      skillText
+      skillAuthor
+      createdAt
     }
   }
 `;

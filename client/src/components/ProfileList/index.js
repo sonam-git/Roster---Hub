@@ -21,7 +21,7 @@ const ProfileList = ({ profiles, title }) => {
                   </span>
                   <br></br>
                   <span className="text-white" style={{ fontSize: '1rem' }}>
-                    currently has {profile.skills ? profile.skills.length : 0}{' '}
+                    currently has {profile.skills? profile.skills.length : 0}{' '}
                     endorsed skill
                     {profile.skills && profile.skills.length === 1 ? '' : 's'}
                   </span>
