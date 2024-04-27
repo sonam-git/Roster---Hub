@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import ChatBox from '../ChatBox'; // Import the ChatBox component
 
 const ProfileList = ({ profiles, title }) => {
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  const handleChatClick = (user) => {
+    setSelectedUser(user);
+  };
+
   if (!profiles.length) {
     return <h3>No Profiles Yet</h3>;
   }
@@ -19,14 +26,23 @@ const ProfileList = ({ profiles, title }) => {
                   <span className="text-white" style={{ fontSize: '1rem' }}>
                     Jersey Number: {profile.jerseyNumber}
                   </span>
-                  <br></br>
+                  <br />
                   <span className="text-white" style={{ fontSize: '1rem' }}>
-                    currently has {profile.skills? profile.skills.length : 0}{' '}
+                    currently has {profile.skills ? profile.skills.length : 0}{' '}
                     endorsed skill
                     {profile.skills && profile.skills.length === 1 ? '' : 's'}
                   </span>
-                  
                 </h4>
+
+                <div className="card-body">
+                  {/* Add a chat button for each profile */}
+                  <button
+                    className="btn btn-block btn-info"
+                    onClick={() => handleChatClick(profile)}
+                  >
+                    Chat
+                  </button>
+                </div>
 
                 <Link
                   className="btn btn-block btn-squared btn-light text-dark"
@@ -38,6 +54,9 @@ const ProfileList = ({ profiles, title }) => {
             </div>
           ))}
       </div>
+
+      {/* Render the chat box if a user is selected */}
+      {selectedUser && <ChatBox user={selectedUser} />}
     </div>
   );
 };

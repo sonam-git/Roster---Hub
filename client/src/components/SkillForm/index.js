@@ -3,14 +3,17 @@ import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 
 import { ADD_SKILL } from "../../utils/mutations";
+import { QUERY_ME, QUERY_SINGLE_PROFILE } from "../../utils/queries";
 
 import Auth from "../../utils/auth";
+
 
 const SkillForm = ({ profileId }) => {
   const [skill, setSkill] = useState("");
 
-  const [addSkill, { error }] = useMutation(ADD_SKILL);
-
+  const [addSkill, { error }] = useMutation(ADD_SKILL, {
+    refetchQueries: [{ query: profileId ? QUERY_SINGLE_PROFILE : QUERY_ME, variables: { profileId: profileId } }],
+  });
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 

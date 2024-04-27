@@ -86,7 +86,7 @@ const resolvers = {
           { _id: profileId },
           { $addToSet: { skills: skill._id } }
         );
-
+       
         return skill;
       }
       throw new AuthenticationError("You need to be logged in!");
@@ -103,6 +103,36 @@ const resolvers = {
         throw new Error("Error deleting Skill.");
       }
     },
+    // sendMessage: async (_, { userId, text }, { user }) => {
+    //   // Check if the user is authenticated
+    //   if (!user) {
+    //     throw new AuthenticationError('You need to be logged in to send messages');
+    //   }
+
+    //   try {
+    //     // Find the recipient user
+    //     const recipient = await Profile.findById(userId);
+    //     if (!recipient) {
+    //       throw new Error('Recipient user not found');
+    //     }
+
+    //     // Create a new message
+    //     const message = new Message({
+    //       sender: user.id,
+    //       recipient: userId,
+    //       text,
+    //       createdAt: new Date()
+    //     });
+
+    //     // Save the message to the database
+    //     await message.save();
+
+    //     return message;
+    //   } catch (error) {
+    //     console.error('Error sending message:', error);
+    //     throw new Error('Failed to send message');
+    //   }
+    // }
   },
 };
 

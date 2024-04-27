@@ -16,9 +16,10 @@ const Profile = () => {
   const { profileId } = useParams();
 
   // If there is no `profileId` in the URL as a parameter, execute the `QUERY_ME` query instead for the logged in user's information
-  const { loading, data } = useQuery(profileId ? QUERY_SINGLE_PROFILE : QUERY_ME, {
+  const { loading, data, error } = useQuery(profileId ? QUERY_SINGLE_PROFILE : QUERY_ME, {
     variables: { profileId: profileId },
   });
+
 
   // Check if data is returning from the `QUERY_ME` query, then the `QUERY_SINGLE_PROFILE` query
   const profile = data?.me || data?.profile || {};
@@ -34,6 +35,10 @@ const Profile = () => {
     return <div>Loading...</div>;
   }
 
+ if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+  
   if (!profile?.name) {
     return (
       <h4>
@@ -53,7 +58,7 @@ const Profile = () => {
       </h2>
 
       {profile.skills?.length > 0 && (
-        <SkillsList skills={profile.skills}  isLoggedInUser={!profileId && true}  />
+        <SkillsList   skills={profile.skills || []} isLoggedInUser={!profileId && true}  />
       )}
    <div className="my-4 p-4" style={{ border: "1px dotted #1a1a1a" }}>
             <SkillForm profileId={profile._id} />
