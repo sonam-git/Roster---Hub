@@ -1,30 +1,33 @@
-import React from 'react';
-import { useMutation } from '@apollo/client';
-import { REMOVE_MESSAGE } from '../../utils/mutations';
-import { QUERY_ME } from '../../utils/queries';
+import React from "react";
+import { useMutation } from "@apollo/client";
+import { REMOVE_MESSAGE } from "../../utils/mutations";
+import { QUERY_ME } from "../../utils/queries";
 
-const MessageList = ({messages, isLoggedInUser = false}) => {
+const MessageList = ({ messages, isLoggedInUser = false }) => {
   const [removeMessage, { error }] = useMutation(REMOVE_MESSAGE, {
     update(cache, { data: { removeMessage } }) {
       try {
-        // Remove the deleted skill from the cache
+        // Read the current cache data
         const { me } = cache.readQuery({ query: QUERY_ME });
-        const updatedMessage = me.messages.filter(
+
+        // Remove the deleted message from the messages array
+        const updatedMessages = me.receivedMessages.filter(
           (message) => message._id !== removeMessage._id
         );
+
+        // Write the updated data back to the cache
         cache.writeQuery({
           query: QUERY_ME,
-          data: { me: { ...me, messages: updatedMessage } },
+          data: { me: { ...me, receivedMessages: updatedMessages } },
         });
-      } catch (e) {
-        console.error(e);
+      } catch (error) {
+        console.error("Error updating cache:", error);
       }
     },
   });
 
-  const handleRemoveMessage = async (messageId ) => {
+  const handleRemoveMessage = async (messageId) => {
     try {
-      // Call the removeSkill mutation with skillId
       await removeMessage({
         variables: { messageId },
       });
@@ -43,18 +46,18 @@ const MessageList = ({messages, isLoggedInUser = false}) => {
         {messages.map((message) => (
           <div key={message._id} className="col-12 col-xl-6">
             <div className="card mb-3">
-            <p className="card-header bg-dark text-light p-2 m-0 display-flex align-center">
-                <span className='message-text'>{message.text}</span>
-                <span className='author-name'> By: {message._id}</span>
+              <p className="card-header bg-dark text-light p-2 m-0 display-flex align-center">
+                <span className="message-text">{message.text}</span>
+                <span className="author-name"> By: {message._id}</span>
                 {isLoggedInUser && (
                   <button
                     className="btn btn-sm btn-danger ml-auto"
-                    onClick={() => handleRemoveMessage(message._id)} 
+                    onClick={() => handleRemoveMessage(message._id)}
                   >
                     X
                   </button>
                 )}
-            </p>
+              </p>
             </div>
           </div>
         ))}
@@ -64,6 +67,6 @@ const MessageList = ({messages, isLoggedInUser = false}) => {
       )}
     </div>
   );
-}
+};
 
-export default MessageList
+export default MessageList;

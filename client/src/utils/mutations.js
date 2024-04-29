@@ -75,15 +75,12 @@ export const REMOVE_SKILL = gql`
 `;
 
 export const REMOVE_MESSAGE = gql`
-  mutation removeMessage($skillId: ID!) {
-    removeMessage(messageId: $messageId) {
-      _id
-     text
-     recipient
-    sender
-      createdAt
-    }
+mutation Mutation($messageId: ID!) {
+  removeMessage(messageId: $messageId) {
+    _id
+    text
   }
+}
 `;
 
 export const SEND_MESSAGE = gql`

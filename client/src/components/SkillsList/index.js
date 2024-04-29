@@ -10,6 +10,7 @@ const SkillsList = ({ skills, isLoggedInUser = false }) => {
       try {
         // Remove the deleted skill from the cache
         const { me } = cache.readQuery({ query: QUERY_ME });
+        
         const updatedSkills = me.skills.filter(
           (skill) => skill._id !== removeSkill._id
         );

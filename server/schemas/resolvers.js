@@ -111,7 +111,7 @@ const resolvers = {
     },
 
     removeSkill: async (parent, { skillId }, context) => {
-      console.log('line143',context.user)
+      // console.log('line143',context.user)
       if (!context.user._id) {
         throw new AuthenticationError("You need to be logged in!");
       }
@@ -163,7 +163,9 @@ await Profile.findByIdAndUpdate(recipientId, { $push: { receivedMessages: savedM
         throw new AuthenticationError("You need to be logged in!");
       }
       try {
-        return Message.findOneAndDelete({ _id: messageId });
+        await  Message.findOneAndDelete({ _id: messageId });
+        // Return a success message or null
+    return { message: "Message deleted successfully" };
       } catch (error) {
         console.error("Error deleting Message:", error);
         throw new Error("Error deleting Message.");
