@@ -5,6 +5,7 @@ import { QUERY_ME } from "../../utils/queries";
 import "../../assets/css/message.css"; 
 
 const MessageList = ({ messages, isLoggedInUser = false }) => {
+  console.log(messages)
   const [removeMessage, { error }] = useMutation(REMOVE_MESSAGE, {
     update(cache, { data: { removeMessage } }) {
       try {
@@ -39,10 +40,19 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
 
   if (!messages.length) {
     return <h3>No Messages Yet</h3>;
-  }
+  } 
+
+
 
   return (
     <div>
+<span  style={{ fontSize: '1rem' }}>You 
+  currently have {messages ? messages.length : 0}{' '}
+  message
+  {messages && messages.length === 1 ? '' : 's'} in your box.
+</span>
+<br>
+</br>
       <div className="message-container">
         {messages.map((message) => (
           <div key={message._id} className="message-item">
