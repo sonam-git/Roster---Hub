@@ -9,6 +9,7 @@ const typeDefs = gql`
     position: String
     phoneNumber: String
     skills: [Skill]
+    receivedMessages: [Message]
   }
 
   type Skill {
@@ -18,6 +19,15 @@ const typeDefs = gql`
     createdAt: String!
   }
 
+  type Message {
+    _id: ID!
+    sender: Profile!
+    recipient: Profile!
+    text: String!
+    createdAt: String!
+  }
+
+
   type Auth {
     token: ID!
     profile: Profile
@@ -26,9 +36,10 @@ const typeDefs = gql`
   type Query {
     profiles: [Profile]!
     profile(profileId: ID!): Profile
+    me: Profile
     skills : [Skill]
     skill(skillId: ID!) : Skill
-    me: Profile
+    receivedMessages: [Message]!
   }
  
   type Mutation {
@@ -36,7 +47,9 @@ const typeDefs = gql`
     login(email: String!, password: String!): Auth
     addInfo(profileId: ID!, jerseyNumber: Int!, position: String!, phoneNumber: String!): Profile
     addSkill(profileId: ID!, skillText: String! ): Skill
+    sendMessage(recipientId: ID!, text: String!): Message!
     removeSkill(skillId: ID!): Skill
+    removeMessage(messageId: ID!): Message
   }
 `;
 

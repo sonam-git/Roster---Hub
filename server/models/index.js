@@ -1,4 +1,5 @@
 const Profile = require('./Profile');
-const Skill = require('./Skill')
+const Skill = require('./Skill');
+const Message = require('./Message')
 
-module.exports = { Profile, Skill};
+module.exports = { Profile, Skill, Message};

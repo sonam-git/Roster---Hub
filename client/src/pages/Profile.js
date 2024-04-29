@@ -50,7 +50,7 @@ const Profile = () => {
   return (
     <div>
       <div className="my-4 p-4" style={{ border: "1px dotted #1a1a1a" }}>
-        {profileId ? <UserProfile profile={profile} /> : <MyProfile profile={me} />}
+        {profileId ? <UserProfile profile={profile} /> : <MyProfile profile={me} isLoggedInUser={!profileId && true}   />}
       </div>
 
       <h2 className="card-header">

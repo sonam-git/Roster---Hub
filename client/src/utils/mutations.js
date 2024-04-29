@@ -73,15 +73,33 @@ export const REMOVE_SKILL = gql`
     }
   }
 `;
-export const SEND_MESSAGE = gql`
-mutation SendMessage($userId: ID!, $text: String!) {
-  sendMessage(userId: $userId, text: $text) {
-    id
+
+export const REMOVE_MESSAGE = gql`
+  mutation removeMessage($skillId: ID!) {
+    removeMessage(messageId: $messageId) {
+      _id
+     text
+     recipient
     sender
-    recipient
+      createdAt
+    }
+  }
+`;
+
+export const SEND_MESSAGE = gql`
+mutation SendMessage($recipientId: ID!, $text: String!) {
+  sendMessage(recipientId: $recipientId, text: $text) {
     text
+    _id
     createdAt
+    recipient {
+      _id
+      name
+    }
+    sender {
+      _id
+      name
+    }
   }
 }
-
 `

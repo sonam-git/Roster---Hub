@@ -37,7 +37,20 @@ const profileSchema = new Schema({
         ref: 'Skill'
       }
    
-  ]
+  ],
+
+  sentMessages: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Message',
+    },
+  ],
+  receivedMessages: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Message',
+    },
+  ],
 });
 
 // set up pre-save middleware to create password

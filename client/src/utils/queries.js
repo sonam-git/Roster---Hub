@@ -14,6 +14,19 @@ export const QUERY_PROFILES = gql`
         skillAuthor
         createdAt
       }
+      receivedMessages {
+        _id
+        text
+        createdAt
+        sender {
+          _id
+          name
+        }
+        recipient {
+          _id
+          name
+        }
+      }
     }
   }
 `;
@@ -31,6 +44,19 @@ export const QUERY_SINGLE_PROFILE = gql`
         skillText
         skillAuthor
         createdAt
+      }
+      receivedMessages {
+        _id
+        text
+        createdAt
+        sender {
+          _id
+          name
+        }
+        recipient {
+          _id
+          name
+        }
       }
     }
   }
@@ -50,6 +76,36 @@ export const QUERY_ME = gql`
         skillAuthor
         createdAt
       }
+      receivedMessages {
+        _id
+        text
+        createdAt
+        sender {
+          _id
+          name
+        }
+        recipient {
+          _id
+          name
+        }
+      }
     }
   }
+`;
+export const RECEIVED_MESSAGES = gql`
+query ReceivedMessages {
+  receivedMessages {
+    _id
+    text
+    createdAt
+    sender {
+      _id
+      name
+    }
+    recipient {
+      _id
+      name
+    }
+  }
+}
 `;

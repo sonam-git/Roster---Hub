@@ -56,7 +56,7 @@ const ProfileList = ({ profiles, title }) => {
       </div>
 
       {/* Render the chat box if a user is selected */}
-      {selectedUser && <ChatBox user={selectedUser} />}
+      {selectedUser && <ChatBox recipient={selectedUser} />}
     </div>
   );
 };

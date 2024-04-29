@@ -1,24 +1,42 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { Profile, Skill } = require("../models");
+const { Profile, Skill ,Message} = require("../models");
 const { signToken } = require("../utils/auth");
 
 const resolvers = {
   Query: {
     profiles: async () => {
-      return Profile.find().populate("skills");
+      return Profile.find().populate("skills").populate('receivedMessages')
     },
 
     profile: async (parent, { profileId }) => {
-      return Profile.findOne({ _id: profileId }).populate("skills");
+      return Profile.findOne({ _id: profileId })
+      .populate("skills").populate('receivedMessages')
     },
     //By adding context to our query, we can retrieve the logged in user without specifically searching for them
     me: async (parent, args, context) => {
       if (context.user) {
-        return Profile.findById({ _id: context.user._id }).populate("skills");
+        return Profile.findById({ _id: context.user._id })
+        .populate("skills").populate('receivedMessages')
       }
       throw new AuthenticationError("You need to be logged in!");
     },
-  },
+
+    receivedMessages: async (_, __, { user }) => {
+      // Check if the user is authenticated
+      if (!user) {
+        throw new AuthenticationError('You need to be logged in to view messages');
+      }
+
+      try {
+        // Retrieve messages received by the authenticated user
+        const messages = await Message.find({ recipient: user._id }).populate('sender');
+        return messages;
+      } catch (error) {
+        console.error('Error fetching messages:', error);
+        throw new Error('Failed to fetch messages');
+      }
+    },
+},
 
   Mutation: {
     addProfile: async (parent, { name, email, password }) => {
@@ -93,7 +111,8 @@ const resolvers = {
     },
 
     removeSkill: async (parent, { skillId }, context) => {
-      if (!context.user) {
+      console.log('line143',context.user)
+      if (!context.user._id) {
         throw new AuthenticationError("You need to be logged in!");
       }
       try {
@@ -103,37 +122,55 @@ const resolvers = {
         throw new Error("Error deleting Skill.");
       }
     },
-    // sendMessage: async (_, { userId, text }, { user }) => {
-    //   // Check if the user is authenticated
-    //   if (!user) {
-    //     throw new AuthenticationError('You need to be logged in to send messages');
-    //   }
+    sendMessage: async (_, { recipientId, text }, { user }) => {
+      // Check if the user is authenticated
+      if (!user) {
+        throw new AuthenticationError('You need to be logged in to send messages');
+      }
 
-    //   try {
-    //     // Find the recipient user
-    //     const recipient = await Profile.findById(userId);
-    //     if (!recipient) {
-    //       throw new Error('Recipient user not found');
-    //     }
+      try {
+        // Find the recipient user
+        const recipient = await Profile.findById(recipientId);
+        // console.log('recipient',recipient.name)
+        if (!recipient) {
+          throw new Error('Recipient user not found');
+        }
 
-    //     // Create a new message
-    //     const message = new Message({
-    //       sender: user.id,
-    //       recipient: userId,
-    //       text,
-    //       createdAt: new Date()
-    //     });
+        // Create a new message with the sender set to the authenticated user's ID
+        const message = new Message({
+          sender: user._id, // Set the sender to the authenticated user's ID
+          recipient: recipientId, // Set the recipient to the provided user ID
+          text,
+          createdAt: new Date().toISOString(), // Format the current date and time
+        });
 
-    //     // Save the message to the database
-    //     await message.save();
+        // Save the message to the database
+        const savedMessage = await message.save();
+// Update sender's sentMessages and recipient's receivedMessages
+await Profile.findByIdAndUpdate(user._id, { $push: { sentMessages: savedMessage._id } });
+await Profile.findByIdAndUpdate(recipientId, { $push: { receivedMessages: savedMessage._id } });
 
-    //     return message;
-    //   } catch (error) {
-    //     console.error('Error sending message:', error);
-    //     throw new Error('Failed to send message');
-    //   }
-    // }
-  },
+        return savedMessage;
+      } catch (error) {
+        console.error('Error sending message:', error);
+        throw new Error('Failed to send message');
+      }
+    },
+    
+    removeMessage: async (parent, { messageId }, context) => {
+
+      if (!context.user._id) {
+        throw new AuthenticationError("You need to be logged in!");
+      }
+      try {
+        return Message.findOneAndDelete({ _id: messageId });
+      } catch (error) {
+        console.error("Error deleting Message:", error);
+        throw new Error("Error deleting Message.");
+      }
+    },
+    
+  }
 };
 
 module.exports = resolvers;
