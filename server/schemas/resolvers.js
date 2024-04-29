@@ -158,19 +158,24 @@ await Profile.findByIdAndUpdate(recipientId, { $push: { receivedMessages: savedM
     },
     
     removeMessage: async (parent, { messageId }, context) => {
-
       if (!context.user._id) {
         throw new AuthenticationError("You need to be logged in!");
       }
+    
       try {
-        await  Message.findOneAndDelete({ _id: messageId });
-        // Return a success message or null
-    return { message: "Message deleted successfully" };
+        const deletedMessage = await Message.findOneAndDelete({ _id: messageId });
+    
+        if (!deletedMessage) {
+          throw new Error("Message not found");
+        }
+    
+        return deletedMessage; // Return the deleted message object
       } catch (error) {
         console.error("Error deleting Message:", error);
         throw new Error("Error deleting Message.");
       }
     },
+    
     
   }
 };
