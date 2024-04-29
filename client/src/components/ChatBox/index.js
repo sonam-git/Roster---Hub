@@ -5,7 +5,7 @@ import Modal from '../Modal';
 import "../../assets/css/modal.css"; 
 import MessageSentModal from '../MessageSentModal'; 
 
-const ChatBox = ({ recipient }) => {
+const ChatBox = ({ recipient, onCloseModal }) => {
   const [message, setMessage] = useState('');
   const [showModal, setShowModal] = useState(false); 
   const [messageSent, setMessageSent] = useState(false); 
@@ -35,18 +35,16 @@ const ChatBox = ({ recipient }) => {
 
   const handleCloseModal = () => {
     setShowModal(false);
-    if (messageSent) {
-      setMessageSent(false); // Reset messageSent state
-    }
+    onCloseModal(); // Call the onCloseModal function provided by the parent component
   };
 
   return (
     recipient && (
       <>
-        {!messageSent && ( // Render message input box only if message is not sent
-          <Modal showModal={!messageSent && showModal} onClose={handleCloseModal}>
+        {!messageSent && (
+          <Modal showModal={!messageSent} onClose={handleCloseModal}>
             <div className="card mb-3">
-              <h3>Chatting with {recipient.name}</h3>
+              <h3>Send Text to {recipient.name}</h3>
               <div className="card-header bg-dark text-light p-2 m-0">
                 <textarea
                   value={message}

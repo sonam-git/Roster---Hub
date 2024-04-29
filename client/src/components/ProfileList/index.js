@@ -9,6 +9,10 @@ const ProfileList = ({ profiles, title }) => {
     setSelectedUser(user);
   };
 
+  const handleModalClose = () => {
+    setSelectedUser(null); // Reset selectedUser state when modal is closed
+  };
+
   if (!profiles.length) {
     return <h3>No Profiles Yet</h3>;
   }
@@ -56,7 +60,7 @@ const ProfileList = ({ profiles, title }) => {
       </div>
 
       {/* Render the chat box if a user is selected */}
-      {selectedUser && <ChatBox recipient={selectedUser} />}
+      {selectedUser && <ChatBox recipient={selectedUser} onCloseModal={handleModalClose} />}
     </div>
   );
 };
