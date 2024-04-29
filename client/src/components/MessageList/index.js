@@ -2,6 +2,7 @@ import React from "react";
 import { useMutation } from "@apollo/client";
 import { REMOVE_MESSAGE } from "../../utils/mutations";
 import { QUERY_ME } from "../../utils/queries";
+import "../../assets/css/message.css"; 
 
 const MessageList = ({ messages, isLoggedInUser = false }) => {
   const [removeMessage, { error }] = useMutation(REMOVE_MESSAGE, {
@@ -42,16 +43,16 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
 
   return (
     <div>
-      <div className="flex-row justify-space-between my-4">
+      <div className="message-container">
         {messages.map((message) => (
-          <div key={message._id} className="col-12 col-xl-6">
-            <div className="card mb-3">
-              <p className="card-header bg-dark text-light p-2 m-0 display-flex align-center">
+          <div key={message._id} className="message-item">
+            <div className="message-card">
+              <p className="message-header">
                 <span className="message-text">{message.text}</span>
-                <span className="author-name"> By: {message._id}</span>
+                <span className="author-name"> From: {message.sender.name} on {message.createdAt}</span>
                 {isLoggedInUser && (
                   <button
-                    className="btn btn-sm btn-danger ml-auto"
+                    className="remove-button"
                     onClick={() => handleRemoveMessage(message._id)}
                   >
                     X
@@ -63,7 +64,7 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
         ))}
       </div>
       {error && (
-        <div className="my-3 p-3 bg-danger text-white">{error.message}</div>
+        <div className="error-message">{error.message}</div>
       )}
     </div>
   );
