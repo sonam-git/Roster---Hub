@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { REMOVE_MESSAGE } from "../../utils/mutations";
 import { QUERY_ME } from "../../utils/queries";
-import { MailIcon } from "@heroicons/react/solid";
+import { MailIcon } from '@heroicons/react/solid';
 
 const MessageList = ({ messages, isLoggedInUser = false }) => {
   const [removeMessage, { error }] = useMutation(REMOVE_MESSAGE, {
@@ -38,15 +38,15 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-2 text-center">Message Box</h1>
-      <div className="flex items-center">
-        <MailIcon className="h-6 w-6 mr-1" />{" "}
-        {/* Adjust size and margin as needed */}
-        <span style={{ fontSize: "1rem" }}>
-          You currently have {messages.length} message
-          {messages.length === 1 ? "" : "s"} in your box.
-        </span>
-      </div>
+       
+       <div className="flex items-center ">
+       <h1 className="text-2xl font-bold mb-2 text-center">Message Box</h1>
+  <MailIcon className="h-6 w-6 mr-1 mb-2 ml-2" /> {/* Adjust size and margin as needed */}
+  <span style={{ fontSize: "1rem", fontWeight: "bold" }} className="mb-2">
+     {messages.length} 
+    {messages.length === 1}
+  </span>
+</div>
       <div className="message-container overflow-auto max-h-80">
         {/* Display messages */}
         {messages.slice(0, displayedMessages).map((message) => (
@@ -57,7 +57,7 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
                 From: {message.sender.name} on {message.createdAt}
               </p>
               {/* Message Text */}
-              <p className="message-text">{message.text}</p>
+              <p >{message.text}</p>
 
               {/* Delete Button (if logged in user) */}
               {isLoggedInUser && (
@@ -74,7 +74,7 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
         {/* Display "View More Messages" button if there are more messages */}
         {displayedMessages < messages.length && (
           <button
-            className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="mt-2 bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={handleScroll}
           >
             View More Messages
