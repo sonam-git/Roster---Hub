@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { SEND_MESSAGE } from '../../utils/mutations';
-import Modal from '../Modal'; 
-import "../../assets/css/modal.css"; 
-import MessageSentModal from '../MessageSentModal'; 
+import { QUERY_ME } from '../../utils/queries'; // Import the necessary query
+import Modal from '../Modal';
+import MessageSentModal from '../MessageSentModal';
+import MyProfile from '../MyProfile'; // Import the MyProfile component
 
 const ChatBox = ({ recipient, onCloseModal }) => {
   const [message, setMessage] = useState('');
-  const [showModal, setShowModal] = useState(false); 
-  const [messageSent, setMessageSent] = useState(false); 
+  const [showModal, setShowModal] = useState(false);
+  const [messageSent, setMessageSent] = useState(false);
   const [sendMessage] = useMutation(SEND_MESSAGE);
 
   const handleMessageChange = (event) => {
@@ -24,10 +25,11 @@ const ChatBox = ({ recipient, onCloseModal }) => {
           recipientId: recipient._id,
           text: message,
         },
+        refetchQueries: [{ query: QUERY_ME }], // Refetch the necessary query after sending the message
       });
       setMessage('');
-      setMessageSent(true); 
-      setShowModal(true); 
+      setMessageSent(true);
+      setShowModal(true);
     } catch (error) {
       console.error('Error sending message:', error);
     }
@@ -35,7 +37,7 @@ const ChatBox = ({ recipient, onCloseModal }) => {
 
   const handleCloseModal = () => {
     setShowModal(false);
-    onCloseModal(); // Call the onCloseModal function provided by the parent component
+    onCloseModal();
   };
 
   return (
@@ -70,10 +72,10 @@ const ChatBox = ({ recipient, onCloseModal }) => {
           </Modal>
         )}
         {showModal && <MessageSentModal onClose={handleCloseModal} />}
+        {messageSent && <MyProfile />}
       </>
     )
   );
-  
 };
 
 export default ChatBox;

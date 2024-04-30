@@ -7,7 +7,7 @@ const MessageSentModal = ({ onClose }) => {
 
   const handleClose = () => {
     onClose(); // Close the modal
-    navigate('/'); // Navigate to the home page
+    navigate('/me'); // Navigate to the home page
   };
 
   return (
