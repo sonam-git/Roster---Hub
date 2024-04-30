@@ -40,31 +40,43 @@ const SkillsList = ({ skills, isLoggedInUser = false }) => {
 
   return (
     <div>
-      <div className="flex-row justify-space-between my-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
         {skills.map((skill) => (
-          <div key={skill._id} className="col-12 col-xl-6">
-            <div className="card mb-3">
-              <h4 className="card-header bg-dark text-light p-2 m-0 display-flex align-center">
-                <span>{skill.skillText}</span>
-                <span className='author-name'> By: {skill.skillAuthor}</span>
-                {isLoggedInUser && (
-                  <button
-                    className="btn btn-sm btn-danger ml-auto"
-                    onClick={() => handleRemoveSkill(skill._id)} // Pass skillId to handleRemoveSkill
-                  >
-                    X
-                  </button>
-                )}
-              </h4>
+          <div key={skill._id} className="col-span-1">
+            <div className="card mb-3 shadow-xl">
+              <div className="card-header bg-dark text-light p-2">
+                {/* Skill text */}
+                <div className="mb-2">
+                  <span>{skill.skillText}</span>
+                </div>
+                {/* By and date */}
+                <div className="flex justify-between text-gray-500">
+                  <div>
+                    <span className="mr-1">By: {skill.skillAuthor}</span>
+                    <span>Date: {new Date(skill.createdAt).toLocaleDateString()}</span>
+                  </div>
+                  {/* Delete button (if logged in user) */}
+                  {isLoggedInUser && (
+                    <button
+                      className="btn btn-sm btn-danger"
+                      onClick={() => handleRemoveSkill(skill._id)}
+                    >
+                      Delete
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         ))}
       </div>
       {error && (
-        <div className="my-3 p-3 bg-danger text-white">{error.message}</div>
+        <div className="my-3 p-3 bg-red-500 text-white">{error.message}</div>
       )}
     </div>
   );
+  
+  
 };
 
 export default SkillsList;

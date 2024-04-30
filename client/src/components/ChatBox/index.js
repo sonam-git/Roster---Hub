@@ -43,20 +43,28 @@ const ChatBox = ({ recipient, onCloseModal }) => {
       <>
         {!messageSent && (
           <Modal showModal={!messageSent} onClose={handleCloseModal}>
-            <div className="card mb-3">
-              <h3>Send Text to {recipient.name}</h3>
-              <div className="card-header bg-dark text-light p-2 m-0">
-                <textarea
-                  value={message}
-                  onChange={handleMessageChange}
-                  placeholder="Type your message..."
-                  rows={4}
-                />
-                <div>
-                  <button className="btn btn-info" onClick={handleSendMessage}>
-                    Send
-                  </button>
-                </div>
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h3 className="text-xl font-bold mb-4">Send Message to {recipient.name}</h3>
+              <textarea
+                value={message}
+                onChange={handleMessageChange}
+                placeholder="Type your message..."
+                rows={6}
+                className="w-full p-2 border border-gray-300 rounded-md mb-4"
+              />
+              <div className="flex justify-end">
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mr-2"
+                  onClick={handleSendMessage}
+                >
+                  Send
+                </button>
+                <button
+                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400"
+                  onClick={handleCloseModal}
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </Modal>
@@ -65,6 +73,7 @@ const ChatBox = ({ recipient, onCloseModal }) => {
       </>
     )
   );
+  
 };
 
 export default ChatBox;
