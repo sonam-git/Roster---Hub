@@ -25,33 +25,34 @@ const Profile = () => {
 
   // Check if data is returning from the `QUERY_ME` query, then the `QUERY_SINGLE_PROFILE` query
   const profile = data?.me || data?.profile || {};
-  
 
-  // Use React Router's `<Redirect />` component to redirect to personal profile page if username is yours
+  // Use React Router's `<Navigate />` component to redirect to personal profile page if username is yours
   if (Auth.loggedIn() && Auth.getProfile().data._id === profileId) {
     return <Navigate to="/me" />;
   }
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="text-center mt-4">Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <div className="text-center mt-4">Error: {error.message}</div>;
   }
 
   if (!profile?.name) {
     return (
-      <h4>
-        You need to be logged in to see your profile page. Use the navigation
-        links above to sign up or log in!
-      </h4>
+      <div className="text-center mt-4">
+        <h4>
+          You need to be logged in to see your profile page. Use the navigation
+          links above to sign up or log in!
+        </h4>
+      </div>
     );
   }
 
   return (
-    <div>
-      <div className="my-4 p-4" style={{ border: "1px dotted #1a1a1a" }}>
+    <div className="container mx-auto">
+      <div className="my-4 p-4 border border-dotted border-gray-300 rounded">
         {profileId ? (
           <UserProfile profile={profile} />
         ) : (
@@ -59,7 +60,7 @@ const Profile = () => {
         )}
       </div>
 
-      <h2 className="card-header">
+      <h2 className="text-center mt-4 mb-2 font-bold text-lg">
         {profileId ? `${profile.name}'s` : "Your"} friends have endorsed these
         skills...
       </h2>
@@ -70,16 +71,16 @@ const Profile = () => {
           isLoggedInUser={!profileId && true}
         />
       )}
-      <div className="my-4 p-4" style={{ border: "1px dotted #1a1a1a" }}>
+
+      <div className="my-4 p-4 border border-dotted border-gray-300 rounded">
         <SkillForm profileId={profile._id} />
       </div>
+
       {/* Render UserInfoForm only for the logged-in user's profile */}
       {Auth.loggedIn() && Auth.getProfile().data._id === profile._id && (
-        <>
-          <div className="my-4 p-4" style={{ border: "1px dotted #1a1a1a" }}>
-            <UserInfoForm profileId={profile._id} />
-          </div>
-        </>
+        <div className="my-4 p-4 border border-dotted border-gray-300 rounded">
+          <UserInfoForm profileId={profile._id} />
+        </div>
       )}
     </div>
   );
