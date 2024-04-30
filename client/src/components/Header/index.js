@@ -1,6 +1,5 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-
+import { MenuIcon } from '@heroicons/react/outline'; // Import the menu icon from Heroicons
 import Auth from '../../utils/auth';
 
 const Header = () => {
@@ -8,36 +7,41 @@ const Header = () => {
     event.preventDefault();
     Auth.logout();
   };
+
   return (
-    <header className="bg-info text-dark mb-4 py-3 display-flex align-center">
-      <div className="container flex-column justify-space-between-lg justify-center align-center text-center">
-        <Link className="text-dark" to="/">
-          <h1 className="m-0" style={{ fontSize: '3rem' }}>
-            Roster Hub {new Date().getFullYear()}
-          </h1>
-        </Link>
-        <p className="m-0" style={{ fontSize: '1.75rem', fontWeight: '700' }}>
-          Meet your team members.
-        </p>
-        <div>
+    <header className="bg-info text-dark mb-4 py-3">
+      <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center justify-between">
+        {/* Menu Icon */}
+        <MenuIcon className="h-8 w-8 lg:hidden" />
+
+        {/* Title and Description */}
+        <div className="text-center lg:text-left">
+          <Link to="/" className="text-dark">
+            <h1 className="text-3xl font-bold">Roster Hub {new Date().getFullYear()}</h1>
+          </Link>
+          <p className="text-lg font-semibold">Meet your team members.</p>
+        </div>
+
+        {/* Buttons */}
+        <div className="flex flex-col lg:flex-row lg:items-center">
           {Auth.loggedIn() ? (
             <>
-              <Link className="btn btn-lg btn-primary m-2" to="/me">
+              <Link className="btn btn-primary lg:mr-2 mb-2 lg:mb-0" to="/me">
                 View My Profile
               </Link>
-              <Link className="btn btn-lg btn-primary m-2" to="/">
+              <Link className="btn btn-primary lg:mr-2 mb-2 lg:mb-0" to="/">
                 View Roster
               </Link>
-              <button className="btn btn-lg btn-light m-2" onClick={logout}>
+              <button className="btn btn-light mb-2 lg:mb-0" onClick={logout}>
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link className="btn btn-lg btn-primary m-2" to="/login">
+              <Link className="btn btn-primary lg:mr-2 mb-2 lg:mb-0" to="/login">
                 Login
               </Link>
-              <Link className="btn btn-lg btn-light m-2" to="/signup">
+              <Link className="btn btn-light mb-2 lg:mb-0" to="/signup">
                 Signup
               </Link>
             </>

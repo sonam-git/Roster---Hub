@@ -53,7 +53,7 @@ const SkillsList = ({ skills, isLoggedInUser = false }) => {
                 <div className="flex justify-between text-gray-500">
                   <div>
                     <span className="mr-1">By: {skill.skillAuthor}</span>
-                    <span>Date: {new Date(skill.createdAt).toLocaleDateString()}</span>
+                    <span>Date: {skill.createdAt}</span>
                   </div>
                   {/* Delete button (if logged in user) */}
                   {isLoggedInUser && (
