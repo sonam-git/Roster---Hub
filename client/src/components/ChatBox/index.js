@@ -61,10 +61,10 @@ const ChatBox = ({ recipient, onCloseModal }) => {
         {!messageSent && (
           <Modal showModal={!messageSent} onClose={handleCloseModal}>
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-xl font-bold mb-4">Chat with {recipient.name}</h3>
+              <h3 className="text-xl font-bold mb-4 card-header bg-dark text-light p-2 m-0 rounded-md">Chat with {recipient.name[0].toUpperCase() + recipient.name.slice(1)}</h3>
               {messages.map((msg, index) => (
                 <div key={index} className="mb-2">
-                  <p className="font-semibold">{msg.sender.name}</p>
+                  <p className="font-semibold">{msg.sender.name[0].toUpperCase() + msg.sender.name.slice(1)}</p>
                   <p>{msg.text}</p>
                   <p className="text-sm text-gray-500">
                     {msg.createdAt}

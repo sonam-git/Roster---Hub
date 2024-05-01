@@ -1,27 +1,27 @@
 import React from "react";
 import profileImage from "../../assets/images/sonamphoto.jpg";
+import SkillsList from "../SkillsList";
 
 const UserProfile = ({ profile }) => {
   return (
-    <div className="md:w-2/3 md:pr-4 flex items-center justify-center mb-6 md:mb-0">
-      <div className="bg-white rounded-lg shadow-md p-6 max-w-md">
+    <div className="md:flex md:space-x-4 mb-6 md:mb-0">
+      {/* Image and User Information */}
+      <div className="md:w-1/2 bg-white rounded-lg shadow-md p-6 max-w-md">
         <img
           src={profileImage}
           alt="Profile"
-          className="rounded-full w-24 h-24 mb-4 mx-auto"
+          className="rounded-full w-24 h-24 mx-auto mb-4"
         />
-        <h1 className="text-2xl font-bold mb-2 text-center">
-         {profile.name}
-        </h1>
-        <p className="text-gray-700 text-center">
-          Jersey Number : {profile.jerseyNumber}
-        </p>
-        <p className="text-gray-700 text-center">
-          Position : {profile.position}
-        </p>
-        <p className="text-gray-700 text-center">
-          Contact: {profile.phoneNumber}
-        </p>
+        <div className="md:text-left text-center">
+          <h1 className="text-2xl font-bold mb-2">{profile.name}</h1>
+          <p className="text-gray-700">Jersey Number: {profile.jerseyNumber}</p>
+          <p className="text-gray-700">Position: {profile.position}</p>
+          <p className="text-gray-700">Contact: {profile.phoneNumber}</p>
+        </div>
+      </div>
+      {/* Skills List */}
+      <div className="md:w-1/2 bg-white rounded-lg shadow-md p-6 max-w-md">
+        <SkillsList skills={profile.skills || []} />
       </div>
     </div>
   );

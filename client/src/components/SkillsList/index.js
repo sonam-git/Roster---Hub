@@ -40,7 +40,7 @@ const SkillsList = ({ skills, isLoggedInUser = false }) => {
 
   return (
     <>
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
+  <div className="grid grid-cols-1 sm:grid-cols-2 my-4">
     {skills.map((skill) => (
       <div key={skill._id} className="col-span-1">
         <div className="card mb-3 shadow-xl rounded-md">

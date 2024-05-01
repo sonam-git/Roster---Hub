@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { MenuIcon } from '@heroicons/react/outline'; // Import the menu icon from Heroicons
 import Auth from '../../utils/auth';
 
@@ -6,6 +6,7 @@ const Header = () => {
   const logout = (event) => {
     event.preventDefault();
     Auth.logout();
+    return <Navigate to="/" />;
   };
 
   return (

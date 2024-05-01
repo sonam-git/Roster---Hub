@@ -18,8 +18,12 @@ const ProfileList = ({ profiles, title }) => {
     return <h3>No Profiles Yet</h3>;
   }
 
+  // Get the ID of the logged-in user
+  const loggedInUserId = Auth.loggedIn() && Auth.getProfile().data._id
+  
+
   // Filter out the logged-in user from the profiles list
-  const filteredProfiles = profiles.filter(profile => profile._id !== Auth.getProfile()._id);
+  const filteredProfiles = profiles.filter(profile => profile._id !== loggedInUserId);
 
   return (
     <div>
