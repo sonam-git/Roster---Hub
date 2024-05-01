@@ -28,6 +28,10 @@ const resolvers = {
             path: "receivedMessages",
             populate: { path: "sender" },
           })
+          .populate({
+            path: "sentMessages",
+            populate: { path: "recipient" },
+          })
           .populate("skills");
       }
       throw new AuthenticationError("You need to be logged in!");

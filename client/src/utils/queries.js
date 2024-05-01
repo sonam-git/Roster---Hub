@@ -89,23 +89,37 @@ export const QUERY_ME = gql`
           name
         }
       }
+      sentMessages {
+        _id
+        text
+        createdAt
+        sender {
+          _id
+          name
+        }
+        recipient {
+          _id
+          name
+        }
+      }
     }
   }
 `;
+
 export const RECEIVED_MESSAGES = gql`
-query ReceivedMessages {
-  receivedMessages {
-    _id
-    text
-    createdAt
-    sender {
+  query ReceivedMessages {
+    receivedMessages {
       _id
-      name
-    }
-    recipient {
-      _id
-      name
+      text
+      createdAt
+      sender {
+        _id
+        name
+      }
+      recipient {
+        _id
+        name
+      }
     }
   }
-}
 `;

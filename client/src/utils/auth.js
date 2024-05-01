@@ -7,7 +7,7 @@ class AuthService {
 
   loggedIn() {
     const token = this.getToken();
-    return token && !this.isTokenExpired(token) ? true : false;
+    return token && !this.isTokenExpired(token);
   }
 
   isTokenExpired(token) {
@@ -34,4 +34,6 @@ class AuthService {
   }
 }
 
-export default new AuthService();
+const authService = new AuthService(); // Assign instance to a variable
+
+export default authService; // Export the instance variable

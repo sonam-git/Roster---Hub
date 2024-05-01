@@ -10,6 +10,7 @@ const typeDefs = gql`
     phoneNumber: String
     skills: [Skill]
     receivedMessages: [Message]
+    sentMessages: [Message]
   }
 
   type Skill {

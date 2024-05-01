@@ -3,33 +3,33 @@ import { useMutation, useQuery } from '@apollo/client';
 import { SEND_MESSAGE } from '../../utils/mutations';
 import Modal from '../Modal';
 import MessageSentModal from '../MessageSentModal';
-import { QUERY_ME } from '../../utils/queries'; // Import the GraphQL query for fetching profile information
+import { QUERY_ME } from '../../utils/queries';
 
 const ChatBox = ({ recipient, onCloseModal }) => {
+  
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([]); // State to store messages
+  const [messages, setMessages] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [messageSent, setMessageSent] = useState(false);
   const [sendMessage] = useMutation(SEND_MESSAGE);
-  
 
-  // Fetch messages between current user and recipient
+  // Fetch all messages between current user and recipient
   const { loading, data } = useQuery(QUERY_ME);
-  if(loading){
-    <div>loading....</div>
-  }
-
+  
   useEffect(() => {
-    if (data && data.me && data.me.receivedMessages) {
-      // Filter messages to include only those from the current recipient
-      const filteredMessages = data.me.receivedMessages.filter(
-        msg => msg.sender._id === recipient._id
+    if (!loading && data && data.me && data.me.receivedMessages) {
+      // Combine received and sent messages
+      const allMessages = [...data.me.receivedMessages, ...data.me.sentMessages];
+      // Filter messages to include only those between current user and recipient
+      const filteredMessages = allMessages.filter(
+        msg => (msg.sender._id === recipient._id || msg.recipient._id === recipient._id)
       );
-      setMessages(filteredMessages);
+      // Sort messages by createdAt timestamp
+      const sortedMessages = filteredMessages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      setMessages(sortedMessages);
     }
-  }, [data, recipient]);
+  }, [loading, data, recipient]);
 
-  // Function to handle sending message
   const handleSendMessage = async () => {
     if (message.trim() === '') return;
 
@@ -39,14 +39,8 @@ const ChatBox = ({ recipient, onCloseModal }) => {
           recipientId: recipient._id,
           text: message,
         },
-        refetchQueries: [{ query: QUERY_ME }], // Refetch the necessary query after sending the message
+        refetchQueries: [{ query: QUERY_ME }],
       });
-
-      // Update messages state with the newly sent message
-      setMessages([
-        ...messages,
-        { sender: 'You', text: message, createdAt: new Date().toISOString() },
-      ]);
 
       setMessage('');
       setMessageSent(true);
@@ -56,7 +50,6 @@ const ChatBox = ({ recipient, onCloseModal }) => {
     }
   };
 
-  // Function to handle closing modal
   const handleCloseModal = () => {
     setShowModal(false);
     onCloseModal();
@@ -69,7 +62,6 @@ const ChatBox = ({ recipient, onCloseModal }) => {
           <Modal showModal={!messageSent} onClose={handleCloseModal}>
             <div className="bg-white rounded-lg shadow-md p-6">
               <h3 className="text-xl font-bold mb-4">Chat with {recipient.name}</h3>
-              {/* Display previous messages */}
               {messages.map((msg, index) => (
                 <div key={index} className="mb-2">
                   <p className="font-semibold">{msg.sender.name}</p>
@@ -79,7 +71,6 @@ const ChatBox = ({ recipient, onCloseModal }) => {
                   </p>
                 </div>
               ))}
-              {/* Input field for new message */}
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}

@@ -51,7 +51,7 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
       <div className="flex items-center ">
         <h1 className="text-2xl font-bold mb-2 text-center">Message Box</h1>
         <MailIcon className="h-6 w-6 mr-1 mb-2 ml-2" />
-        <span style={{ fontSize: "1rem", fontWeight: "bold", marginBottom: 5 }}>
+        <span style={{ fontSize: "1rem", fontWeight: "bold", marginBottom: 10 }}>
           {messages.length}
           {messages.length === 1}
         </span>
