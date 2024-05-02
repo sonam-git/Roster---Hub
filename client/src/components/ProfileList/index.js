@@ -60,7 +60,7 @@ const ProfileList = ({ profiles, title }) => {
                 </button>
                 {/* Player info button */}
                 <Link
-                  className="btn btn-squared btn-light text-dark"
+                  className="text-dark"
                   to={`/profiles/${profile._id}`}
                 >
                   <span className="text-black text-sm">

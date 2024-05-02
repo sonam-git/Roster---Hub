@@ -8,6 +8,7 @@ const typeDefs = gql`
     jerseyNumber: Int
     position: String
     phoneNumber: String
+    profilePic: String
     skills: [Skill]
     receivedMessages: [Message]
     sentMessages: [Message]
@@ -46,7 +47,7 @@ const typeDefs = gql`
   type Mutation {
     addProfile(name: String!, email: String!, password: String! ): Auth
     login(email: String!, password: String!): Auth
-    addInfo(profileId: ID!, jerseyNumber: Int!, position: String!, phoneNumber: String!): Profile
+    addInfo(profileId: ID!, jerseyNumber: Int!, position: String!, phoneNumber: String!, profilePic: String): Profile
     addSkill(profileId: ID!, skillText: String! ): Skill
     sendMessage(recipientId: ID!, text: String!): Message!
     removeSkill(skillId: ID!): Skill

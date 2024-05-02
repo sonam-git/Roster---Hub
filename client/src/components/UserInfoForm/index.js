@@ -2,38 +2,45 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 
-import { ADD_INFO} from '../../utils/mutations';
+import { ADD_INFO } from '../../utils/mutations';
 
 import Auth from '../../utils/auth';
 
-const UserInfoForm = ({profileId}) => {
-    const [jerseyNumber, setJerseyNumber] = useState('');
-    const [position, setPosition] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
+const UserInfoForm = ({ profileId }) => {
+  const [jerseyNumber, setJerseyNumber] = useState('');
+  const [position, setPosition] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [profilePic, setProfilePic] = useState(null); // State to store the selected profile picture file
 
-    const [addInfo, { error }] = useMutation(ADD_INFO);
-  
+  const [addInfo, { error }] = useMutation(ADD_INFO);
+
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
     try {
       // add information
-     await addInfo({
+      await addInfo({
         variables: {
           profileId,
           jerseyNumber: parseInt(jerseyNumber),
           position,
           phoneNumber,
+          profilePic: profilePic // Pass the selected profile picture file
         },
       });
-    
-    setJerseyNumber('')
-    setPosition('')
-    setPhoneNumber('')
+
+      setJerseyNumber('');
+      setPosition('');
+      setPhoneNumber('');
+      setProfilePic(null); // Reset the profile picture state after submission
     } catch (err) {
       console.error(err);
     }
-    
+  };
+
+  const handleProfilePicChange = (event) => {
+    const file = event.target.files[0]; // Get the selected file
+    setProfilePic(file); // Update the profile picture state
   };
 
   return (
@@ -65,11 +72,18 @@ const UserInfoForm = ({profileId}) => {
               onChange={(event) => setPhoneNumber(event.target.value)}
               required
             />
-        
+            {/* Profile picture input */}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleProfilePicChange}
+              className="form-input w-100"
+              required
+            />
           </div>
           <div className="col-12 col-lg-3">
             <button className="btn btn-info btn-block py-3" type="submit">
-             Add Info
+              Add Info
             </button>
           </div>
           {error && (
@@ -88,4 +102,4 @@ const UserInfoForm = ({profileId}) => {
   );
 };
 
-export default UserInfoForm ;
+export default UserInfoForm;

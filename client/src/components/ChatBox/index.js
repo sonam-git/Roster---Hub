@@ -17,7 +17,11 @@ const ChatBox = ({ recipient, onCloseModal }) => {
   const { loading, data } = useQuery(QUERY_ME);
   
   useEffect(() => {
-    if (!loading && data && data.me && data.me.receivedMessages) {
+    console.log("Loading:", loading);
+    console.log("Data:", data);
+    console.log("Recipient:", recipient);
+    
+    if (!loading && data && data.me && data.me.receivedMessages && recipient) {
       // Combine received and sent messages
       const allMessages = [...data.me.receivedMessages, ...data.me.sentMessages];
       // Filter messages to include only those between current user and recipient
@@ -29,6 +33,8 @@ const ChatBox = ({ recipient, onCloseModal }) => {
       setMessages(sortedMessages);
     }
   }, [loading, data, recipient]);
+  
+  
 
   const handleSendMessage = async () => {
     if (message.trim() === '') return;
@@ -63,14 +69,14 @@ const ChatBox = ({ recipient, onCloseModal }) => {
             <div className="bg-white rounded-lg shadow-md p-6">
               <h3 className="text-xl font-bold mb-4 card-header bg-dark text-light p-2 m-0 rounded-md">Chat with {recipient.name[0].toUpperCase() + recipient.name.slice(1)}</h3>
               {messages.map((msg, index) => (
-                <div key={index} className="mb-2">
-                  <p className="font-semibold">{msg.sender.name[0].toUpperCase() + msg.sender.name.slice(1)}</p>
-                  <p>{msg.text}</p>
-                  <p className="text-sm text-gray-500">
-                    {msg.createdAt}
-                  </p>
-                </div>
-              ))}
+  <div key={index} className="mb-2">
+    <p className="font-semibold">{msg.sender && msg.sender.name ? msg.sender.name[0].toUpperCase() + msg.sender.name.slice(1) : 'Sender'}</p>
+    <p>{msg.text}</p>
+    <p className="text-sm text-gray-500">
+      {msg.createdAt || ''}
+    </p>
+  </div>
+))}
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}

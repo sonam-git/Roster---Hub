@@ -8,6 +8,7 @@ export const QUERY_PROFILES = gql`
       jerseyNumber
       position
       phoneNumber
+      profilePic
       skills {
         _id
         skillText
@@ -39,6 +40,7 @@ export const QUERY_SINGLE_PROFILE = gql`
       jerseyNumber
       position
       phoneNumber
+      profilePic
       skills {
         _id
         skillText
@@ -70,6 +72,7 @@ export const QUERY_ME = gql`
       jerseyNumber
       position
       phoneNumber
+      profilePic
       skills {
         _id
         skillText

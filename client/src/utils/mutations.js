@@ -24,18 +24,21 @@ export const ADD_INFO = gql`
     $jerseyNumber: Int!
     $position: String!
     $phoneNumber: String!
+    $profilePic: String
   ) {
     addInfo(
       profileId: $profileId
       jerseyNumber: $jerseyNumber
       position: $position
       phoneNumber: $phoneNumber
+      profilePic: $profilePic
     ) {
       _id
       name
       jerseyNumber
       position
       phoneNumber
+      profilePic
     }
   }
 `;

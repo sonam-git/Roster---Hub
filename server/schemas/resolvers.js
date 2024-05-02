@@ -1,6 +1,8 @@
 const { AuthenticationError } = require("apollo-server-express");
 const { Profile, Skill, Message } = require("../models");
 const { signToken } = require("../utils/auth");
+const cloudinary = require("../utils/cloudinary");
+const { promisify } = require('util');
 
 const resolvers = {
   Query: {
@@ -79,31 +81,45 @@ const resolvers = {
       const token = signToken(profile);
       return { token, profile };
     },
-
+  
     addInfo: async (
       parent,
-      { profileId, jerseyNumber, position, phoneNumber },
+      { profileId, jerseyNumber, position, phoneNumber, profilePic },
       context
     ) => {
-      // Check if the user is logged in
-      if (context.user) {
+       // Check if the user is logged in
+       if (!context.user) {
+        throw new AuthenticationError("You need to be logged in to update profile information");
+      }
+      try {
         // Check if the profile exists
         const profile = await Profile.findById(profileId);
         if (!profile) {
           throw new Error("Profile not found!");
         }
-
+    
         // Update the profile with the additional information
         profile.jerseyNumber = jerseyNumber;
         profile.position = position;
         profile.phoneNumber = phoneNumber;
 
+        if (profilePic) {
+          // Construct the path to the file
+          const mainDir = path.dirname(require.main.filename);
+          const filename = `${mainDir}/uploads/${profilePic}`;
+
+          // Upload the image to cloudinary
+          const photo = await cloudinary.v2.uploader.upload(filename);
+          profile.profilePic = photo.secure_url; // Assign the secure URL to profilePic
+        }
+        console.log(photo)
         // Save the updated profile
         await profile.save();
 
         return profile;
-      } else {
-        throw new AuthenticationError("You need to be logged in!");
+      } catch (error) {
+        console.error("Error updating profile information:", error);
+        throw new Error("Failed to update profile information");
       }
     },
 

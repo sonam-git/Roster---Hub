@@ -4,7 +4,8 @@ import { useMutation } from '@apollo/client';
 import { REMOVE_SKILL } from '../../utils/mutations';
 import { QUERY_ME } from '../../utils/queries';
 
-const SkillsList = ({ skills, isLoggedInUser = false }) => {
+const SkillsList = ({ profile, skills, isLoggedInUser = false }) => {
+
   const [removeSkill, { error }] = useMutation(REMOVE_SKILL, {
     update(cache, { data: { removeSkill } }) {
       try {
@@ -40,6 +41,14 @@ const SkillsList = ({ skills, isLoggedInUser = false }) => {
 
   return (
     <>
+   {
+    !isLoggedInUser &&  <h2 className="text-center mt-4 mb-2 font-bold text-lg">
+    {profile.name}friends have endorsed these
+     skills...
+   </h2>
+
+   }
+  
   <div className="grid grid-cols-1 sm:grid-cols-2 my-4">
     {skills.map((skill) => (
       <div key={skill._id} className="col-span-1">
