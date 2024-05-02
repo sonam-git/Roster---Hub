@@ -17,10 +17,6 @@ const ChatBox = ({ recipient, onCloseModal }) => {
   const { loading, data } = useQuery(QUERY_ME);
   
   useEffect(() => {
-    console.log("Loading:", loading);
-    console.log("Data:", data);
-    console.log("Recipient:", recipient);
-    
     if (!loading && data && data.me && data.me.receivedMessages && recipient) {
       // Combine received and sent messages
       const allMessages = [...data.me.receivedMessages, ...data.me.sentMessages];
