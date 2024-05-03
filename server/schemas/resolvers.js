@@ -1,8 +1,8 @@
 const { AuthenticationError } = require("apollo-server-express");
 const { Profile, Skill, Message } = require("../models");
 const { signToken } = require("../utils/auth");
-const cloudinary = require("../utils/cloudinary");
-const { promisify } = require('util');
+const cloudinary = require("cloudinary").v2;
+
 
 const resolvers = {
   Query: {
@@ -84,7 +84,7 @@ const resolvers = {
   
     addInfo: async (
       parent,
-      { profileId, jerseyNumber, position, phoneNumber, profilePic },
+      { profileId, jerseyNumber, position, phoneNumber},
       context
     ) => {
        // Check if the user is logged in
@@ -103,16 +103,6 @@ const resolvers = {
         profile.position = position;
         profile.phoneNumber = phoneNumber;
 
-        if (profilePic) {
-          // Construct the path to the file
-          const mainDir = path.dirname(require.main.filename);
-          const filename = `${mainDir}/uploads/${profilePic}`;
-
-          // Upload the image to cloudinary
-          const photo = await cloudinary.v2.uploader.upload(filename);
-          profile.profilePic = photo.secure_url; // Assign the secure URL to profilePic
-        }
-        console.log(photo)
         // Save the updated profile
         await profile.save();
 
@@ -120,6 +110,36 @@ const resolvers = {
       } catch (error) {
         console.error("Error updating profile information:", error);
         throw new Error("Failed to update profile information");
+      }
+    },
+    uploadProfilePic: async (_, { profileId, file }, context) => {
+      // Check if the user is authenticated
+      if (!context.user) {
+        throw new AuthenticationError("You need to be logged in to update profile picture");
+      }
+
+      try {
+        // Upload the file to cloudinary or any other cloud storage
+        const uploadedImage = await cloudinary.uploader.upload(file, {
+          folder: "profile_pictures", // Optional folder name
+        });
+
+        // Find the profile by ID
+        const profile = await Profile.findById(profileId);
+        if (!profile) {
+          throw new Error("Profile not found!");
+        }
+
+        // Update the profile's profilePic property
+        profile.profilePic = uploadedImage.secure_url;
+
+        // Save the updated profile
+        await profile.save();
+
+        return profile;
+      } catch (error) {
+        console.error("Error uploading profile picture:", error);
+        throw new Error("Failed to upload profile picture");
       }
     },
 

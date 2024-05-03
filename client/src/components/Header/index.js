@@ -1,5 +1,5 @@
 import { Link, Navigate } from 'react-router-dom';
-import { MenuIcon } from '@heroicons/react/outline'; // Import the menu icon from Heroicons
+// import { MenuIcon } from '@heroicons/react/outline'; // Import the menu icon from Heroicons
 import Auth from '../../utils/auth';
 
 const Header = () => {
@@ -13,7 +13,7 @@ const Header = () => {
     <header className="bg-info text-dark mb-4 py-3">
       <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center justify-between">
         {/* Menu Icon */}
-        <MenuIcon className="h-8 w-8 lg:hidden" />
+        {/* <MenuIcon className="h-8 w-8 lg:hidden" /> */}
 
         {/* Title and Description */}
         <div className="text-center lg:text-left">
@@ -30,7 +30,7 @@ const Header = () => {
               <Link className="btn btn-primary lg:mr-2 mb-2 lg:mb-0" to="/me">
                 View My Profile
               </Link>
-              <Link className="btn btn-primary lg:mr-2 mb-2 lg:mb-0" to="/">
+              <Link className="btn btn-primary lg:mr-2 mb-2 lg:mb-0" to="/roster">
                 View Roster
               </Link>
               <button className="btn btn-light mb-2 lg:mb-0" onClick={logout}>

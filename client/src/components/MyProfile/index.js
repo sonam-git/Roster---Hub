@@ -2,7 +2,7 @@ import React from "react";
 import { useQuery } from '@apollo/client';
 import { QUERY_ME } from '../../utils/queries';
 import MessageList from "../MessageList";
-
+import ProfilePicUploader from "../ProfilePicUploader";
 
 const MyProfile = ({ isLoggedInUser }) => {
   // Fetch the user's information
@@ -16,21 +16,28 @@ const MyProfile = ({ isLoggedInUser }) => {
     <div className="md:flex md:space-x-4 mb-6 md:mb-0">
       {/* Profile Details */}
       <div className="md:w-1/3 bg-white rounded-lg shadow-md p-6 max-w-md">
+       
+        {/* Profile Picture */}
         <img
-          src={me?.profilePic} // Use the profile picture directly from the profile data
+          src={me?.profilePic || 'placeholder_image_url'} // Use the profile picture directly from the profile data or a placeholder image URL
           alt="Profile"
           className="rounded-full w-24 h-24 mx-auto mb-4"
         />
-         <div className="md:text-left text-center">
+         {/* Conditional rendering of ProfilePicUploader */}
+         {!me?.profilePic && <ProfilePicUploader />}
+         <br></br>
+        {/* Profile Information */}
+        <div className="md:text-left text-center">
           <h1 className="text-2xl font-bold text-center">{me?.name}</h1>
           {me?.jerseyNumber && <p className="text-gray-700 text-center">Jersey Number: {me.jerseyNumber}</p>}
           {me?.position && <p className="text-gray-700 text-center">Position: {me.position}</p>}
           {me?.phoneNumber && <p className="text-gray-700 text-center">Contact: {me.phoneNumber}</p>}
-          </div>
+        </div>
       </div>
       {/* Message List */}
       <div className="md:w-2/3 bg-white rounded-lg shadow-md p-6 max-w-2xl">
         <div className="bg-white rounded-lg shadow-md p-6 max-w-xl">
+          {/* Conditional rendering of MessageList */}
           {me?.receivedMessages ? (
             <MessageList messages={me.receivedMessages || []} isLoggedInUser={isLoggedInUser} />
           ) : (

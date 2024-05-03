@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
-import { SEND_MESSAGE } from '../../utils/mutations';
-import Modal from '../Modal';
-import MessageSentModal from '../MessageSentModal';
-import { QUERY_ME } from '../../utils/queries';
+import React, { useState, useEffect } from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import { SEND_MESSAGE } from "../../utils/mutations";
+import Modal from "../Modal";
+import MessageSentModal from "../MessageSentModal";
+import { QUERY_ME } from "../../utils/queries";
 
 const ChatBox = ({ recipient, onCloseModal }) => {
-  
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [messageSent, setMessageSent] = useState(false);
@@ -15,25 +14,31 @@ const ChatBox = ({ recipient, onCloseModal }) => {
 
   // Fetch all messages between current user and recipient
   const { loading, data } = useQuery(QUERY_ME);
-  
+
   useEffect(() => {
     if (!loading && data && data.me && data.me.receivedMessages && recipient) {
       // Combine received and sent messages
-      const allMessages = [...data.me.receivedMessages, ...data.me.sentMessages];
+      const allMessages = [
+        ...data.me.receivedMessages,
+        ...data.me.sentMessages,
+      ];
       // Filter messages to include only those between current user and recipient
       const filteredMessages = allMessages.filter(
-        msg => (msg.sender._id === recipient._id || msg.recipient._id === recipient._id)
+        (msg) =>
+          msg.sender._id === recipient._id ||
+          msg.recipient._id === recipient._id
       );
-      // Sort messages by createdAt timestamp
-      const sortedMessages = filteredMessages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-      setMessages(sortedMessages);
+      // Sort messages by createdAt timestamp in ascending order
+      const sortedMessages = filteredMessages.sort(
+        (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+      );
+      // Reverse the order to display the latest message at the bottom
+      setMessages(sortedMessages.reverse());
     }
   }, [loading, data, recipient]);
-  
-  
 
   const handleSendMessage = async () => {
-    if (message.trim() === '') return;
+    if (message.trim() === "") return;
 
     try {
       await sendMessage({
@@ -44,11 +49,11 @@ const ChatBox = ({ recipient, onCloseModal }) => {
         refetchQueries: [{ query: QUERY_ME }],
       });
 
-      setMessage('');
+      setMessage("");
       setMessageSent(true);
       setShowModal(true);
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error("Error sending message:", error);
     }
   };
 
@@ -63,16 +68,23 @@ const ChatBox = ({ recipient, onCloseModal }) => {
         {!messageSent && (
           <Modal showModal={!messageSent} onClose={handleCloseModal}>
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-xl font-bold mb-4 card-header bg-dark text-light p-2 m-0 rounded-md">Chat with {recipient.name[0].toUpperCase() + recipient.name.slice(1)}</h3>
+              <h3 className="text-xl font-bold mb-4 card-header bg-dark text-light p-2 m-0 rounded-md">
+                Chat with{" "}
+                {recipient.name[0].toUpperCase() + recipient.name.slice(1)}
+              </h3>
+              {/* Reverse the order of messages to display the latest at the bottom */}
               {messages.map((msg, index) => (
-  <div key={index} className="mb-2">
-    <p className="font-semibold">{msg.sender && msg.sender.name ? msg.sender.name[0].toUpperCase() + msg.sender.name.slice(1) : 'Sender'}</p>
-    <p>{msg.text}</p>
-    <p className="text-sm text-gray-500">
-      {msg.createdAt || ''}
-    </p>
-  </div>
-))}
+                <div key={index} className="mb-2">
+                  <p className="font-semibold">
+                    {msg.sender && msg.sender.name
+                      ? msg.sender.name[0].toUpperCase() +
+                        msg.sender.name.slice(1)
+                      : "Sender"}
+                  </p>
+                  <p>{msg.text}</p>
+                  <p className="text-sm text-gray-500">{msg.createdAt || ""}</p>
+                </div>
+              ))}
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
