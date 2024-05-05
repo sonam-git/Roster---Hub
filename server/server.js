@@ -3,6 +3,7 @@ const path = require('path');
 const { ApolloServer } = require('apollo-server-express');
 const { authMiddleware } = require('./utils/auth');
 const { typeDefs, resolvers } = require('./schemas');
+const { graphqlUploadExpress } = require('graphql-upload'); // Import the graphqlUploadExpress middleware
 const db = require('./config/connection');
 
 
@@ -13,10 +14,12 @@ const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  uploads: false,
   context: authMiddleware,
 });
 
-
+// app.use(cors());
+app.use(graphqlUploadExpress())
 // Bodyparser middlewares
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

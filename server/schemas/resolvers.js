@@ -2,25 +2,31 @@ const { AuthenticationError } = require("apollo-server-express");
 const { Profile, Skill, Message } = require("../models");
 const { signToken } = require("../utils/auth");
 const cloudinary = require("cloudinary").v2;
-
+require("dotenv").config();
+cloudinary.config({
+  cloud_name: "dey5y9jip",
+  api_key: "279571669115484",
+  api_secret: "ms63UupjyfnTLl07NGMlh3H-LpU",
+});
 
 const resolvers = {
   Query: {
     profiles: async () => {
-      return Profile.find().populate({
-        path: "receivedMessages",
-        populate: { path: "sender" },
-      })
-      .populate("skills");
+      return Profile.find()
+        .populate({
+          path: "receivedMessages",
+          populate: { path: "sender" },
+        })
+        .populate("skills");
     },
 
     profile: async (parent, { profileId }) => {
       return Profile.findOne({ _id: profileId })
-      .populate({
-        path: "receivedMessages",
-        populate: { path: "sender" },
-      })
-      .populate("skills");
+        .populate({
+          path: "receivedMessages",
+          populate: { path: "sender" },
+        })
+        .populate("skills");
     },
     //By adding context to our query, we can retrieve the logged in user without specifically searching for them
     me: async (parent, args, context) => {
@@ -49,7 +55,7 @@ const resolvers = {
 
       try {
         // Retrieve messages received by the authenticated user
-        const messages = await Message.find({ recipient: user._id })
+        const messages = await Message.find({ recipient: user._id });
         return messages;
       } catch (error) {
         console.error("Error fetching messages:", error);
@@ -81,15 +87,17 @@ const resolvers = {
       const token = signToken(profile);
       return { token, profile };
     },
-  
+
     addInfo: async (
       parent,
-      { profileId, jerseyNumber, position, phoneNumber},
+      { profileId, jerseyNumber, position, phoneNumber },
       context
     ) => {
-       // Check if the user is logged in
-       if (!context.user) {
-        throw new AuthenticationError("You need to be logged in to update profile information");
+      // Check if the user is logged in
+      if (!context.user) {
+        throw new AuthenticationError(
+          "You need to be logged in to update profile information"
+        );
       }
       try {
         // Check if the profile exists
@@ -97,7 +105,7 @@ const resolvers = {
         if (!profile) {
           throw new Error("Profile not found!");
         }
-    
+
         // Update the profile with the additional information
         profile.jerseyNumber = jerseyNumber;
         profile.position = position;
@@ -112,26 +120,33 @@ const resolvers = {
         throw new Error("Failed to update profile information");
       }
     },
-    uploadProfilePic: async (_, { profileId, file }, context) => {
-      // Check if the user is authenticated
+    // Update the uploadProfilePic resolver to handle Cloudinary uploads
+    uploadProfilePic: async (_, { profileId, profilePic }, context) => {
       if (!context.user) {
-        throw new AuthenticationError("You need to be logged in to update profile picture");
+        throw new AuthenticationError(
+          "You need to be logged in to update profile picture"
+        );
       }
 
       try {
-        // Upload the file to cloudinary or any other cloud storage
-        const uploadedImage = await cloudinary.uploader.upload(file, {
-          folder: "profile_pictures", // Optional folder name
-        });
-
+        let imageUrl = null;
+        // Upload the image to Cloudinary only if an image was provided
+        if (profilePic ) {
+          const { secure_url: uploadedImageUrl } =
+            await cloudinary.uploader.upload(profilePic , {
+              allowed_formats : ['png','jpg','jpeg','svg','ico','jifif','webp']
+            });
+          imageUrl = uploadedImageUrl;
+        }
+       
         // Find the profile by ID
         const profile = await Profile.findById(profileId);
         if (!profile) {
           throw new Error("Profile not found!");
         }
 
-        // Update the profile's profilePic property
-        profile.profilePic = uploadedImage.secure_url;
+        // Update the profile's profilePic property with the Cloudinary URL
+        profile.profilePic = imageUrl ;
 
         // Save the updated profile
         await profile.save();

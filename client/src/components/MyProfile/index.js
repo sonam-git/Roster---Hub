@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/client';
 import { QUERY_ME } from '../../utils/queries';
 import MessageList from "../MessageList";
 import ProfilePicUploader from "../ProfilePicUploader";
+import ProfileAvatar from "../../assets/images/profile-avatar.png"
 
 const MyProfile = ({ isLoggedInUser }) => {
   // Fetch the user's information
@@ -19,12 +20,12 @@ const MyProfile = ({ isLoggedInUser }) => {
        
         {/* Profile Picture */}
         <img
-          src={me?.profilePic || 'placeholder_image_url'} // Use the profile picture directly from the profile data or a placeholder image URL
+          src={me?.profilePic || ProfileAvatar } // Use the profile picture directly from the profile data or a placeholder image URL
           alt="Profile"
           className="rounded-full w-24 h-24 mx-auto mb-4"
         />
          {/* Conditional rendering of ProfilePicUploader */}
-         {!me?.profilePic && <ProfilePicUploader />}
+         {!me?.profilePic && <ProfilePicUploader profileId={me._id}/>}
          <br></br>
         {/* Profile Information */}
         <div className="md:text-left text-center">

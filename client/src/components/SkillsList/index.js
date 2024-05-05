@@ -1,11 +1,10 @@
-import React from 'react';
-import { useMutation } from '@apollo/client';
+import React from "react";
+import { useMutation } from "@apollo/client";
 
-import { REMOVE_SKILL } from '../../utils/mutations';
-import { QUERY_ME } from '../../utils/queries';
+import { REMOVE_SKILL } from "../../utils/mutations";
+import { QUERY_ME } from "../../utils/queries";
 
 const SkillsList = ({ profile, skills, isLoggedInUser = false }) => {
-
   const [removeSkill, { error }] = useMutation(REMOVE_SKILL, {
     update(cache, { data: { removeSkill } }) {
       try {
@@ -41,51 +40,51 @@ const SkillsList = ({ profile, skills, isLoggedInUser = false }) => {
 
   return (
     <>
-   {
-    !isLoggedInUser &&  <h2 className="text-center mt-4 mb-2 font-bold text-lg">
-    {profile.name}friends have endorsed these
-     skills...
-   </h2>
+      {!isLoggedInUser && (
+        <h2 className="text-center mt-4 mb-2 font-bold text-lg">
+          {profile.name} friends have endorsed these{" "}
+          {profile.skills ? profile.skills.length : 0} skill
+          {profile.skills && profile.skills.length === 1 ? "" : "s"}
+        </h2>
+      )}
 
-   }
-  
-  <div className="grid grid-cols-1 sm:grid-cols-2 my-4">
-    {skills.map((skill) => (
-      <div key={skill._id} className="col-span-1">
-        <div className="card mb-3 shadow-xl rounded-md">
-          <div className="card-header text-light p-2">
-            {/* Skill text */}
-            <div className="mb-2">
-              <span>{skill.skillText}</span>
-            </div>
-            {/* By and date */}
-            <div className="flex justify-between text-gray-500">
-              <div>
-                <span className="mr-1">By: {skill.skillAuthor} on {skill.createdAt}</span>
+      <div className="grid grid-cols-1 sm:grid-cols-2 my-4">
+        {skills.map((skill) => (
+          <div key={skill._id} className="col-span-1">
+            <div className="card mb-3 shadow-xl rounded-md">
+              <div className="card-header text-light p-2">
+                {/* Skill text */}
+                <div className="mb-2">
+                  <span>{skill.skillText}</span>
+                </div>
+                {/* By and date */}
+                <div className="flex justify-between text-gray-500">
+                  <div>
+                    <span className="mr-1">
+                      By: {skill.skillAuthor} on {skill.createdAt}
+                    </span>
+                  </div>
+                  {/* Delete button (if logged in user) */}
+                  {isLoggedInUser && (
+                    <button
+                      className="btn btn-sm btn-danger"
+                      onClick={() => handleRemoveSkill(skill._id)}
+                    >
+                      Delete
+                    </button>
+                  )}
+                </div>
               </div>
-              {/* Delete button (if logged in user) */}
-              {isLoggedInUser && (
-                <button
-                  className="btn btn-sm btn-danger"
-                  onClick={() => handleRemoveSkill(skill._id)}
-                >
-                  Delete
-                </button>
-              )}
             </div>
           </div>
-        </div>
+        ))}
       </div>
-    ))}
-  </div>
 
-{error && (
-  <div className="my-3 p-3 bg-red-500 text-white">{error.message}</div>
-)}
+      {error && (
+        <div className="my-3 p-3 bg-red-500 text-white">{error.message}</div>
+      )}
     </>
   );
-  
-  
 };
 
 export default SkillsList;

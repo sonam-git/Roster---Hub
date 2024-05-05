@@ -1,5 +1,6 @@
 import React from "react";
 import SkillsList from "../SkillsList";
+import ProfileAvatar from "../../assets/images/profile-avatar.png"
 
 
 const UserProfile = ({ profile }) => {
@@ -9,7 +10,7 @@ const UserProfile = ({ profile }) => {
       {/* Image and User Information */}
       <div className="md:w-1/3 bg-white rounded-lg shadow-md p-6 max-w-md">
         <img
-          src={profile.profilePic} // Use the profile picture directly from the profile data
+          src={profile?.profilePic || ProfileAvatar } // Use the profile picture directly from the profile data
           alt="Profile"
           className="rounded-full w-24 h-24 mx-auto mb-4"
         />
@@ -19,6 +20,7 @@ const UserProfile = ({ profile }) => {
           <p className="text-gray-700">Position: {profile.position}</p>
           <p className="text-gray-700">Contact: {profile.phoneNumber}</p>
         </div> 
+        
       </div>
       {/* Skills List */}
       <div className="md:w-2/3 bg-white rounded-lg shadow-md p-6 max-w-2xl"> {/* Adjusted width */}

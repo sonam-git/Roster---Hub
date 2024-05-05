@@ -41,14 +41,14 @@ export const ADD_INFO = gql`
 `;
 
 export const UPLOAD_PROFILE_PIC = gql`
-  mutation UploadProfilePic($profileId: ID!, $file: Upload!) {
-    uploadProfilePic(profileId: $profileId, file: $file) {
+  mutation uploadProfilePic($profileId: ID!, $profilePic: Upload!) {
+    uploadProfilePic(profileId: $profileId, profilePic: $profilePic) {
       _id
-      name
       profilePic
     }
   }
 `;
+
 
 export const ADD_SKILL = gql`
   mutation addSkill($profileId: ID!, $skillText: String!) {
