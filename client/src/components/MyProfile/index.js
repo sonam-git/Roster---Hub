@@ -25,7 +25,7 @@ const MyProfile = ({ isLoggedInUser }) => {
           className="rounded-full w-28 h-28 mx-auto mb-4"
         />
         {/* Always display ProfilePicUploader */}
-        <ProfilePicUploader profileId={me._id}/>
+        <ProfilePicUploader profileId={me._id} profilePicUrl={me.profilePic}/>
         <br></br>
         {/* Profile Information */}
         <div className="md:text-left text-center">

@@ -1,12 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { UPLOAD_PROFILE_PIC } from "../../utils/mutations";
 import Axios from "axios";
+import { SyncLoader } from "react-spinners";
+import { AiOutlineUpload } from 'react-icons/ai';
 
-const ProfilePicUploader = ({ profileId }) => {
+const ProfilePicUploader = ({ profileId, profilePicUrl }) => {
   const [loading, setLoading] = useState(false);
   const [profilePic, setProfilePic] = useState(null); // State to store the selected profile picture
   const [uploadProfilePic] = useMutation(UPLOAD_PROFILE_PIC);
+  const [buttonText, setButtonText] = useState("Upload");
+
+  useEffect(() => {
+    // Determine button text based on whether an image is already uploaded
+    if (profilePicUrl) {
+      setButtonText("Change Image");
+    } else {
+      setButtonText("Upload");
+    }
+  }, [profilePicUrl]);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -52,20 +64,7 @@ const ProfilePicUploader = ({ profileId }) => {
     <div className="flex items-center justify-center">
       <div className="flex flex-col items-center justify-center space-y-4">
         <label htmlFor="profilePicInput" className="cursor-pointer">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6 text-blue-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
+        <AiOutlineUpload size={24} className="text-blue-500" />
         </label>
         <input
           id="profilePicInput"
@@ -84,9 +83,11 @@ const ProfilePicUploader = ({ profileId }) => {
           className="ml-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300"
           disabled={loading}
         >
-          Upload
+          {buttonText}
         </button>
-        {loading && <p className="ml-2">Uploading...</p>}
+        <div className="ml-2">
+          <SyncLoader color="#000" loading={loading} size={10} />
+        </div>
       </div>
     </div>
   );
