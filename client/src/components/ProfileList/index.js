@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import ChatBox from "../ChatBox"; // Import the ChatBox component
+import { AiOutlineMessage } from "react-icons/ai"; // Import the chat icon
+import { RiProfileLine } from "react-icons/ri"; // Import the profile icon
 import Auth from "../../utils/auth";
+import ProfileAvatar from "../../assets/images/profile-avatar.png";
 
 const ProfileList = ({ profiles, title }) => {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -19,77 +22,54 @@ const ProfileList = ({ profiles, title }) => {
   }
 
   // Get the ID of the logged-in user
-  const loggedInUserId = Auth.loggedIn() && Auth.getProfile().data._id
-  
+  const loggedInUserId = Auth.loggedIn() && Auth.getProfile().data._id;
 
   // Filter out the logged-in user from the profiles list
-  const filteredProfiles = profiles.filter(profile => profile._id !== loggedInUserId);
+  const filteredProfiles = profiles.filter(
+    (profile) => profile._id !== loggedInUserId
+  );
 
   return (
     <div>
-      <h3 className="text-primary">{title}</h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 my-4">
+      <h3 className="text-3xl font-bold text-center">{title}</h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
         {filteredProfiles.map((profile) => (
-          <div key={profile._id} className="col-span-1">
-            <div className="card mb-3 shadow-xl">
-              <h4 className="card-header bg-dark text-light p-2 m-0">
-                {profile.name} <br />
-                <span className="text-white text-sm">
+          <div key={profile._id} className="bg-white rounded-lg shadow-xl p-6">
+            <div className="grid grid-cols-2 items-center">
+              {/* Column 1: Name and Jersey Number */}
+              <div>
+                <h4 className="font-bold">{profile.name}</h4>
+                <p className="text-gray-600 font-bold">
                   Jersey Number: {profile.jerseyNumber}
-                </span>
-                <br />
-              </h4>
-              <div className="card-body flex justify-between items-center">
-                {/* Chat button */}
-                <button
-                  className="btn btn-info mr-2"
-                  onClick={() => handleChatClick(profile)}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M12 2.25c-2.429 0-4.817.178-7.152.521C2.87 3.061 1.5 4.795 1.5 6.741v6.018c0 1.946 1.37 3.68 3.348 3.97.877.129 1.761.234 2.652.316V21a.75.75 0 0 0 1.28.53l4.184-4.183a.39.39 0 0 1 .266-.112c2.006-.05 3.982-.22 5.922-.506 1.978-.29 3.348-2.023 3.348-3.97V6.741c0-1.947-1.37-3.68-3.348-3.97A49.145 49.145 0 0 0 12 2.25ZM8.25 8.625a1.125 1.125 0 1 0 0 2.25 1.125 1.125 0 0 0 0-2.25Zm2.625 1.125a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Zm4.875-1.125a1.125 1.125 0 1 0 0 2.25 1.125 1.125 0 0 0 0-2.25Z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
-                {/* Player info button */}
-                <Link
-                  className="text-dark"
-                  to={`/profiles/${profile._id}`}
-                >
-                  <span className="text-black text-sm">
-                    Currently has {profile.skills ? profile.skills.length : 0}{" "}
-                    endorsed skill
-                    {profile.skills && profile.skills.length === 1 ? "" : "s"}
-                  </span>
-                </Link>
-                {/* Player info button */}
-                <Link
-                  className="btn btn-squared btn-light text-dark"
-                  to={`/profiles/${profile._id}`}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
-                    />
-                  </svg>
-                </Link>
+                </p>
               </div>
+              {/* Column 2: Image */}
+              <div className="flex justify-center items-center">
+                <img
+                  src={profile?.profilePic || ProfileAvatar}
+                  alt="Profile"
+                  className="rounded-full w-24 h-24"
+                />
+              </div>
+            </div>
+            {/* Icons */}
+            <div className="flex justify-between mt-4">
+              {/* Chat button */}
+              <button
+                className=" flex items-center"
+                onClick={() => handleChatClick(profile)}
+              >
+                <AiOutlineMessage className="mr-2 text-2xl" />
+                <span>Chat</span>
+              </button>
+              {/* Player info button */}
+              <Link
+                className=" flex items-center"
+                to={`/profiles/${profile._id}`}
+              >
+                <RiProfileLine className="mr-2 text-2xl" />
+                <span className="text-dark">View Profile</span>
+              </Link>
             </div>
           </div>
         ))}

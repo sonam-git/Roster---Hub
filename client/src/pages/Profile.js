@@ -60,27 +60,27 @@ const Profile = () => {
         )}
       </div>
       {Auth.loggedIn() && Auth.getProfile().data._id === profile._id && (
-  <>
-    {profile.skills?.length > 0 ? (
-      <>
-        <h2 className="text-center mt-4 mb-2 font-bold text-lg">
-          {profileId ? `${profile.name}'s` : "Your"} friends have endorsed these {profile.skills ? profile.skills.length : 0} skill
-          {profile.skills && profile.skills.length === 1 ? "" : "s"}
-        </h2>
-        <SkillsList
-          skills={profile.skills || []}
-          isLoggedInUser={!profileId && true}
-          profile={profile}
-        />
-      </>
-    ) : (
-      <h2 className="text-center mt-4 mb-2 font-bold text-lg">No endorsed Skill yet</h2>
-    )}
-  </>
-)}
-
-
-
+        <>
+          {profile.skills?.length > 0 ? (
+            <>
+              <h2 className="text-center mt-4 mb-2 font-bold text-lg">
+                {profileId ? `${profile.name}'s` : "Your"} friends have endorsed
+                these {profile.skills ? profile.skills.length : 0} skill
+                {profile.skills && profile.skills.length === 1 ? "" : "s"}
+              </h2>
+              <SkillsList
+                skills={profile.skills || []}
+                isLoggedInUser={!profileId && true}
+                profile={profile}
+              />
+            </>
+          ) : (
+            <h2 className="text-center mt-4 mb-2 font-bold text-lg">
+              No endorsed Skill yet
+            </h2>
+          )}
+        </>
+      )}
 
       <div className="my-4 p-4 border border-dotted border-gray-300 rounded">
         <SkillForm profileId={profile._id} />

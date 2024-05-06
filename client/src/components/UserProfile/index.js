@@ -12,10 +12,10 @@ const UserProfile = ({ profile }) => {
         <img
           src={profile?.profilePic || ProfileAvatar } // Use the profile picture directly from the profile data
           alt="Profile"
-          className="rounded-full w-24 h-24 mx-auto mb-4"
+          className="rounded-full w-28 h-28 mx-auto mb-4"
         />
-        <div className="md:text-left text-center">
-          <h1 className="text-2xl font-bold mb-2">{profile.name}</h1>
+        <div className="md:text-left">
+          <h1 className="text-2xl font-bold mb-2">{profile.name[0].toUpperCase() + profile.name.slice(1)}</h1>
           <p className="text-gray-700">Jersey Number: {profile.jerseyNumber}</p>
           <p className="text-gray-700">Position: {profile.position}</p>
           <p className="text-gray-700">Contact: {profile.phoneNumber}</p>

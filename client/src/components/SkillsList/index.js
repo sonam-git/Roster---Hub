@@ -1,8 +1,8 @@
 import React from "react";
 import { useMutation } from "@apollo/client";
-
 import { REMOVE_SKILL } from "../../utils/mutations";
 import { QUERY_ME } from "../../utils/queries";
+import { AiOutlineDelete } from 'react-icons/ai';
 
 const SkillsList = ({ profile, skills, isLoggedInUser = false }) => {
   const [removeSkill, { error }] = useMutation(REMOVE_SKILL, {
@@ -67,10 +67,10 @@ const SkillsList = ({ profile, skills, isLoggedInUser = false }) => {
                   {/* Delete button (if logged in user) */}
                   {isLoggedInUser && (
                     <button
-                      className="btn btn-sm btn-danger"
+                      className="btn btn-sm btn-danger hover:bg-red-700 transition duration-300"
                       onClick={() => handleRemoveSkill(skill._id)}
                     >
-                      Delete
+                     <AiOutlineDelete />
                     </button>
                   )}
                 </div>

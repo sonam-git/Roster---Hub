@@ -22,11 +22,11 @@ const MyProfile = ({ isLoggedInUser }) => {
         <img
           src={me?.profilePic || ProfileAvatar } // Use the profile picture directly from the profile data or a placeholder image URL
           alt="Profile"
-          className="rounded-full w-24 h-24 mx-auto mb-4"
+          className="rounded-full w-28 h-28 mx-auto mb-4"
         />
-         {/* Conditional rendering of ProfilePicUploader */}
-         {!me?.profilePic && <ProfilePicUploader profileId={me._id}/>}
-         <br></br>
+        {/* Always display ProfilePicUploader */}
+        <ProfilePicUploader profileId={me._id}/>
+        <br></br>
         {/* Profile Information */}
         <div className="md:text-left text-center">
           <h1 className="text-2xl font-bold text-center">{me?.name}</h1>

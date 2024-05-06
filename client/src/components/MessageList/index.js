@@ -72,7 +72,7 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
                 {/* Reply Button */}
                 {isLoggedInUser && (
                   <button
-                    className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md"
+                    className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300"
                     onClick={() => handleReply(message.sender)}
                   >
                     Reply
@@ -82,7 +82,7 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
                 {/* Delete Button (if logged in user) */}
                 {isLoggedInUser && (
                   <button
-                    className="mt-4 bg-red-500 text-white px-4 py-2 rounded-md"
+                    className="mt-4 bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300"
                     onClick={() => handleRemoveMessage(message._id)}
                   >
                     Delete
@@ -95,7 +95,7 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
         {/* Display "View More Messages" button if there are more messages */}
         {displayedMessages < messages.length && (
           <button
-            className="mt-2 bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={handleScroll}
           >
             View More Messages

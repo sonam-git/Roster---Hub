@@ -61,7 +61,7 @@ const SkillForm = ({ profileId }) => {
       ) : (
         <p>
           You need to be logged in to add information. Please{" "}
-          <Link to="/login">Login</Link> or <Link to="/signup">Signup.</Link>
+          <Link to="/login">Login</Link> or <Link to="/signup">Signup</Link>
         </p>
       )}
     </div>
