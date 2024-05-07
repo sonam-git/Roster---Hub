@@ -4,7 +4,7 @@ import { useQuery } from "@apollo/client";
 
 import SkillsList from "../components/SkillsList";
 import SkillForm from "../components/SkillForm";
-import UserInfoForm from "../components/UserInfoForm";
+// import UserInfoForm from "../components/UserInfoForm";
 
 import { QUERY_SINGLE_PROFILE, QUERY_ME } from "../utils/queries";
 
@@ -87,11 +87,11 @@ const Profile = () => {
       </div>
 
       {/* Render UserInfoForm only for the logged-in user's profile */}
-      {Auth.loggedIn() && Auth.getProfile().data._id === profile._id && (
+      {/* {Auth.loggedIn() && Auth.getProfile().data._id === profile._id && (
         <div className="my-4 p-4 border border-dotted border-gray-300 rounded">
           <UserInfoForm profileId={profile._id} />
-        </div>
-      )}
+        </div> */}
+      {/* )} */}
     </div>
   );
 };

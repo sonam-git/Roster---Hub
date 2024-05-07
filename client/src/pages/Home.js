@@ -22,7 +22,7 @@ if(loading){
         <div className="col-12 col-md-10 my-3">
           {/* Conditional rendering based on authentication status */}
           {isLoggedIn ? (
-            <ProfileList profiles={profiles} title="Here's the current roster..." />
+            <ProfileList profiles={profiles} title="The current roster" />
           ) : (
             <Hero />
           )}

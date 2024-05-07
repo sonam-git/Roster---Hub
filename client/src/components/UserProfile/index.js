@@ -1,6 +1,6 @@
 import React from "react";
 import SkillsList from "../SkillsList";
-import ProfileAvatar from "../../assets/images/profile-avatar.png"
+import  ProfileCard  from "../ProfileCard";
 
 
 const UserProfile = ({ profile }) => {
@@ -8,24 +8,12 @@ const UserProfile = ({ profile }) => {
   return (
     <div className="md:flex md:space-x-4 mb-6 md:mb-0">
       {/* Image and User Information */}
-      <div className="md:w-1/3 bg-white rounded-lg shadow-md p-6 max-w-md">
-        <img
-          src={profile?.profilePic || ProfileAvatar } // Use the profile picture directly from the profile data
-          alt="Profile"
-          className="rounded-full w-28 h-28 mx-auto mb-4"
-        />
-        <div className="md:text-left">
-          <h1 className="text-2xl font-bold mb-2">{profile.name[0].toUpperCase() + profile.name.slice(1)}</h1>
-          <p className="text-gray-700">Jersey Number: {profile.jerseyNumber}</p>
-          <p className="text-gray-700">Position: {profile.position}</p>
-          <p className="text-gray-700">Contact: {profile.phoneNumber}</p>
-        </div> 
-        
-      </div>
+      <ProfileCard profile={profile}/>
       {/* Skills List */}
       <div className="md:w-2/3 bg-white rounded-lg shadow-md p-6 max-w-2xl"> {/* Adjusted width */}
         <SkillsList skills={profile.skills || []} profile={profile} />
       </div>
+    
     </div>
   );
   

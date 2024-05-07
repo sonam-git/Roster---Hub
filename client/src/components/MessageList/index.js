@@ -5,6 +5,7 @@ import { useMutation } from "@apollo/client";
 import { REMOVE_MESSAGE } from "../../utils/mutations";
 import { QUERY_ME } from "../../utils/queries";
 import { MailIcon } from "@heroicons/react/solid";
+import { AiOutlineDelete } from 'react-icons/ai';
 import ChatBox from "../ChatBox";
 
 const MessageList = ({ messages, isLoggedInUser = false }) => {
@@ -47,11 +48,15 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
   };
 
   return (
-    <div>
+    <>
       <div className="flex items-center ">
-        <h1 className="text-2xl font-bold mb-2 text-center">Message Box</h1>
+        <h1 className="text-2xl lg:text-xl xl:text-2xl font-bold mb-2 text-center">
+          Message Box
+        </h1>
         <MailIcon className="h-6 w-6 mr-1 mb-2 ml-2" />
-        <span style={{ fontSize: "1rem", fontWeight: "bold", marginBottom: 10 }}>
+        <span
+          style={{ fontSize: "1rem", fontWeight: "bold", marginBottom: 10 }}
+        >
           {messages.length}
           {messages.length === 1}
         </span>
@@ -72,7 +77,7 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
                 {/* Reply Button */}
                 {isLoggedInUser && (
                   <button
-                    className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300"
+                    className="mt-4 mr-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300"
                     onClick={() => handleReply(message.sender)}
                   >
                     Reply
@@ -85,7 +90,7 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
                     className="mt-4 bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300"
                     onClick={() => handleRemoveMessage(message._id)}
                   >
-                    Delete
+                    <AiOutlineDelete />
                   </button>
                 )}
               </div>
@@ -111,7 +116,7 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
           onCloseModal={() => setShowChatModal(false)}
         />
       )}
-    </div>
+    </>
   );
 };
 

@@ -64,11 +64,11 @@ const ProfileList = ({ profiles, title }) => {
               </button>
               {/* Player info button */}
               <Link
-                className=" flex items-center"
+                className=" flex items-center "
                 to={`/profiles/${profile._id}`}
               >
                 <RiProfileLine className="mr-2 text-2xl" />
-                <span className="text-dark">View Profile</span>
+                <span className="text-dark ">View Profile</span>
               </Link>
             </div>
           </div>

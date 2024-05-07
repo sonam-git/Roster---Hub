@@ -80,7 +80,7 @@ const ProfilePicUploader = ({ profileId, profilePicUrl }) => {
         <button
           type="button"
           onClick={handleSubmit}
-          className="ml-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300"
+          className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 ml-2 px-4 border border-blue-500 hover:border-transparent rounded"
           disabled={loading}
         >
           {buttonText}
