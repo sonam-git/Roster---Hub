@@ -53,7 +53,7 @@ const UserInfoForm = ({ profileId }) => {
     <div>
       {Auth.loggedIn() ? (
         <>
-         <h4 className="text-xl font-semibold mb-2">Add / Update Your Information.</h4>
+        
        
         
         <form

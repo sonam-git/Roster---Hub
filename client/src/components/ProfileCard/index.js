@@ -44,7 +44,7 @@ const ProfileCard = ({ profile }) => {
 
   return (
     <>
-      <div className="bg-white rounded-lg overflow-hidden shadow-md">
+      <div className=" bg-white rounded-lg overflow-hidden shadow-md">
         <div className="w-full h-[200px] bg-red-500  flex items-center justify-center">
           <div className="w-40 h-40 rounded-full bg-white relative overflow-hidden">
             <img

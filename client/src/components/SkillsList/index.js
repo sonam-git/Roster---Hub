@@ -48,7 +48,7 @@ const SkillsList = ({ profile, skills, isLoggedInUser = false }) => {
         </h2>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 my-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 my-4 max-h-80 overflow-y-auto">
         {skills.map((skill) => (
           <div key={skill._id} className="col-span-1">
             <div className="card mb-3 shadow-2xl rounded-md">
