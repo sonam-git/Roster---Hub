@@ -65,13 +65,15 @@ const ChatBox = ({ recipient, onCloseModal }) => {
   return (
     recipient && (
       <>
-        {!messageSent && (
-          <Modal showModal={!messageSent} onClose={handleCloseModal}>
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-xl font-bold mb-4 card-header bg-dark text-light p-2 m-0 rounded-md">
-                Chat with{" "}
-                {recipient.name[0].toUpperCase() + recipient.name.slice(1)}
-              </h3>
+          {!messageSent && (
+        <Modal showModal={!messageSent} onClose={handleCloseModal}>
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-xl font-bold mb-4 card-header bg-dark text-light p-2 m-0 rounded-md">
+              Chat with{" "}
+              {recipient.name[0].toUpperCase() + recipient.name.slice(1)}
+            </h3>
+            {/* Container with fixed height and vertical scrolling */}
+            <div className="conversation-container max-h-80 overflow-y-auto">
               {/* Reverse the order of messages to display the latest at the bottom */}
               {messages.map((msg, index) => (
                 <div key={index} className="mb-2">
@@ -81,34 +83,35 @@ const ChatBox = ({ recipient, onCloseModal }) => {
                         msg.sender.name.slice(1)
                       : "Sender"}
                   </p>
-                  <p>{msg.text}</p>
+                  <p className="bg-gray-500 rounded-md text-white p-2">{msg.text}</p>
                   <p className="text-sm text-gray-500">{msg.createdAt || ""}</p>
                 </div>
               ))}
-              <textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Type your message..."
-                rows={3}
-                className="w-full p-2 border border-gray-300 rounded-md mb-4"
-              />
-              <div className="flex justify-end">
-                <button
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mr-2"
-                  onClick={handleSendMessage}
-                >
-                  Send
-                </button>
-                <button
-                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400"
-                  onClick={handleCloseModal}
-                >
-                  Cancel
-                </button>
-              </div>
             </div>
-          </Modal>
-        )}
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Type your message..."
+              rows={3}
+              className="w-full p-2 border border-gray-300 rounded-md mb-4"
+            />
+            <div className="flex justify-end">
+              <button
+                className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-800 mr-2"
+                onClick={handleSendMessage}
+              >
+                Send
+              </button>
+              <button
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400"
+                onClick={handleCloseModal}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
         {showModal && <MessageSentModal onClose={handleCloseModal} />}
       </>
     )

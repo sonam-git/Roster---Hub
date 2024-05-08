@@ -64,7 +64,7 @@ const ProfilePicUploader = ({ profileId, profilePicUrl }) => {
     <div className="flex items-center justify-center">
       <div className="flex flex-col items-center justify-center space-y-4">
         <label htmlFor="profilePicInput" className="cursor-pointer">
-        <AiOutlineUpload size={24} className="text-blue-500" />
+        <AiOutlineUpload size={24} className="text-indigo-800" />
         </label>
         <input
           id="profilePicInput"
@@ -80,7 +80,7 @@ const ProfilePicUploader = ({ profileId, profilePicUrl }) => {
         <button
           type="button"
           onClick={handleSubmit}
-          className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 ml-2 px-4 border border-blue-500 hover:border-transparent rounded"
+          className="bg-transparent hover:bg-indigo-600 text-indigo-700 font-semibold hover:text-white py-2 ml-2 px-4 border border-blue-500 hover:border-transparent rounded"
           disabled={loading}
         >
           {buttonText}

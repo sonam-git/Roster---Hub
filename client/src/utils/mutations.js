@@ -110,3 +110,13 @@ mutation SendMessage($recipientId: ID!, $text: String!) {
   }
 }
 `
+export const SAVE_SOCIAL_MEDIA_LINK = gql`
+mutation  saveSocialMediaLink($userId: ID!, $type: String!, $link: String!) {
+  saveSocialMediaLink(userId: $userId, type: $type, link: $link) {
+    _id
+    userId
+    type
+    link
+  }
+}
+`;

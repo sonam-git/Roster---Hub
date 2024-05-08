@@ -86,7 +86,7 @@ const Signup = () => {
                 >
                   Submit
                 </button>
-                <Link to="/login" className="text-gray-600 hover:text-blue-500 mt-3 font-bold">Already Have An Account ?</Link>
+                <Link to="/login" className="text-gray-600 hover:text-blue-500 ml-2 mt-3 font-bold">Already Have An Account ?</Link>
               </div>
             </form>
           )}

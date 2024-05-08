@@ -9,6 +9,12 @@ export const QUERY_PROFILES = gql`
       position
       phoneNumber
       profilePic
+      socialMediaLinks { 
+        _id
+        userId
+        type
+        link
+      }
       skills {
         _id
         skillText
@@ -41,6 +47,12 @@ export const QUERY_SINGLE_PROFILE = gql`
       position
       phoneNumber
       profilePic
+      socialMediaLinks {
+        _id
+        userId
+        type
+        link
+      }
       skills {
         _id
         skillText
@@ -73,6 +85,12 @@ export const QUERY_ME = gql`
       position
       phoneNumber
       profilePic
+      socialMediaLinks { 
+        _id
+        userId
+        type
+        link
+      }
       skills {
         _id
         skillText

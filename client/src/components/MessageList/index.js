@@ -71,13 +71,13 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
                 From: {message.sender.name} on {message.createdAt}
               </p>
               {/* Message Text */}
-              <p>{message.text}</p>
+              <p className="bg-gray-500 rounded-md text-white p-2">{message.text}</p>
 
               <div className="card-body flex justify-between items-center">
                 {/* Reply Button */}
                 {isLoggedInUser && (
                   <button
-                    className="mt-4 mr-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300"
+                    className="mt-4 mr-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-800 transition duration-300"
                     onClick={() => handleReply(message.sender)}
                   >
                     Reply
@@ -100,7 +100,7 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
         {/* Display "View More Messages" button if there are more messages */}
         {displayedMessages < messages.length && (
           <button
-            className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="mt-2 bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded"
             onClick={handleScroll}
           >
             View More Messages

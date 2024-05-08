@@ -11,6 +11,7 @@ scalar Upload
     phoneNumber: String
     profilePic: String
     skills: [Skill]
+    socialMediaLinks: [SocialMediaLink]
     receivedMessages: [Message]
     sentMessages: [Message]
   }
@@ -30,6 +31,12 @@ scalar Upload
     createdAt: String!
   }
 
+  type SocialMediaLink {
+    _id: ID!
+    userId: ID!
+    type: String!
+    link: String!
+  }
 
   type Auth {
     token: ID!
@@ -43,6 +50,7 @@ scalar Upload
     skills : [Skill]
     skill(skillId: ID!) : Skill
     receivedMessages: [Message]!
+    socialMediaLinks(userId: ID!): [SocialMediaLink]!
   }
  
   type Mutation {
@@ -54,6 +62,7 @@ scalar Upload
     sendMessage(recipientId: ID!, text: String!): Message!
     removeSkill(skillId: ID!): Skill
     removeMessage(messageId: ID!): Message
+    saveSocialMediaLink(userId: ID!, type: String!, link: String!): SocialMediaLink!
   }
 `;
 

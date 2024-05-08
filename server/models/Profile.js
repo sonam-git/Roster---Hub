@@ -41,6 +41,12 @@ const profileSchema = new Schema({
       ref: "Skill",
     },
   ],
+  socialMediaLinks: [ 
+    {
+      type: Schema.Types.ObjectId,
+      ref: "SocialMediaLink",
+    },
+  ],
 
   sentMessages: [
     {

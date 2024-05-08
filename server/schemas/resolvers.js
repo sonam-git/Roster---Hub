@@ -1,5 +1,5 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { Profile, Skill, Message } = require("../models");
+const { Profile, Skill, Message,SocialMediaLink } = require("../models");
 const { signToken } = require("../utils/auth");
 const cloudinary = require("cloudinary").v2;
 require("dotenv").config();
@@ -17,7 +17,11 @@ const resolvers = {
           path: "receivedMessages",
           populate: { path: "sender" },
         })
-        .populate("skills");
+        .populate("skills")
+        .populate({
+          path: "socialMediaLinks",
+          populate: {path: "link"}
+        });
     },
 
     profile: async (parent, { profileId }) => {
@@ -26,7 +30,11 @@ const resolvers = {
           path: "receivedMessages",
           populate: { path: "sender" },
         })
-        .populate("skills");
+        .populate("skills")
+        .populate({
+          path: "socialMediaLinks",
+          populate: {path: "link"}
+        });
     },
     //By adding context to our query, we can retrieve the logged in user without specifically searching for them
     me: async (parent, args, context) => {
@@ -40,7 +48,11 @@ const resolvers = {
             path: "sentMessages",
             populate: { path: "recipient" },
           })
-          .populate("skills");
+          .populate("skills")
+          .populate({
+            path: "socialMediaLinks",
+            populate: {path: "link"}
+          });
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -62,6 +74,15 @@ const resolvers = {
         throw new Error("Failed to fetch messages");
       }
     },
+    socialMediaLinks: async (_, { userId }, context) => {
+      try {
+        // Fetch social media links from the SocialMediaLink model based on the user's ID
+        const socialMediaLinks = await SocialMediaLink.find({ userId });
+        return socialMediaLinks;
+      } catch (error) {
+        throw new Error('Failed to fetch social media links: ' + error.message);
+      }
+    }
   },
 
   Mutation: {
@@ -252,6 +273,35 @@ const resolvers = {
         throw new Error("Error deleting Message.");
       }
     },
+    saveSocialMediaLink: async (_, { userId, type, link }) => {
+      try {
+        // Save or update the social media link in the SocialMediaLink model
+        let socialMediaLink = await SocialMediaLink.findOneAndUpdate(
+          { userId, type },
+          { link },
+          { upsert: true, new: true }
+        );
+    
+        // Find the Profile by its ID and update the socialMediaLinks array
+        const updatedProfile = await Profile.findOneAndUpdate(
+          { _id: userId },
+          { $addToSet: { socialMediaLinks: socialMediaLink._id } },
+          { new: true }
+        ).populate('socialMediaLinks');
+    
+        if (!updatedProfile) {
+          throw new Error('Profile not found!');
+        }
+    
+        return socialMediaLink;
+      } catch (error) {
+        throw new Error('Failed to save social media link: ' + error.message);
+      }
+    },
+    
+    
+    
+    
   },
 };
 

@@ -42,7 +42,7 @@ const SkillsList = ({ profile, skills, isLoggedInUser = false }) => {
     <>
       {!isLoggedInUser && (
         <h2 className="text-center mt-4 mb-2 font-bold text-lg">
-          {profile.name} friends have endorsed these{" "}
+          {profile.name}'s friends have endorsed these{" "}
           {profile.skills ? profile.skills.length : 0} skill
           {profile.skills && profile.skills.length === 1 ? "" : "s"}
         </h2>
@@ -51,17 +51,17 @@ const SkillsList = ({ profile, skills, isLoggedInUser = false }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 my-4">
         {skills.map((skill) => (
           <div key={skill._id} className="col-span-1">
-            <div className="card mb-3 shadow-xl rounded-md">
+            <div className="card mb-3 shadow-2xl rounded-md">
               <div className="card-header text-light p-2">
                 {/* Skill text */}
-                <div className="mb-2">
-                  <span>{skill.skillText}</span>
+                <div className="mb-2 text-dark font-bold bg-white p-2 ">
+                  <span>{skill.skillText[0].toUpperCase()+ skill.skillText.slice(1)}</span>
                 </div>
                 {/* By and date */}
-                <div className="flex justify-between text-gray-500">
+                <div className="flex justify-between text-white-500">
                   <div>
-                    <span className="mr-1">
-                      By: {skill.skillAuthor} on {skill.createdAt}
+                    <span className="mr-1 text-xs">
+                      By : {skill.skillAuthor[0].toUpperCase()+ skill.skillAuthor.slice(1)} on {skill.createdAt}
                     </span>
                   </div>
                   {/* Delete button (if logged in user) */}
