@@ -69,7 +69,7 @@ const ProfileCard = ({ profile }) => {
           <div className="flex justify-center">
             <a
               href={`tel:${profile.phoneNumber}`}
-              className="bg-indigo-600 text-white px-8 py-3 rounded-full font-semibold uppercase text-sm  hover:bg-indigo-800"
+              className="bg-indigo-600 text-white px-2 py-2  rounded-full font-semibold uppercase text-sm  hover:bg-indigo-800"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -4,6 +4,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import {  QUERY_ME } from '../../utils/queries';
 import {ADD_INFO} from '../../utils/mutations'
 import Auth from '../../utils/auth';
+import { FaUserEdit } from "react-icons/fa";
 
 const UserInfoForm = ({ profileId }) => {
   const [jerseyNumber, setJerseyNumber] = useState('');
@@ -91,8 +92,8 @@ const UserInfoForm = ({ profileId }) => {
               onChange={(event) => setPhoneNumber(event.target.value)}
               required
             />
-             <button className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 mt-5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" type="submit">
-              {buttonText}
+             <button className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 mt-5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" type="submit">
+              {buttonText}<FaUserEdit  className='inline ml-3'/>
             </button>
           </div>
           <div>

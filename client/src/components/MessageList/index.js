@@ -6,9 +6,11 @@ import { REMOVE_MESSAGE } from "../../utils/mutations";
 import { QUERY_ME } from "../../utils/queries";
 import { MailIcon } from "@heroicons/react/solid";
 import { AiOutlineDelete } from 'react-icons/ai';
+import { FaReply } from "react-icons/fa";
 import ChatBox from "../ChatBox";
 
 const MessageList = ({ messages, isLoggedInUser = false }) => {
+ 
   const [removeMessage, { error }] = useMutation(REMOVE_MESSAGE, {
     update(cache, { data: { removeMessage } }) {
       try {
@@ -80,7 +82,7 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
                     className="mt-4 mr-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-800 transition duration-300"
                     onClick={() => handleReply(message.sender)}
                   >
-                    Reply
+                   <FaReply />
                   </button>
                 )}
 

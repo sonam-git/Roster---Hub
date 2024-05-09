@@ -7,6 +7,8 @@ import ProfilePicUploader from "../ProfilePicUploader";
 import UserInfoForm from "../UserInfoForm";
 import ProfileAvatar from "../../assets/images/profile-avatar.png";
 import "@fortawesome/fontawesome-free/css/all.css";
+import { FaEdit } from "react-icons/fa";
+
 
 const MyProfile = ({ isLoggedInUser }) => {
   // Fetch the user's information
@@ -65,7 +67,7 @@ const MyProfile = ({ isLoggedInUser }) => {
         />
         <div className="flex flex-col items-center">
           <h3 className="text-xl font-semibold text-black-700">
-            {me?.name[0].toUpperCase() + me?.name.slice(1)}
+            {me?.name[0].toUpperCase() + me?.name.slice(1)}<FaEdit className="inline ml-2" />
           </h3>
           {me?.position && (
             <p className=" font-semibold text-gray-700">
@@ -103,7 +105,7 @@ const MyProfile = ({ isLoggedInUser }) => {
         <div className="flex justify-center">
           <a
             href={`tel:${me.phoneNumber}`}
-            className="bg-indigo-600 text-white px-8 py-3 rounded-full font-semibold uppercase text-sm hover:bg-indigo-800"
+            className="bg-indigo-600 text-white px-2 py-2 rounded-full font-semibold uppercase text-sm hover:bg-indigo-800"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
