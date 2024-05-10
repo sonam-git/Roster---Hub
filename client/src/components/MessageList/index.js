@@ -1,16 +1,13 @@
-// MessageList.js
-
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { REMOVE_MESSAGE } from "../../utils/mutations";
 import { QUERY_ME } from "../../utils/queries";
 import { MailIcon } from "@heroicons/react/solid";
-import { AiOutlineDelete } from 'react-icons/ai';
+import { AiOutlineDelete } from "react-icons/ai";
 import { FaReply } from "react-icons/fa";
 import ChatBox from "../ChatBox";
 
 const MessageList = ({ messages, isLoggedInUser = false }) => {
- 
   const [removeMessage, { error }] = useMutation(REMOVE_MESSAGE, {
     update(cache, { data: { removeMessage } }) {
       try {
@@ -70,19 +67,21 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
             <div className="message-card border border-gray-300 rounded-lg p-4 mb-4">
               {/* Sender Information */}
               <p className="text-sm text-gray-500 mt-2">
-                From: {message.sender.name} on {message.createdAt}
+                From: {message?.sender.name} on {message.createdAt}
               </p>
               {/* Message Text */}
-              <p className="bg-gray-500 rounded-md text-white p-2">{message.text}</p>
+              <p className="bg-gray-500 rounded-md text-white p-2">
+                {message.text}
+              </p>
 
               <div className="card-body flex justify-between items-center">
                 {/* Reply Button */}
                 {isLoggedInUser && (
                   <button
                     className="mt-4 mr-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-800 transition duration-300"
-                    onClick={() => handleReply(message.sender)}
+                    onClick={() => handleReply(message?.sender)}
                   >
-                   <FaReply />
+                    <FaReply />
                   </button>
                 )}
 

@@ -63,6 +63,8 @@ scalar Upload
     removeSkill(skillId: ID!): Skill
     removeMessage(messageId: ID!): Message
     saveSocialMediaLink(userId: ID!, type: String!, link: String!): SocialMediaLink!
+    updateName(name: String!): Profile
+    updatePassword(oldPassword: String!, newPassword: String!): Profile
   }
 `;
 

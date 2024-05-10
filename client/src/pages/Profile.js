@@ -69,7 +69,7 @@ const Profile = () => {
                 {profile.skills && profile.skills.length === 1 ? "" : "s"}
               </h2>
               <SkillsList
-                skills={profile.skills || []}
+                skills={profile?.skills || []}
                 isLoggedInUser={!profileId && true}
                 profile={profile}
               />

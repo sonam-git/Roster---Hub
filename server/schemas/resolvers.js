@@ -1,5 +1,6 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { Profile, Skill, Message,SocialMediaLink } = require("../models");
+const bcrypt = require("bcrypt");
+const { Profile, Skill, Message, SocialMediaLink } = require("../models");
 const { signToken } = require("../utils/auth");
 const cloudinary = require("cloudinary").v2;
 require("dotenv").config();
@@ -20,7 +21,7 @@ const resolvers = {
         .populate("skills")
         .populate({
           path: "socialMediaLinks",
-          populate: {path: "link"}
+          populate: { path: "link" },
         });
     },
 
@@ -33,7 +34,7 @@ const resolvers = {
         .populate("skills")
         .populate({
           path: "socialMediaLinks",
-          populate: {path: "link"}
+          populate: { path: "link" },
         });
     },
     //By adding context to our query, we can retrieve the logged in user without specifically searching for them
@@ -51,7 +52,7 @@ const resolvers = {
           .populate("skills")
           .populate({
             path: "socialMediaLinks",
-            populate: {path: "link"}
+            populate: { path: "link" },
           });
       }
       throw new AuthenticationError("You need to be logged in!");
@@ -80,9 +81,9 @@ const resolvers = {
         const socialMediaLinks = await SocialMediaLink.find({ userId });
         return socialMediaLinks;
       } catch (error) {
-        throw new Error('Failed to fetch social media links: ' + error.message);
+        throw new Error("Failed to fetch social media links: " + error.message);
       }
-    }
+    },
   },
 
   Mutation: {
@@ -152,14 +153,22 @@ const resolvers = {
       try {
         let imageUrl = null;
         // Upload the image to Cloudinary only if an image was provided
-        if (profilePic ) {
+        if (profilePic) {
           const { secure_url: uploadedImageUrl } =
-            await cloudinary.uploader.upload(profilePic , {
-              allowed_formats : ['png','jpg','jpeg','svg','ico','jifif','webp']
+            await cloudinary.uploader.upload(profilePic, {
+              allowed_formats: [
+                "png",
+                "jpg",
+                "jpeg",
+                "svg",
+                "ico",
+                "jifif",
+                "webp",
+              ],
             });
           imageUrl = uploadedImageUrl;
         }
-       
+
         // Find the profile by ID
         const profile = await Profile.findById(profileId);
         if (!profile) {
@@ -167,7 +176,7 @@ const resolvers = {
         }
 
         // Update the profile's profilePic property with the Cloudinary URL
-        profile.profilePic = imageUrl ;
+        profile.profilePic = imageUrl;
 
         // Save the updated profile
         await profile.save();
@@ -281,27 +290,71 @@ const resolvers = {
           { link },
           { upsert: true, new: true }
         );
-    
+
         // Find the Profile by its ID and update the socialMediaLinks array
         const updatedProfile = await Profile.findOneAndUpdate(
           { _id: userId },
           { $addToSet: { socialMediaLinks: socialMediaLink._id } },
           { new: true }
-        ).populate('socialMediaLinks');
-    
+        ).populate("socialMediaLinks");
+
         if (!updatedProfile) {
-          throw new Error('Profile not found!');
+          throw new Error("Profile not found!");
         }
-    
+
         return socialMediaLink;
       } catch (error) {
-        throw new Error('Failed to save social media link: ' + error.message);
+        throw new Error("Failed to save social media link: " + error.message);
       }
     },
-    
-    
-    
-    
+    updateName: async (_, { name }, context) => {
+      if (!context.user) {
+        throw new AuthenticationError(
+          "You need to be logged in to update name!"
+        );
+      }
+
+      try {
+        const profile = await Profile.findById(context.user._id);
+
+        if (!profile) {
+          throw new Error("Profile not found!");
+        }
+
+        profile.name = name;
+        await profile.save();
+
+        return profile;
+      } catch (error) {
+        console.error("Error updating name:", error);
+        throw new Error("Failed to update name.");
+      }
+    },
+
+    updatePassword: async (_, { oldPassword, newPassword }, context) => {
+      console.log(oldPassword, newPassword);
+      if (!context.user) {
+        throw new AuthenticationError(
+          "You need to be logged in to update password!"
+        );
+      }
+
+      try {
+        const profile = await Profile.findById(context.user._id);
+
+        if (!profile) {
+          throw new Error("Profile not found!");
+        }
+
+        // Use the updatePassword method to update the password
+        await profile.updatePassword(oldPassword, newPassword);
+
+        return profile;
+      } catch (error) {
+        console.error("Error updating password:", error);
+        throw new Error("Failed to update password.");
+      }
+    },
   },
 };
 

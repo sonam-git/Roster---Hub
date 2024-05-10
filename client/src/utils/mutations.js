@@ -109,7 +109,7 @@ mutation SendMessage($recipientId: ID!, $text: String!) {
     }
   }
 }
-`
+`;
 export const SAVE_SOCIAL_MEDIA_LINK = gql`
 mutation  saveSocialMediaLink($userId: ID!, $type: String!, $link: String!) {
   saveSocialMediaLink(userId: $userId, type: $type, link: $link) {
@@ -119,4 +119,22 @@ mutation  saveSocialMediaLink($userId: ID!, $type: String!, $link: String!) {
     link
   }
 }
+`;
+
+export const UPDATE_NAME_MUTATION = gql`
+  mutation UpdateName($name: String!) {
+    updateName(name: $name) {
+      _id
+      name
+    }
+  }
+`;
+
+// Mutation to update the password
+export const UPDATE_PASSWORD_MUTATION = gql`
+  mutation UpdatePassword($oldPassword: String!, $newPassword: String!) {
+    updatePassword(oldPassword: $oldPassword, newPassword: $newPassword) {
+      _id
+    }
+  }
 `;

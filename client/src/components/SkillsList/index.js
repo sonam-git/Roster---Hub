@@ -10,7 +10,7 @@ const SkillsList = ({ profile, skills, isLoggedInUser = false }) => {
       try {
         // Remove the deleted skill from the cache
         const { me } = cache.readQuery({ query: QUERY_ME });
-        const updatedSkills = me.skills.filter(
+        const updatedSkills = me?.skills.filter(
           (skill) => skill._id !== removeSkill._id
         );
         cache.writeQuery({
@@ -43,8 +43,8 @@ const SkillsList = ({ profile, skills, isLoggedInUser = false }) => {
       {!isLoggedInUser && (
         <h2 className="text-center mt-4 mb-2 font-bold text-lg">
           {profile.name}'s friends have endorsed these{" "}
-          {profile.skills ? profile.skills.length : 0} skill
-          {profile.skills && profile.skills.length === 1 ? "" : "s"}
+          {profile?.skills ? profile?.skills.length : 0} skill
+          {profile?.skills && profile?.skills.length === 1 ? "" : "s"}
         </h2>
       )}
 
@@ -61,7 +61,7 @@ const SkillsList = ({ profile, skills, isLoggedInUser = false }) => {
                 <div className="flex justify-between text-white-500">
                   <div>
                     <span className="mr-1 text-xs">
-                      By : {skill.skillAuthor[0].toUpperCase()+ skill.skillAuthor.slice(1)} on {skill.createdAt}
+                      By : {skill.skillAuthor[0].toUpperCase()+ skill.skillAuthor.slice(1)} on {skill?.createdAt}
                     </span>
                   </div>
                   {/* Delete button (if logged in user) */}

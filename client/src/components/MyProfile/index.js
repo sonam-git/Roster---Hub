@@ -4,10 +4,12 @@ import { QUERY_ME } from "../../utils/queries";
 import { SAVE_SOCIAL_MEDIA_LINK } from "../../utils/mutations";
 import MessageList from "../MessageList";
 import ProfilePicUploader from "../ProfilePicUploader";
-import UserInfoForm from "../UserInfoForm";
+// import UserInfoForm from "../UserInfoForm";
 import ProfileAvatar from "../../assets/images/profile-avatar.png";
 import "@fortawesome/fontawesome-free/css/all.css";
-import { FaEdit } from "react-icons/fa";
+
+// import ProfileSettings from "../ProfileSettings";
+import ProfileManagement from "../ProfileManangement";
 
 
 const MyProfile = ({ isLoggedInUser }) => {
@@ -23,15 +25,14 @@ const MyProfile = ({ isLoggedInUser }) => {
   if (loading) return <div>Loading...</div>;
 
   const me = data?.me;
-  console.log(me);
-
+  
   // Function to save social media link
   const saveLink = async () => {
     try {
       // Call the mutation to save the social media link
       await saveSocialMediaLink({
         variables: {
-          userId: me._id,
+          userId: me?._id,
           type: selectedSocialMedia,
           link: socialMediaLink,
         },
@@ -51,7 +52,7 @@ const MyProfile = ({ isLoggedInUser }) => {
   {/* Profile Details */}
   <div className="md:w-2/5 mb-4 md:mb-0">
     <div className=" bg-white rounded-lg overflow-hidden shadow-md">
-      <div className="w-full h-[200px] bg-red-500 flex items-center justify-center">
+      <div className="w-full h-[200px] bg-blue-300 flex items-center justify-center">
         <div className="w-40 h-40 rounded-full bg-white relative overflow-hidden">
           <img
             src={me?.profilePic || ProfileAvatar}
@@ -67,16 +68,16 @@ const MyProfile = ({ isLoggedInUser }) => {
         />
         <div className="flex flex-col items-center">
           <h3 className="text-xl font-semibold text-black-700">
-            {me?.name[0].toUpperCase() + me?.name.slice(1)}<FaEdit className="inline ml-2" />
+            {me?.name[0].toUpperCase() + me?.name.slice(1)}
           </h3>
           {me?.position && (
             <p className=" font-semibold text-gray-700">
-              Position: {me.position}
+              Position: {me?.position}
             </p>
           )}
           {me?.jerseyNumber && (
             <p className="text-gray-700 font-semibold">
-              Jersey Number: {me.jerseyNumber}
+              Jersey Number: {me?.jerseyNumber}
             </p>
           )}
         </div>
@@ -104,7 +105,7 @@ const MyProfile = ({ isLoggedInUser }) => {
         {/* Contact button with phone number */}
         <div className="flex justify-center">
           <a
-            href={`tel:${me.phoneNumber}`}
+            href={`tel:${me?.phoneNumber}`}
             className="bg-indigo-600 text-white px-2 py-2 rounded-full font-semibold uppercase text-sm hover:bg-indigo-800"
           >
             <svg
@@ -126,22 +127,14 @@ const MyProfile = ({ isLoggedInUser }) => {
       </div>
     </div>
   </div>
-  {/* User Info Form */}
-  <div className="md:w-3/5 ">
-    
-    <div className="bg-white rounded-lg shadow-md p-6 max-w-2xl mt-2">
-    <h4 className="text-xl font-semibold mb-4 ml-2">Add / Update Your Information.</h4>
-      <div className="my-4 p-4 border border-dotted border-gray-300 rounded">
-        <UserInfoForm profileId={me._id} />
-      </div>
-    </div>
-  </div>
+  {/* User Profile Setting*/}
+ <ProfileManagement me = {me}/>
 </div>
 
       {/* Message List */}
       <div className="my-4 p-4 border border-dotted border-gray-300 rounded">
         <MessageList
-          messages={me.receivedMessages || []}
+          messages={me?.receivedMessages || []}
           isLoggedInUser={isLoggedInUser}
         />
       </div>
