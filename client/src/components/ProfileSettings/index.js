@@ -44,7 +44,7 @@ const ProfileSettings = () => {
         return;
       }
       await updatePassword({ variables: { currentPassword, newPassword } });
-      setSuccessMessage("Your password has been changed successfully.");
+      setPasswordSuccessMessage("Your password has been changed successfully.");
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
@@ -53,7 +53,7 @@ const ProfileSettings = () => {
         setErrorMessage("");
       }, 3000);
       Auth.logout();
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       console.error("Error updating password:", error);
       setErrorMessage("Failed to update password. Please try again.");
@@ -109,7 +109,7 @@ const ProfileSettings = () => {
         value={currentPassword}
         onChange={(e) => setCurrentPassword(e.target.value)}
         className="w-full border border-gray-300 rounded-md py-2 px-4 mb-4"
-        placeholder="Enter old password"
+        placeholder="Enter current password"
       />
       <input
         type="password"
