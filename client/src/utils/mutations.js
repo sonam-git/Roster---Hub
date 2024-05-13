@@ -132,9 +132,10 @@ export const UPDATE_NAME_MUTATION = gql`
 
 // Mutation to update the password
 export const UPDATE_PASSWORD_MUTATION = gql`
-  mutation UpdatePassword($oldPassword: String!, $newPassword: String!) {
-    updatePassword(oldPassword: $oldPassword, newPassword: $newPassword) {
-      _id
-    }
+mutation UpdatePassword($currentPassword: String!, $newPassword: String!) {
+  updatePassword(currentPassword: $currentPassword, newPassword: $newPassword) {
+    _id
+    name
   }
+}
 `;

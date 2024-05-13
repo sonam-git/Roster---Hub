@@ -64,7 +64,7 @@ scalar Upload
     removeMessage(messageId: ID!): Message
     saveSocialMediaLink(userId: ID!, type: String!, link: String!): SocialMediaLink!
     updateName(name: String!): Profile
-    updatePassword(oldPassword: String!, newPassword: String!): Profile
+    updatePassword(currentPassword: String!, newPassword: String!): Profile
   }
 `;
 

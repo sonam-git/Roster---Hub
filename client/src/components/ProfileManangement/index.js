@@ -12,7 +12,7 @@ const ProfileManagement = ({me}) => {
 
   return (
     <div className="md:w-3/5">
-      <div className="bg-white rounded-lg shadow-md p-6 max-w-2xl mt-2">
+      <div className="bg-white rounded-lg shadow-md p-6 max-w-2xl">
         <div className="flex justify-between items-center mb-4">
           <button
             className={`px-4 py-2 rounded-md ${activeComponent === 'userInfo' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}

@@ -78,23 +78,18 @@ profileSchema.methods.isCorrectPassword = async function (password) {
 };
 
 // update password methods
-profileSchema.methods.updatePassword = async function (oldPassword, newPassword) {
- // Check if the old password matches
- const isMatch = await bcrypt.compare(oldPassword, this.password);
- if (!isMatch) {
-   throw new Error("Incorrect old password!");
- }
+// profileSchema.methods.updatePassword = async function (currentPassword, newPassword) {
+//  // Check if the old password matches
+//  const isMatch = await bcrypt.compare(currentPassword, this.password);
+//  if (!isMatch) {
+//    throw new Error("Incorrect current password!");
+//  }
 
- // Hash the new password
- const saltRounds = 10;
- const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-
- // Update the password field
- this.password = hashedPassword;
-
- // Save the updated profile
- await this.save();
-};
+//  const hashedPassword = await bcrypt.hash(newPassword, 10);
+//  this.password = hashedPassword;
+//  await this.save();
+ 
+// };
 
 const Profile = model("Profile", profileSchema);
 

@@ -37,5 +37,5 @@ const signToken = function ({ email, name, _id }) {
 
 module.exports = {
   authMiddleware,
-  signToken
+  signToken,
 };

@@ -10,7 +10,6 @@ import Auth from '../utils/auth'; // Import your Auth utility
 const Home = () => {
   const { loading, data } = useQuery(QUERY_PROFILES);
   const profiles = data?.profiles || [];
- console.log(profiles)
   // Check if the user is logged in
   const isLoggedIn = Auth.loggedIn();
 if(loading){

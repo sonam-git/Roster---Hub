@@ -51,7 +51,7 @@ const MyProfile = ({ isLoggedInUser }) => {
      <div className="md:flex md:space-x-4 mb-6 md:mb-0">
   {/* Profile Details */}
   <div className="md:w-2/5 mb-4 md:mb-0">
-    <div className=" bg-white rounded-lg overflow-hidden shadow-md">
+    <div className="wd-full bg-white rounded-lg overflow-hidden shadow-md">
       <div className="w-full h-[200px] bg-blue-300 flex items-center justify-center">
         <div className="w-40 h-40 rounded-full bg-white relative overflow-hidden">
           <img
@@ -128,7 +128,9 @@ const MyProfile = ({ isLoggedInUser }) => {
     </div>
   </div>
   {/* User Profile Setting*/}
+
  <ProfileManagement me = {me}/>
+
 </div>
 
       {/* Message List */}

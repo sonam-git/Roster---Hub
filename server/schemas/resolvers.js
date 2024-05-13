@@ -1,7 +1,7 @@
 const { AuthenticationError } = require("apollo-server-express");
-const bcrypt = require("bcrypt");
 const { Profile, Skill, Message, SocialMediaLink } = require("../models");
 const { signToken } = require("../utils/auth");
+const bcrypt = require("bcrypt");
 const cloudinary = require("cloudinary").v2;
 require("dotenv").config();
 cloudinary.config({
@@ -323,7 +323,6 @@ const resolvers = {
 
         profile.name = name;
         await profile.save();
-
         return profile;
       } catch (error) {
         console.error("Error updating name:", error);
@@ -331,24 +330,30 @@ const resolvers = {
       }
     },
 
-    updatePassword: async (_, { oldPassword, newPassword }, context) => {
-      console.log(oldPassword, newPassword);
+    // Update the password mutation resolver
+    updatePassword: async (_, { currentPassword, newPassword }, context) => {
+      // Check if the user is authenticated
       if (!context.user) {
         throw new AuthenticationError(
-          "You need to be logged in to update password!"
+          "You need to be logged in to update the password!"
         );
       }
-
+      console.log(context.user);
       try {
+        // Find the user's profile
         const profile = await Profile.findById(context.user._id);
-
         if (!profile) {
           throw new Error("Profile not found!");
         }
 
-        // Use the updatePassword method to update the password
-        await profile.updatePassword(oldPassword, newPassword);
+        // Check if the old password matches
+        const isMatch = await bcrypt.compare(currentPassword, profile.password);
+        if (!isMatch) {
+          throw new Error("Incorrect current password!");
+        }
 
+        profile.password = newPassword;
+        await profile.save();
         return profile;
       } catch (error) {
         console.error("Error updating password:", error);

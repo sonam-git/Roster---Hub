@@ -13,9 +13,15 @@ class AuthService {
   }
 // Check if token is expired
   isTokenExpired(token) {
+    if (!token) {
+      // If token is not available, consider it as expired
+      localStorage.removeItem('id_token');
+      return true;
+    }
     const decoded = decode(token);
     if (decoded.exp < Date.now() / 1000) {
       localStorage.removeItem('id_token');
+      this.logout();
       return true;
     }
     return false;

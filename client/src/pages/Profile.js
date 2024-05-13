@@ -51,8 +51,8 @@ const Profile = () => {
   }
 
   return (
-    <div className="container mx-auto">
-      <div className="my-4 p-4 border border-dotted border-gray-300 rounded">
+    <div className="container ">
+      <div className=" my-4 p-4 border border-dotted border-gray-300 rounded">
         {profileId ? (
           <UserProfile profile={profile} />
         ) : (
