@@ -1,15 +1,16 @@
 import React from "react";
 import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
 import Auth from "../../utils/auth";
-import controlImage from "../../assets/images/control.png";
+import controlImage from "../../assets/images/iconizer-arrow.png";
 import logoImage from "../../assets/images/logo.png";
-import chartFillImage from "../../assets/images/Chart_fill.png";
-import chatImage from "../../assets/images/Chat.png";
-import userImage from "../../assets/images/User.png";
-import rosterImage from "../../assets/images/Setting.png";
-import logoutImage from "../../assets/images/Setting.png";
-import loginImage from "../../assets/images/Setting.png";
-import signupImage from "../../assets/images/Setting.png";
+import chartFillImage from "../../assets/images/iconizer-home.png";
+import chatImage from "../../assets/images/iconizer-message.png";
+import skillImage from "../../assets/images/iconizer-skill.png";
+import userImage from "../../assets/images/iconizer-account.png";
+import rosterImage from "../../assets/images/iconizer-roster.png";
+import logoutImage from "../../assets/images/iconizer-logout.png";
+import loginImage from "../../assets/images/iconizer-login.png";
+import signupImage from "../../assets/images/iconizer-signup.png";
 
 const Header = () => {
   const [open, setOpen] = React.useState(true);
@@ -26,7 +27,7 @@ const Header = () => {
         { title: "Home", src: chartFillImage, path: "/" },
         { title: "My Profile", src: userImage, path: "/me" },
         { title: "Roster", src: rosterImage, path: "/roster" },
-        { title: "Skill - List", src: chatImage, path: "/skill" },
+        { title: "Skill - List", src: skillImage, path: "/skill" },
         { title: "Message", src: chatImage, path: "/message" },
         { title: "Logout", src: logoutImage, action: handleLogout },
       ]

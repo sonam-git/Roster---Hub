@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import ChatBox from "../ChatBox"; // Import the ChatBox component
 import { AiOutlineMessage } from "react-icons/ai"; // Import the chat icon
-import { RiProfileLine } from "react-icons/ri"; // Import the profile icon
+import { RiProfileLine,RiTShirt2Line } from "react-icons/ri"; // Import the profile icon
 import Auth from "../../utils/auth";
 import ProfileAvatar from "../../assets/images/profile-avatar.png";
 
@@ -51,7 +51,7 @@ const ProfileList = ({ profiles, title }) => {
               <div>
                 <h4 className="font-bold">{profile.name}</h4>
                 <p className="text-gray-600 font-bold">
-                  Jersey Number: {profile.jerseyNumber}
+                <RiTShirt2Line className="mr-2 text-xl inline" />= {profile.jerseyNumber}
                 </p>
               </div>
               {/* Column 2: Image */}

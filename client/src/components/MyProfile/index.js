@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import { QUERY_ME } from "../../utils/queries";
 import { SAVE_SOCIAL_MEDIA_LINK } from "../../utils/mutations";
-// import MessageList from "../MessageList";
+import { RiTShirt2Line } from "react-icons/ri"; 
+import { FaUser } from "react-icons/fa";
 import ProfilePicUploader from "../ProfilePicUploader";
 import ProfileManagement from "../ProfileManangement";
 import ProfileAvatar from "../../assets/images/profile-avatar.png";
@@ -70,12 +71,13 @@ const MyProfile = ({ isLoggedInUser }) => {
           </h3>
           {me?.position && (
             <p className=" font-semibold text-gray-700">
-              Position: {me?.position}
+              <FaUser className="mr-2 text-xl inline mb-1" />
+{me?.position}
             </p>
           )}
           {me?.jerseyNumber && (
             <p className="text-gray-700 font-semibold">
-              Jersey Number: {me?.jerseyNumber}
+              <RiTShirt2Line className="mr-2 text-2xl inline" />= {me?.jerseyNumber}
             </p>
           )}
         </div>

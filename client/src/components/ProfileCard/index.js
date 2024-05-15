@@ -1,4 +1,5 @@
 import ProfileAvatar from "../../assets/images/profile-avatar.png";
+import { FaUser } from "react-icons/fa";
 
 const ProfileCard = ({ profile }) => {
   // Function to render social media icons with links
@@ -59,7 +60,8 @@ const ProfileCard = ({ profile }) => {
             <h3 className="text-xl font-semibold text-black-700">
               {profile.name[0].toUpperCase() + profile.name.slice(1)}
             </h3>
-            <p className="font-semibold text-gray-700">{profile.position}</p>
+            <p className="font-semibold text-gray-700"><FaUser className="mr-2 text-xl inline mb-1" />
+{profile.position}</p>
           </div>
 
           <div className="flex items-center justify-center">
