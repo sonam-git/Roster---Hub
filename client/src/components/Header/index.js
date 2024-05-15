@@ -47,18 +47,21 @@ const Header = () => {
         } bg-gray-900 h-full p-5 pt-8 transition-all duration-300 z-50 lg:static fixed`}
         style={{ top: "0", left: "0" }}
       >
-         <img
+        <img
           src={controlImage}
           className={`absolute cursor-pointer right-3 top-9 w-8 border-dark-blue border-2 rounded-full bg-white transform ${
             open ? "" : "rotate-180"
-          }`}
+          } `}
           onClick={toggleMenu}
           alt="toggle menu"
         />
+
         <div className="flex items-center">
           <img
             src={logoImage}
-            className={`cursor-pointer duration-500 ${open && "rotate-[360deg]"}`}
+            className={`cursor-pointer duration-500 ${
+              open && "rotate-[360deg]"
+            }`}
             alt="logo"
           />
           <h1
@@ -74,13 +77,24 @@ const Header = () => {
             <li
               key={index}
               className={`flex rounded-md p-2 cursor-pointer items-center gap-x-4 mt-2 ${
-                location.pathname === Menu.path ? "bg-gray-700 text-white" : "text-gray-400 hover:text-gray-200"
+                location.pathname === Menu.path
+                  ? "bg-gray-700 text-white"
+                  : "text-gray-400 hover:text-gray-200"
               }`}
             >
-              <Link to={Menu.path} onClick={Menu.action} className="flex items-center w-full no-underline" style={{ textDecoration: "none" }}>
+              <Link
+                to={Menu.path}
+                onClick={Menu.action}
+                className="flex items-center w-full no-underline"
+                style={{ textDecoration: "none" }}
+              >
                 <div className="flex items-center">
                   <img src={Menu.src} alt={Menu.title} className="w-10 mr-2" />
-                  <span className={`${!open && "hidden"} origin-left duration-200 text-lg md:text-sm lg:text-xl`}>
+                  <span
+                    className={`${
+                      !open && "hidden"
+                    } origin-left duration-200 text-lg md:text-sm lg:text-xl`}
+                  >
                     {Menu.title}
                   </span>
                 </div>
