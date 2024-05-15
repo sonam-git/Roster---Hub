@@ -15,13 +15,13 @@ const ProfileManagement = ({me}) => {
       <div className="bg-white rounded-lg shadow-md p-6 max-w-2xl">
         <div className="flex justify-between items-center mb-4">
           <button
-            className={`px-4 py-2 rounded-md ${activeComponent === 'userInfo' ? 'bg-dark text-white' : 'bg-gray-200 text-gray-700'}`}
+            className={`px-4 py-2 rounded-md ${activeComponent === 'userInfo' ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-900'}`}
             onClick={() => setActiveComponent('userInfo')}
           >
             User Info Form <FaEdit className="inline ml-2" />
           </button>
           <button
-            className={`px-4 py-2 rounded-md ${activeComponent === 'profileSettings' ? 'bg-dark text-white' : 'bg-gray-200 text-gray-700'}`}
+            className={`px-4 py-2 rounded-md ${activeComponent === 'profileSettings' ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-900'}`}
             onClick={() => setActiveComponent('profileSettings')}
           >
             Profile Setting <FaEdit className="inline ml-2" />
