@@ -27,15 +27,15 @@ const Welcome = ({ username }) => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Application Features</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">App Features</h2>
             <ul className="list-disc list-inside text-gray-700">
-              <li>Sign up with name, email, & password</li>
+              <li>Sign up with user information</li>
               <li>Upload profile picture</li>
               <li>Add information </li>
-              <li>Update profile information & password</li>
+              <li>Update profile information</li>
               <li>Message between players</li>
               <li>Endorse teammates' skills</li>
-              <li>Filter skills endorsed by teammates</li>
+              <li>Manage endorsed skills  </li>
             </ul>
           </div>
           <div>

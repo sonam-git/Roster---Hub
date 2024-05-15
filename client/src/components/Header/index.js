@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
 import Auth from "../../utils/auth";
-import controlImage from "../../assets/images/iconizer-arrow.png";
+import controlImage from "../../assets/images/iconizer-arrow-left.png";
 import logoImage from "../../assets/images/logo.png";
 import chartFillImage from "../../assets/images/iconizer-home.png";
 import chatImage from "../../assets/images/iconizer-message.png";
@@ -80,7 +80,7 @@ const Header = () => {
               className={`flex rounded-md p-2 cursor-pointer items-center gap-x-4 mt-2 ${
                 location.pathname === Menu.path
                   ? "bg-gray-700 text-white"
-                  : "text-gray-400 hover:text-gray-200"
+                  : "text-gray-400 hover:text-red-800"
               }`}
             >
               <Link
