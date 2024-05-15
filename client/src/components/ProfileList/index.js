@@ -7,6 +7,7 @@ import Auth from "../../utils/auth";
 import ProfileAvatar from "../../assets/images/profile-avatar.png";
 
 const ProfileList = ({ profiles, title }) => {
+  console.log(profiles)
   const [selectedUser, setSelectedUser] = useState(null);
 
   const handleChatClick = (user) => {
@@ -64,7 +65,7 @@ const ProfileList = ({ profiles, title }) => {
               </button>
               {/* Player info button */}
               <Link
-                className=" flex items-center "
+                className=" flex items-center hover:no-underline"
                 to={`/profiles/${profile._id}`}
               >
                 <RiProfileLine className="mr-2 text-2xl" />

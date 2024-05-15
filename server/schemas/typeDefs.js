@@ -65,6 +65,7 @@ scalar Upload
     saveSocialMediaLink(userId: ID!, type: String!, link: String!): SocialMediaLink!
     updateName(name: String!): Profile
     updatePassword(currentPassword: String!, newPassword: String!): Profile
+    deleteProfile(profileId: ID!):Profile
   }
 `;
 

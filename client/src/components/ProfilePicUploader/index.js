@@ -1,28 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { UPLOAD_PROFILE_PIC } from "../../utils/mutations";
 import Axios from "axios";
 import { SyncLoader } from "react-spinners";
-import { AiOutlineUpload } from 'react-icons/ai';
+import { AiOutlineUpload } from "react-icons/ai";
 
 const ProfilePicUploader = ({ profileId, profilePicUrl }) => {
   const [loading, setLoading] = useState(false);
-  const [profilePic, setProfilePic] = useState(null); // State to store the selected profile picture
+  const [profilePic, setProfilePic] = useState(null); 
   const [uploadProfilePic] = useMutation(UPLOAD_PROFILE_PIC);
-  const [buttonText, setButtonText] = useState("Upload");
-
-  useEffect(() => {
-    // Determine button text based on whether an image is already uploaded
-    if (profilePicUrl) {
-      setButtonText("Change Image");
-    } else {
-      setButtonText("Upload");
-    }
-  }, [profilePicUrl]);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    setProfilePic(file);
+    // Check if profilePic is already set
+    if (!profilePic) {
+      setProfilePic(file);
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -64,7 +57,7 @@ const ProfilePicUploader = ({ profileId, profilePicUrl }) => {
     <div className="flex items-center justify-center">
       <div className="flex flex-col items-center justify-center space-y-4">
         <label htmlFor="profilePicInput" className="cursor-pointer">
-        <AiOutlineUpload size={24} className="text-indigo-800" />
+          <AiOutlineUpload size={24} className="text-indigo-800" />
         </label>
         <input
           id="profilePicInput"
@@ -83,7 +76,7 @@ const ProfilePicUploader = ({ profileId, profilePicUrl }) => {
           className="bg-transparent hover:bg-indigo-600 text-indigo-700 font-semibold hover:text-white py-2 ml-2 px-4 border border-blue-500 hover:border-transparent rounded"
           disabled={loading}
         >
-          {buttonText}
+          {profilePicUrl ? "Change Image" : "Upload"}
         </button>
         <div className="ml-2">
           <SyncLoader color="#000" loading={loading} size={10} />

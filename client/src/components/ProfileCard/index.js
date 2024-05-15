@@ -43,14 +43,14 @@ const ProfileCard = ({ profile }) => {
   };
 
   return (
-    <>
-      <div className=" bg-white rounded-lg overflow-hidden shadow-md">
-        <div className="w-full h-[200px] bg-red-500  flex items-center justify-center">
+    <div className="md:w-1/3 mb-4 md:mb-0 mt-8">
+      <div className="w-full bg-white rounded-lg overflow-hidden shadow-md">
+        <div className="w-full h-[200px] bg-blue-300 flex items-center justify-center">
           <div className="w-40 h-40 rounded-full bg-white relative overflow-hidden">
             <img
               src={profile?.profilePic || ProfileAvatar}
               alt="Profile"
-              className="rounded-full  mx-auto mb-4"
+              className="rounded-full w-40 h-40 mx-auto mb-4"
             />
           </div>
         </div>
@@ -69,7 +69,7 @@ const ProfileCard = ({ profile }) => {
           <div className="flex justify-center">
             <a
               href={`tel:${profile.phoneNumber}`}
-              className="bg-indigo-600 text-white px-2 py-2  rounded-full font-semibold uppercase text-sm  hover:bg-indigo-800"
+              className="bg-indigo-600 text-white px-2 py-2 rounded-full font-semibold uppercase text-sm hover:bg-indigo-800"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -89,7 +89,7 @@ const ProfileCard = ({ profile }) => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

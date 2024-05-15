@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import { QUERY_ME } from "../../utils/queries";
 import { SAVE_SOCIAL_MEDIA_LINK } from "../../utils/mutations";
-import MessageList from "../MessageList";
+// import MessageList from "../MessageList";
 import ProfilePicUploader from "../ProfilePicUploader";
-// import UserInfoForm from "../UserInfoForm";
+import ProfileManagement from "../ProfileManangement";
 import ProfileAvatar from "../../assets/images/profile-avatar.png";
 import "@fortawesome/fontawesome-free/css/all.css";
 
-// import ProfileSettings from "../ProfileSettings";
-import ProfileManagement from "../ProfileManangement";
 
 
 const MyProfile = ({ isLoggedInUser }) => {
@@ -134,12 +132,12 @@ const MyProfile = ({ isLoggedInUser }) => {
 </div>
 
       {/* Message List */}
-      <div className="my-4 p-4 border border-dotted border-gray-300 rounded">
+      {/* <div className="my-4 p-4 border border-dotted border-gray-300 rounded">
         <MessageList
           messages={me?.receivedMessages || []}
           isLoggedInUser={isLoggedInUser}
         />
-      </div>
+      </div> */}
       {/* Social media link modal */}
       {selectedSocialMedia && (
         <div className="fixed z-10 inset-0 overflow-y-auto flex justify-center items-center">

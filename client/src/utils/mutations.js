@@ -139,3 +139,16 @@ mutation UpdatePassword($currentPassword: String!, $newPassword: String!) {
   }
 }
 `;
+export const DELETE_PROFILE = gql`
+mutation DeleteProfile($profileId: ID!) {
+  deleteProfile(profileId: $profileId) {
+    _id
+  }
+}
+`;
+
+export const LOGOUT_USER = gql`
+  mutation {
+    logoutUser
+  }
+`;

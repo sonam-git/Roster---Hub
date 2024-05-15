@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import {
   UPDATE_NAME_MUTATION,
   UPDATE_PASSWORD_MUTATION,
+  LOGOUT_USER
 } from "../../utils/mutations";
 import { QUERY_ME } from "../../utils/queries";
-import Auth from "../../utils/auth";
+// import Auth from "../../utils/auth";
+import RemoveAccount from "../RemoveAccount";
 
 const ProfileSettings = () => {
   const [name, setName] = useState("");
@@ -16,16 +18,18 @@ const ProfileSettings = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [passwordSuccessMessage, setPasswordSuccessMessage] = useState("");
+  const [showFarewell, setShowFarewell] = useState(false);
 
   const [updateName] = useMutation(UPDATE_NAME_MUTATION);
   const [updatePassword] = useMutation(UPDATE_PASSWORD_MUTATION);
+  const [logoutUser] = useMutation(LOGOUT_USER);
 
-  // useNavigate hook to navigate to login page
-  const navigate = useNavigate();
+// useNavigate hook to navigate to login page
+// const navigate = useNavigate();
 
   const handleNameUpdate = async () => {
     try {
-      await updateName({ variables: { name }, refetchQueries: [QUERY_ME] });
+   await updateName({ variables: { name }, refetchQueries: [QUERY_ME] });
       setSuccessMessage("Your name has been changed successfully.");
       setName(""); // Clear input field after successful update
       setTimeout(() => {
@@ -33,7 +37,6 @@ const ProfileSettings = () => {
       }, 3000); // Remove success message after 3 seconds
     } catch (error) {
       console.error("Error updating name:", error);
-      // Handle error
     }
   };
 
@@ -51,12 +54,22 @@ const ProfileSettings = () => {
       setTimeout(() => {
         setPasswordSuccessMessage("");
         setErrorMessage("");
-      }, 3000);
-      Auth.logout();
-      navigate("/");
+        // if you want the user to be logged out as soon as the password is changed.
+        // Auth.logout();
+        // navigate("/");
+      }, 4000);
+    
     } catch (error) {
       console.error("Error updating password:", error);
       setErrorMessage("Failed to update password. Please try again.");
+    }
+  };
+  const handleRemove = async () => {
+    try {
+      await logoutUser();
+      setShowFarewell(true);
+    } catch (error) {
+      console.error('Error logging out:', error);
     }
   };
 
@@ -108,29 +121,33 @@ const ProfileSettings = () => {
         type="password"
         value={currentPassword}
         onChange={(e) => setCurrentPassword(e.target.value)}
-        className="w-full border border-gray-300 rounded-md py-2 px-4 mb-4"
+        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 mb-2"
         placeholder="Enter current password"
       />
       <input
         type="password"
         value={newPassword}
         onChange={(e) => setNewPassword(e.target.value)}
-        className="w-full border border-gray-300 rounded-md py-2 px-4 mb-4"
+        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 mb-2"
         placeholder="Enter new password"
       />
       <input
         type="password"
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
-        className="w-full border border-gray-300 rounded-md py-2 px-4 mb-4"
+        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 mb-2"
         placeholder="Confirm your new password"
       />
+       <div className="flex justify-between items-center mb-4">
       <button
         onClick={handlePasswordChange}
         className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md"
       >
         Change Password
       </button>
+      <RemoveAccount onRemove={handleRemove} />
+      {showFarewell && <p>Sorry to see you leave. We wish you all the best!</p>}
+      </div>
     </div>
   );
 };

@@ -68,7 +68,6 @@ profileSchema.pre("save", async function (next) {
     const saltRounds = 10;
     this.password = await bcrypt.hash(this.password, saltRounds);
   }
-
   next();
 });
 
@@ -77,19 +76,6 @@ profileSchema.methods.isCorrectPassword = async function (password) {
   return bcrypt.compare(password, this.password);
 };
 
-// update password methods
-// profileSchema.methods.updatePassword = async function (currentPassword, newPassword) {
-//  // Check if the old password matches
-//  const isMatch = await bcrypt.compare(currentPassword, this.password);
-//  if (!isMatch) {
-//    throw new Error("Incorrect current password!");
-//  }
-
-//  const hashedPassword = await bcrypt.hash(newPassword, 10);
-//  this.password = hashedPassword;
-//  await this.save();
- 
-// };
 
 const Profile = model("Profile", profileSchema);
 

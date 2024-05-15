@@ -33,7 +33,7 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
     }
   };
 
-  const [displayedMessages, setDisplayedMessages] = useState(2);
+  const [displayedMessages, setDisplayedMessages] = useState(3);
   const [showChatModal, setShowChatModal] = useState(false);
   const [selectedRecipient, setSelectedRecipient] = useState(null);
 
@@ -48,8 +48,8 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
 
   return (
     <>
-      <div className="flex items-center ">
-        <h1 className="text-2xl lg:text-xl xl:text-2xl font-bold mb-2 text-center">
+      <div className="flex items-center">
+        <h1 className="text-xl lg:text-xl xl:text-2xl font-bold mb-2 text-center">
           Message Box
         </h1>
         <MailIcon className="h-6 w-6 mr-1 mb-2 ml-2" />
@@ -60,11 +60,10 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
           {messages.length === 1}
         </span>
       </div>
-      <div className="overscroll-contain message-container overflow-auto max-h-80">
-        {/* Display messages */}
+      <div className="overflow-auto max-h-80 my-4 grid grid-cols-1 gap-4">
         {messages.slice(0, displayedMessages).map((message) => (
-          <div key={message._id} className="message-item">
-            <div className="message-card border border-gray-300 rounded-lg p-4 mb-4">
+          <div key={message._id} className="col-span-1">
+            <div className="border border-gray-300 rounded-lg p-4 mb-4">
               {/* Sender Information */}
               <p className="text-sm text-gray-500 mt-2">
                 From: {message?.sender.name} on {message.createdAt}
@@ -74,11 +73,11 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
                 {message.text}
               </p>
 
-              <div className="card-body flex justify-between items-center">
+              <div className="flex justify-between items-center">
                 {/* Reply Button */}
                 {isLoggedInUser && (
                   <button
-                    className="mt-4 mr-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-800 transition duration-300"
+                    className="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-800 transition duration-300"
                     onClick={() => handleReply(message?.sender)}
                   >
                     <FaReply />
