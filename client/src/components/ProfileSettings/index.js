@@ -1,14 +1,23 @@
 import React, { useState } from "react";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
+import { useNavigate } from 'react-router-dom';
 import {
   UPDATE_NAME_MUTATION,
   UPDATE_PASSWORD_MUTATION,
-  LOGOUT_USER
+  DELETE_PROFILE,
 } from "../../utils/mutations";
 import { QUERY_ME } from "../../utils/queries";
 import RemoveAccount from "../RemoveAccount";
+import FarewellModal from "../FareWellModal";
+import Auth from '../../utils/auth'
 
 const ProfileSettings = ({ isDarkMode }) => {
+  const navigate = useNavigate();
+
+  const {data} = useQuery(QUERY_ME);
+  const userId = data.me._id;
+
+  console.log(data.me._id)
   const [name, setName] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -20,7 +29,8 @@ const ProfileSettings = ({ isDarkMode }) => {
 
   const [updateName] = useMutation(UPDATE_NAME_MUTATION);
   const [updatePassword] = useMutation(UPDATE_PASSWORD_MUTATION);
-  const [logoutUser] = useMutation(LOGOUT_USER);
+  const [deleteProfile] = useMutation(DELETE_PROFILE);
+ 
 
   const handleNameUpdate = async () => {
     try {
@@ -56,13 +66,18 @@ const ProfileSettings = ({ isDarkMode }) => {
     }
   };
 
-  const handleRemove = async () => {
+  const handleRemove = async (profileId) => {
     try {
-      await logoutUser();
+      await deleteProfile({ variables: { profileId } });
       setShowFarewell(true);
     } catch (error) {
-      console.error('Error logging out:', error);
+      console.error('Error removing profile:', error);
     }
+  };
+
+  const handleLogout = () => {
+    Auth.logout();
+    navigate('/');
   };
 
   return (
@@ -136,8 +151,10 @@ const ProfileSettings = ({ isDarkMode }) => {
         >
           Change Password
         </button>
-        <RemoveAccount onRemove={handleRemove} />
-        {showFarewell && <p>Sorry to see you leave. We wish you all the best!</p>}
+        <RemoveAccount onRemove={handleRemove} profileId={userId} />
+        {showFarewell && (
+        <FarewellModal onClose={handleLogout} />
+      )}
       </div>
     </div>
   );

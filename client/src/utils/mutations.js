@@ -146,9 +146,3 @@ mutation DeleteProfile($profileId: ID!) {
   }
 }
 `;
-
-export const LOGOUT_USER = gql`
-  mutation {
-    logoutUser
-  }
-`;

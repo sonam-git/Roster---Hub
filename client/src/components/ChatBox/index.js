@@ -97,7 +97,7 @@ const ChatBox = ({ recipient, onCloseModal, isDarkMode }) => {
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Type your message..."
                 rows={3}
-                className="w-full p-2 border border-gray-300 rounded-md mb-4"
+                className="text-dark w-full p-2 border border-gray-300 rounded-md mb-4"
               />
               <div className="flex justify-end">
                 <button
