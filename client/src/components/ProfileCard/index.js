@@ -1,52 +1,50 @@
-import ProfileAvatar from "../../assets/images/profile-avatar.png";
-import { FaUser } from "react-icons/fa";
+// src/components/ProfileCard.js
+import React from 'react';
+import ProfileAvatar from '../../assets/images/profile-avatar.png';
+import { FaUser } from 'react-icons/fa';
 
-const ProfileCard = ({ profile }) => {
+const ProfileCard = ({ profile, isDarkMode }) => {
   // Function to render social media icons with links
   const renderSocialMediaIcons = () => {
     return profile.socialMediaLinks.map((socialMedia) => {
-      // Map each social media link to its corresponding icon and link
-      let iconClassName = "";
-      let link = "";
+      let iconClassName = '';
+      let link = '';
 
-      // Determine the icon class name and link based on the social media type
       switch (socialMedia.type) {
-        case "twitter":
-          iconClassName = "fa-brands fa-twitter";
+        case 'twitter':
+          iconClassName = 'fa-brands fa-twitter';
           link = socialMedia.link;
           break;
-        case "facebook":
-          iconClassName = "fa-brands fa-facebook";
+        case 'facebook':
+          iconClassName = 'fa-brands fa-facebook';
           link = socialMedia.link;
           break;
-        case "linkedin":
-          iconClassName = "fa-brands fa-linkedin-in";
+        case 'linkedin':
+          iconClassName = 'fa-brands fa-linkedin-in';
           link = socialMedia.link;
           break;
-        // Add cases for other social media types if needed
         default:
           break;
       }
 
-      // Render the social media icon with a clickable link
       return (
         <a
           key={socialMedia._id}
           href={link}
           target="_blank"
           rel="noopener noreferrer"
-          className="mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center bg-[#1DA1F2]"
+          className={`mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center ${isDarkMode ? 'bg-gray-600' : 'bg-[#1DA1F2]'}`}
         >
-          <i className={iconClassName + " text-white"}></i>
+          <i className={iconClassName + ' text-white'}></i>
         </a>
       );
     });
   };
 
   return (
-    <div className="md:w-1/3 mb-4 md:mb-0 mt-8">
-      <div className="w-full bg-white rounded-lg overflow-hidden shadow-md">
-        <div className="w-full h-[200px] bg-blue-300 flex items-center justify-center">
+    <div className={` mb-4 md:mb-0 mt-8 rounded-lg  ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
+      <div className={`w-full rounded-lg overflow-hidden shadow-md ${isDarkMode ? 'bg-gray-700' : 'bg-white'}`}>
+        <div className={`w-full h-[200px] flex items-center justify-center ${isDarkMode ? 'bg-gray-600' : 'bg-blue-300'}`}>
           <div className="w-40 h-40 rounded-full bg-white relative overflow-hidden">
             <img
               src={profile?.profilePic || ProfileAvatar}
@@ -57,21 +55,21 @@ const ProfileCard = ({ profile }) => {
         </div>
         <div className="py-10 px-6 grid grid-cols-1 gap-6">
           <div className="flex flex-col items-center">
-            <h3 className="text-xl font-semibold text-black-700">
+            <h3 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-black-700'}`}>
               {profile.name[0].toUpperCase() + profile.name.slice(1)}
             </h3>
-            <p className="font-semibold text-gray-700"><FaUser className="mr-2 text-xl inline mb-1" />
-{profile.position}</p>
+            <p className={`font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              <FaUser className="mr-2 text-xl inline mb-1" />
+              {profile.position}
+            </p>
           </div>
-
           <div className="flex items-center justify-center">
-            {/* Render social media icons */}
             {renderSocialMediaIcons()}
           </div>
           <div className="flex justify-center">
             <a
               href={`tel:${profile.phoneNumber}`}
-              className="bg-indigo-600 text-white px-2 py-2 rounded-full font-semibold uppercase text-sm hover:bg-indigo-800"
+              className={`bg-indigo-600 text-white px-2 py-2 rounded-full font-semibold uppercase text-sm hover:bg-indigo-800`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

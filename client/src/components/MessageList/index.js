@@ -7,7 +7,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { FaReply } from "react-icons/fa";
 import ChatBox from "../ChatBox";
 
-const MessageList = ({ messages, isLoggedInUser = false }) => {
+const MessageList = ({ messages, isLoggedInUser = false, isDarkMode }) => {
   const [removeMessage, { error }] = useMutation(REMOVE_MESSAGE, {
     update(cache, { data: { removeMessage } }) {
       try {
@@ -60,7 +60,7 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
           {messages.length === 1}
         </span>
       </div>
-      <div className="overflow-auto max-h-80 my-4 grid grid-cols-1 gap-4">
+      <div className={`overflow-auto max-h-80 my-4 grid grid-cols-1 gap-4 `}>
         {messages.slice(0, displayedMessages).map((message) => (
           <div key={message._id} className="col-span-1">
             <div className="border border-gray-300 rounded-lg p-4 mb-4">
@@ -69,7 +69,7 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
                 From: {message?.sender.name} on {message.createdAt}
               </p>
               {/* Message Text */}
-              <p className="bg-gray-500 rounded-md text-white p-2">
+              <p className={`bg-gray-500 rounded-md text-white p-2`}>
                 {message.text}
               </p>
 
@@ -114,6 +114,7 @@ const MessageList = ({ messages, isLoggedInUser = false }) => {
         <ChatBox
           recipient={selectedRecipient}
           onCloseModal={() => setShowChatModal(false)}
+          isDarkMode={isDarkMode}
         />
       )}
     </>

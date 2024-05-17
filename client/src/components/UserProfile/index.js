@@ -1,19 +1,23 @@
-import React from "react";
-import SkillsList from "../SkillsList";
-import  ProfileCard  from "../ProfileCard";
-import SkillForm from "../SkillForm";
-
+// src/components/UserProfile.js
+import React, { useContext } from 'react';
+import SkillsList from '../SkillsList';
+import ProfileCard from '../ProfileCard';
+import SkillForm from '../SkillForm';
+import { ThemeContext } from '../ThemeContext';
 
 const UserProfile = ({ profile }) => {
+  const { isDarkMode } = useContext(ThemeContext);
 
   return (
-    <div className="md:flex md:space-x-8 mb-6 md:mb-0">
-      {/* Image and User Information */}
-      <ProfileCard profile={profile} className="md:w-1/3 " />
-      {/* Skills List */}
-      <div className="md:w-2/3 bg-white rounded-lg shadow-md p-2 max-w-2xl">
-        <SkillsList skills={profile.skills || []} profile={profile} />
-        <SkillForm profileId={profile._id}/>
+    <div className={`md:flex md:space-x-2 mb-6 md:mb-0 rounded-lg  ${isDarkMode ? 'bg-gray-500 text-white' : 'bg-white text-black'}`}>
+      <div className={`md:w-2/5  md:mb-0 p-2  `}>
+      <ProfileCard profile={profile} isDarkMode={isDarkMode}  />
+      </div>
+      <div className={` md:w-4/5  md:m-2 mr-2 p-2 rounded-lg shadow-md max-w-2xl ${isDarkMode ? 'bg-gray-700' : 'bg-white'}`}>
+        <SkillsList skills={profile.skills || []} isDarkMode={isDarkMode} profile={profile} />
+        <div >
+        <SkillForm profileId={profile._id}  />
+        </div>
       </div>
     </div>
   );

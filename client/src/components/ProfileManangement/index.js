@@ -3,36 +3,31 @@ import UserInfoForm from '../UserInfoForm';
 import ProfileSettings from '../ProfileSettings';
 import { FaEdit } from "react-icons/fa";
 
-const ProfileManagement = ({me}) => {
-
+const ProfileManagement = ({me ,isDarkMode}) => {
+ 
   const [activeComponent, setActiveComponent] = useState('userInfo'); // Default to 'userInfo'
 
-
-
-
   return (
-    <div className="md:w-3/5">
-      <div className="bg-white rounded-lg shadow-md p-6 max-w-2xl">
+      <div className={` rounded-lg shadow-md p-6 max-w-2xl ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-white text-black'}`}>
         <div className="flex justify-between items-center mb-4">
           <button
-            className={`px-4 py-2 rounded-md ${activeComponent === 'userInfo' ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-900'}`}
+            className={`px-4 py-2 rounded-md ${activeComponent === 'userInfo' ? 'bg-blue-200 text-dark' : 'bg-gray-200 text-gray-900'}`}
             onClick={() => setActiveComponent('userInfo')}
           >
             User Info Form <FaEdit className="inline ml-2" />
           </button>
           <button
-            className={`px-4 py-2 rounded-md ${activeComponent === 'profileSettings' ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-900'}`}
+            className={`px-4 py-2 rounded-md ${activeComponent === 'profileSettings' ? 'bg-blue-200 text-dark' : 'bg-gray-200 text-gray-900'}`}
             onClick={() => setActiveComponent('profileSettings')}
           >
             Profile Setting <FaEdit className="inline ml-2" />
           </button>
         </div>
-        <div className="my-9 p-4 border border-dotted border-gray-300 rounded">
-          {activeComponent === 'userInfo' && <UserInfoForm profileId={me._id} />}
-          {activeComponent === 'profileSettings' && <ProfileSettings user={me} />}
+        <div className={`my-9 p-4 border border-dotted border-gray-300 rounded ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-white text-black'}`}>
+          {activeComponent === 'userInfo' && <UserInfoForm profileId={me._id} isDarkMode={isDarkMode} />}
+          {activeComponent === 'profileSettings' && <ProfileSettings user={me}  isDarkMode={isDarkMode}/>}
         </div>
       </div>
-    </div>
   );
 };
 

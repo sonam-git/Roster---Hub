@@ -4,7 +4,7 @@ import { REMOVE_SKILL } from "../../utils/mutations";
 import { QUERY_ME } from "../../utils/queries";
 import { AiOutlineDelete } from 'react-icons/ai';
 
-const SkillsList = ({ profile, skills, isLoggedInUser = false }) => {
+const SkillsList = ({ profile, skills, isLoggedInUser = false, isDarkMode }) => {
   const [removeSkill, { error }] = useMutation(REMOVE_SKILL, {
     update(cache, { data: { removeSkill } }) {
       try {
@@ -51,10 +51,10 @@ const SkillsList = ({ profile, skills, isLoggedInUser = false }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 my-4 max-h-80 overflow-y-auto">
         {skills.map((skill) => (
           <div key={skill._id} className="col-span-1">
-            <div className="card mb-3 shadow-2xl rounded-md">
+          <div className={`card mb-3 shadow-2xl rounded-md ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}>
               <div className="card-header text-light p-2">
                 {/* Skill text */}
-                <div className="mb-2 text-dark font-bold bg-white p-2 ">
+                <div className={`mb-2 font-bold p-2 ${isDarkMode ? 'bg-gray-800  text-white' : 'bg-white  text-black'}`}>
                   <span>{skill.skillText[0].toUpperCase()+ skill.skillText.slice(1)}</span>
                 </div>
                 {/* By and date */}

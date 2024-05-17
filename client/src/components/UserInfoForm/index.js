@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
-import {  QUERY_ME } from '../../utils/queries';
-import {ADD_INFO} from '../../utils/mutations'
+import { QUERY_ME } from '../../utils/queries';
+import { ADD_INFO } from '../../utils/mutations';
 import Auth from '../../utils/auth';
 import { FaUserEdit } from "react-icons/fa";
 
-const UserInfoForm = ({ profileId }) => {
+const UserInfoForm = ({ profileId, isDarkMode }) => {
   const [jerseyNumber, setJerseyNumber] = useState('');
   const [position, setPosition] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -51,15 +51,15 @@ const UserInfoForm = ({ profileId }) => {
   };
 
   return (
-    <div>
+    <div className={` max-w-md mx-auto ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-white text-black'}`}>
       {Auth.loggedIn() ? (
         <>
         <form
-          className="flex flex-col lg:flex-row justify-center items-center lg:justify-between lg:items-center"
+          className={`flex flex-col lg:flex-row justify-center items-center lg:justify-between lg:items-center `}
           onSubmit={handleFormSubmit}
         >
-          <div className="lg:w-full lg:mr-4 mb-4 lg:mb-0">
-            <label htmlFor="jersey number" className="block text-sm font-semibold leading-6 text-gray-900">
+          <div className={`${isDarkMode ? 'bg-gray-600 text-white' : 'bg-white text-black'} lg:w-full lg:mr-4 mb-4 lg:mb-0`}>
+            <label htmlFor="jersey number" className="block text-sm font-semibold leading-6 text-gray-900 dark:text-white">
               Jersey Number
             </label>
             <input
@@ -69,7 +69,7 @@ const UserInfoForm = ({ profileId }) => {
               onChange={(event) => setJerseyNumber(event.target.value)}
               required
             />
-            <label htmlFor="position" className="block text-sm font-semibold leading-6 text-gray-900">
+            <label htmlFor="position" className="block text-sm font-semibold leading-6 text-gray-900 dark:text-white">
               Position
             </label>
             <input
@@ -79,7 +79,7 @@ const UserInfoForm = ({ profileId }) => {
               onChange={(event) => setPosition(event.target.value)}
               required
             />
-            <label htmlFor="phone-number" className="block text-sm font-semibold leading-6 text-gray-900">
+            <label htmlFor="phone-number" className="block text-sm font-semibold leading-6 text-gray-900 dark:text-white">
               Phone number
             </label>
             <input
@@ -89,7 +89,7 @@ const UserInfoForm = ({ profileId }) => {
               onChange={(event) => setPhoneNumber(event.target.value)}
               required
             />
-             <button className="block w-1/2 rounded-md bg-indigo-600 mt-4 px-3.5 py-2.5 mt-5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" type="submit">
+            <button className="block w-1/2 rounded-md bg-indigo-600 mt-4 px-3.5 py-2.5 mt-5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" type="submit">
               {buttonText}<FaUserEdit  className='inline ml-3'/>
             </button>
           </div>
@@ -99,7 +99,6 @@ const UserInfoForm = ({ profileId }) => {
                 {error.message}
               </div>
             )}
-           
           </div>
         </form>
         </>

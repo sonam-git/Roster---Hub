@@ -1,22 +1,26 @@
-import React from "react";
+// src/components/Hero.js
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { ThemeContext } from '../ThemeContext'; // Import ThemeContext
 
 const Hero = () => {
+  const { isDarkMode } = useContext(ThemeContext); // Access isDarkMode from ThemeContext
+
   return (
-    <div className="bg-gray-900 sm:py-20 px-4 sm:px-6 lg:px-8">
+    <div className={`bg-gray-700 sm:py-20 px-4 sm:px-6 lg:px-8 rounded-lg  ${isDarkMode ? 'text-white' : 'text-black'}`}>
       <div className="max-w-7xl mx-auto text-center">
-        <h1 className="text-4xl font-bold text-white mb-4">
+        <h1 className="text-4xl font-bold mb-4 text-white">
           Welcome to Your Team's Roster Hub
         </h1>
-        <p className="text-xl text-gray-300 mb-8">
+        <p className="text-xl mb-8 text-white">
           Experience the thrill of the game with us
         </p>
         <div className="mb-8">
-          <div className="bg-gray-800 bg-opacity-75 rounded-lg p-6">
-            <h2 className="text-2xl font-bold text-white mb-4">
+          <div className="bg-gray-200 bg-opacity-75 rounded-lg p-6">
+            <h2 className="text-2xl font-bold mb-4">
               Create Your Profile Now
             </h2>
-            <p className="text-lg text-gray-300">
+            <p>
               This is the platform where each player within the team can create their profile, upload their profile picture, update information such as playing position, name, jersey number, photo, password, etc. Each player can endorse their teammates for their skills. It also has messaging features where players can send texts to each other.
             </p>
           </div>

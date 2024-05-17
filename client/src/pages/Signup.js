@@ -35,17 +35,17 @@ const Signup = () => {
   };
 
   return (
-    <main className="flex justify-center mb-4">
-      <div className="w-full max-w-md mt-5">
-        <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <h4 className="text-center text-2xl font-bold text-gray-900 mb-6">Sign Up</h4>
+    <main className={`flex justify-center mb-4`}>
+      <div className={`w-full max-w-md mt-5 `}>
+        <div className={`shadow-md rounded px-8 pt-6 pb-8 mb-4`}>
+          <h4 className="text-center text-2xl font-bold text-gray-900 mb-6 dark:text-white">Sign Up</h4>
           {data ? (
             <p className="text-center text-gray-900">
               Success! You may now head <Link to="/">back to the homepage.</Link>
             </p>
           ) : (
-            <form onSubmit={handleFormSubmit} className="space-y-6">
-              <label htmlFor="Username" className="block text-sm font-medium leading-6 text-gray-900">
+            <form onSubmit={handleFormSubmit} className="space-y-6 ">
+              <label htmlFor="Username" className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
                   Username
               </label>
               <input
@@ -56,7 +56,7 @@ const Signup = () => {
                 value={formState.name}
                 onChange={handleChange}
               />
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
                   Email address
               </label>
               <input
@@ -67,7 +67,7 @@ const Signup = () => {
                 value={formState.email}
                 onChange={handleChange}
               />
-              <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
                   Password
               </label>
               <input
@@ -86,7 +86,7 @@ const Signup = () => {
                 >
                   Submit
                 </button>
-                <Link to="/login" className="text-gray-600 hover:text-blue-500 ml-2 mt-3 font-bold">Already Have An Account ?</Link>
+                <Link to="/login" className="text-gray-600 hover:text-blue-500 ml-2 mt-3 font-bold dark:text-white">Already Have An Account ?</Link>
               </div>
             </form>
           )}

@@ -11,7 +11,7 @@ import { QUERY_SINGLE_PROFILE, QUERY_ME } from "../utils/queries";
 import Auth from "../utils/auth";
 
 
-const Skill = () => {
+const Skill = ({isDarkMode}) => {
   const { profileId } = useParams();
 
   // If there is no `profileId` in the URL as a parameter, execute the `QUERY_ME` query instead for the logged in user's information
@@ -64,6 +64,7 @@ const Skill = () => {
                 skills={profile?.skills || []}
                 isLoggedInUser={!profileId && true}
                 profile={profile}
+                isDarkMode={isDarkMode}
               />
             </>
           ) : (

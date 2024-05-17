@@ -5,7 +5,7 @@ import Axios from "axios";
 import { SyncLoader } from "react-spinners";
 import { AiOutlineUpload } from "react-icons/ai";
 
-const ProfilePicUploader = ({ profileId, profilePicUrl }) => {
+const ProfilePicUploader = ({ profileId, profilePicUrl ,isDarkMode}) => {
   const [loading, setLoading] = useState(false);
   const [profilePic, setProfilePic] = useState(null); 
   const [uploadProfilePic] = useMutation(UPLOAD_PROFILE_PIC);
@@ -57,7 +57,7 @@ const ProfilePicUploader = ({ profileId, profilePicUrl }) => {
     <div className="flex items-center justify-center">
       <div className="flex flex-col items-center justify-center space-y-4">
         <label htmlFor="profilePicInput" className="cursor-pointer">
-          <AiOutlineUpload size={24} className="text-indigo-800" />
+          <AiOutlineUpload size={24} className="text-dark-800" />
         </label>
         <input
           id="profilePicInput"
@@ -73,7 +73,7 @@ const ProfilePicUploader = ({ profileId, profilePicUrl }) => {
         <button
           type="button"
           onClick={handleSubmit}
-          className="bg-transparent hover:bg-indigo-600 text-indigo-700 font-semibold hover:text-white py-2 ml-2 px-4 border border-blue-500 hover:border-transparent rounded"
+          className={`bg-transparent hover:bg-indigo-600 text-dark-800 font-semibold hover:text-dark py-2 ml-2 px-4 border border-indigo-500 hover:border-transparent rounded ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}
           disabled={loading}
         >
           {profilePicUrl ? "Change Image" : "Upload"}

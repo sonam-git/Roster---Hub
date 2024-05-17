@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   ApolloClient,
   InMemoryCache,
@@ -18,14 +18,14 @@ import Roster from './pages/Roster';
 import Message from './pages/Message';
 import Skill from './pages/Skill';
 
+import { ThemeProvider, ThemeContext } from './components/ThemeContext';
+
 const httpLink = createHttpLink({
   uri: '/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
   const token = localStorage.getItem('id_token');
-  // return the headers to the context so httpLink can read them
   return {
     headers: {
       ...headers,
@@ -39,27 +39,37 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+function AppContent() {
+  const { isDarkMode } = useContext(ThemeContext);
+
+  return (
+    <div className={`flex flex-row min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
+      <Header />
+      <div className="flex-1">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/roster" element={<Roster />} />
+          <Route path="/message" element={<Message />} />
+          <Route path="/skill" element={<Skill />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/me" element={<Profile />} />
+          <Route path="/profiles/:profileId" element={<Profile />} />
+        </Routes>
+      </div>
+      <Footer className="w-full h-18" />
+    </div>
+  );
+}
+
 function App() {
   return (
     <ApolloProvider client={client}>
-      <Router>
-        <div className="flex flex-row min-h-screen">
-          <Header />
-          <div className="flex-1">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/roster" element={<Roster />} />
-              <Route path="/message" element={<Message />} />
-              <Route path="/skill" element={<Skill />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/me" element={<Profile />} />
-              <Route path="/profiles/:profileId" element={<Profile />} />
-            </Routes>
-          </div>
-          <Footer className="w-full h-18" />
-        </div>
-      </Router>
+      <ThemeProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </ThemeProvider>
     </ApolloProvider>
   );
 }

@@ -1,34 +1,29 @@
-import React, { useState } from "react";
-import { useQuery, useMutation } from "@apollo/client";
-import { QUERY_ME } from "../../utils/queries";
-import { SAVE_SOCIAL_MEDIA_LINK } from "../../utils/mutations";
-import { RiTShirt2Line } from "react-icons/ri"; 
-import { FaUser } from "react-icons/fa";
-import ProfilePicUploader from "../ProfilePicUploader";
-import ProfileManagement from "../ProfileManangement";
-import ProfileAvatar from "../../assets/images/profile-avatar.png";
-import "@fortawesome/fontawesome-free/css/all.css";
-
-
+// src/components/MyProfile.js
+import React, { useState, useContext } from 'react';
+import { useQuery, useMutation } from '@apollo/client';
+import { QUERY_ME } from '../../utils/queries';
+import { SAVE_SOCIAL_MEDIA_LINK } from '../../utils/mutations';
+import { RiTShirt2Line } from 'react-icons/ri'; 
+import { FaUser } from 'react-icons/fa';
+import ProfilePicUploader from '../ProfilePicUploader';
+import ProfileManagement from '../ProfileManangement';
+import ProfileAvatar from '../../assets/images/profile-avatar.png';
+import '@fortawesome/fontawesome-free/css/all.css';
+import { ThemeContext } from '../ThemeContext';
 
 const MyProfile = ({ isLoggedInUser }) => {
-  // Fetch the user's information
+  const { isDarkMode } = useContext(ThemeContext);
   const { loading, data } = useQuery(QUERY_ME);
-
   const [selectedSocialMedia, setSelectedSocialMedia] = useState(null);
   const [socialMediaLink, setSocialMediaLink] = useState("");
-
-  // Mutation to save social media link
   const [saveSocialMediaLink] = useMutation(SAVE_SOCIAL_MEDIA_LINK);
 
   if (loading) return <div>Loading...</div>;
 
   const me = data?.me;
-  
-  // Function to save social media link
+
   const saveLink = async () => {
     try {
-      // Call the mutation to save the social media link
       await saveSocialMediaLink({
         variables: {
           userId: me?._id,
@@ -36,8 +31,6 @@ const MyProfile = ({ isLoggedInUser }) => {
           link: socialMediaLink,
         },
       });
-
-      // Close modal after saving the link
       setSelectedSocialMedia(null);
       setSocialMediaLink("");
     } catch (error) {
@@ -47,11 +40,10 @@ const MyProfile = ({ isLoggedInUser }) => {
 
   return (
     <>
-     <div className="md:flex md:space-x-4 mb-6 md:mb-0">
-  {/* Profile Details */}
-  <div className="md:w-2/5 mb-4 md:mb-0">
-    <div className="wd-full bg-white rounded-lg overflow-hidden shadow-md">
-      <div className="w-full h-[200px] bg-blue-300 flex items-center justify-center">
+<div className={`md:flex md:space-x-2 mb-6 md:mb-0 rounded-lg ${isDarkMode ? 'bg-gray-500 text-white' : 'bg-white text-black'}`}>
+  <div className={`md:w-2/5  md:mb-0 p-2 `}>
+    <div className={`wd-full rounded-lg overflow-hidden shadow-md ${isDarkMode ? 'bg-gray-700' : 'bg-white'}`}>
+      <div className={`w-full h-[200px] flex items-center justify-center ${isDarkMode ? 'bg-gray-600' : 'bg-blue-300'}`}>
         <div className="w-40 h-40 rounded-full bg-white relative overflow-hidden">
           <img
             src={me?.profilePic || ProfileAvatar}
@@ -61,52 +53,47 @@ const MyProfile = ({ isLoggedInUser }) => {
         </div>
       </div>
       <div className="py-10 px-6 grid grid-cols-1 gap-6">
-        <ProfilePicUploader
-          profileId={me._id}
-          profilePicUrl={me.profilePic}
-        />
+        <ProfilePicUploader profileId={me._id} profilePicUrl={me.profilePic} isDarkMode={isDarkMode} />
         <div className="flex flex-col items-center">
-          <h3 className="text-xl font-semibold text-black-700">
+          <h3 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-black-700'}`}>
             {me?.name[0].toUpperCase() + me?.name.slice(1)}
           </h3>
           {me?.position && (
-            <p className=" font-semibold text-gray-700">
+            <p className={`font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
               <FaUser className="mr-2 text-xl inline mb-1" />
-{me?.position}
+              {me?.position}
             </p>
           )}
           {me?.jerseyNumber && (
-            <p className="text-gray-700 font-semibold">
+            <p className={`font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
               <RiTShirt2Line className="mr-2 text-2xl inline" />= {me?.jerseyNumber}
             </p>
           )}
         </div>
-        {/* Social media icons */}
         <div className="flex items-center justify-center">
           <span
-            className="mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center bg-[#1DA1F2]"
+            className={`mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center ${isDarkMode ? 'bg-gray-600' : 'bg-[#1DA1F2]'}`}
             onClick={() => setSelectedSocialMedia("twitter")}
           >
             <i className="fa-brands fa-twitter text-white"></i>
           </span>
           <span
-            className="mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center bg-[#162666]"
+            className={`mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center ${isDarkMode ? 'bg-gray-600' : 'bg-[#162666]'}`}
             onClick={() => setSelectedSocialMedia("facebook")}
           >
             <i className="fa-brands fa-facebook text-white"></i>
           </span>
           <span
-            className="mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center bg-[#0077b5]"
+            className={`mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center ${isDarkMode ? 'bg-gray-600' : 'bg-[#0077b5]'}`}
             onClick={() => setSelectedSocialMedia("linkedin")}
           >
             <i className="fa-brands fa-linkedin-in text-white"></i>
           </span>
         </div>
-        {/* Contact button with phone number */}
         <div className="flex justify-center">
           <a
             href={`tel:${me?.phoneNumber}`}
-            className="bg-indigo-600 text-white px-2 py-2 rounded-full font-semibold uppercase text-sm hover:bg-indigo-800"
+            className={`px-2 py-2 rounded-full font-semibold uppercase text-sm ${isDarkMode ? 'bg-indigo-800' : 'bg-indigo-600'} text-white hover:bg-indigo-800`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -127,39 +114,24 @@ const MyProfile = ({ isLoggedInUser }) => {
       </div>
     </div>
   </div>
-  {/* User Profile Setting*/}
-
- <ProfileManagement me = {me}/>
-
+  <div className={`md:w-3/5  md:mb-0 p-2 `}>
+  <ProfileManagement me={me} isDarkMode={isDarkMode} />
+  </div>
 </div>
 
-      {/* Message List */}
-      {/* <div className="my-4 p-4 border border-dotted border-gray-300 rounded">
-        <MessageList
-          messages={me?.receivedMessages || []}
-          isLoggedInUser={isLoggedInUser}
-        />
-      </div> */}
-      {/* Social media link modal */}
       {selectedSocialMedia && (
         <div className="fixed z-10 inset-0 overflow-y-auto flex justify-center items-center">
           <div className="bg-gray-900 bg-opacity-50 absolute inset-0"></div>
           <div className="relative bg-white rounded-lg shadow-md p-6">
             <label className="block text-lg font-semibold mb-2">
-              Insert{" "}
-              {selectedSocialMedia.charAt(0).toUpperCase() +
-                selectedSocialMedia.slice(1)}{" "}
-              Link:
+              Insert {selectedSocialMedia.charAt(0).toUpperCase() + selectedSocialMedia.slice(1)} Link:
             </label>
             <input
               type="text"
               value={socialMediaLink}
               onChange={(e) => setSocialMediaLink(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md mb-4"
-              placeholder={`Enter your ${
-                selectedSocialMedia.charAt(0).toUpperCase() +
-                selectedSocialMedia.slice(1)
-              } link`}
+              placeholder={`Enter your ${selectedSocialMedia.charAt(0).toUpperCase() + selectedSocialMedia.slice(1)} link`}
             />
             <div className="flex justify-end">
               <button

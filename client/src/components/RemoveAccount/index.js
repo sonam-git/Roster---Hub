@@ -20,7 +20,7 @@ const RemoveAccount = ({ onRemove }) => {
 
   return (
 <div>
-  <button onClick={() => setShowModal(true)} className="bg-red-400 hover:bg-red-600 text-white font-semibold py-2 px-4 ml-2 rounded-md">
+  <button onClick={() => setShowModal(true)} className="bg-red-400 hover:bg-red-600 text-white font-semibold py-2 px-4 ml-2 rounded-md mt-4">
     Delete Account
   </button>
   {showModal && (
