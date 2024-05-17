@@ -92,25 +92,39 @@ const Header = () => {
                   ? 'bg-gray-300 dark:bg-gray-100'
                   : 'text-gray-400 dark:text-gray-300'
               }`}
+              onClick={Menu.action ? Menu.action : null}
             >
-              <Link
-                to={Menu.path}
-                onClick={Menu.action}
-                className="flex items-center w-full no-underline"
-                style={{ textDecoration: 'none' }}
-              >
-                <div className="flex items-center">
-                <img src={Menu.src} alt={Menu.title} className="w-10 mr-2 p-1 hover:bg-red-400 rounded-full" />
-
-                  <span
-                    className={`${
-                      !open && 'hidden'
-                    } origin-left duration-200 text-lg md:text-sm lg:text-xl hover:text-red-500`}
-                  >
-                    {Menu.title}
-                  </span>
+              {Menu.path ? (
+                <Link
+                  to={Menu.path}
+                  className="flex items-center w-full no-underline"
+                  style={{ textDecoration: 'none' }}
+                >
+                  <div className="flex items-center">
+                    <img src={Menu.src} alt={Menu.title} className="w-10 mr-2 p-1 hover:bg-red-400 rounded-full" />
+                    <span
+                      className={`${
+                        !open && 'hidden'
+                      } origin-left duration-200 text-lg md:text-sm lg:text-xl hover:text-red-500`}
+                    >
+                      {Menu.title}
+                    </span>
+                  </div>
+                </Link>
+              ) : (
+                <div className="flex items-center w-full no-underline" style={{ textDecoration: 'none' }}>
+                  <div className="flex items-center">
+                    <img src={Menu.src} alt={Menu.title} className="w-10 mr-2 p-1 hover:bg-red-400 rounded-full" />
+                    <span
+                      className={`${
+                        !open && 'hidden'
+                      } origin-left duration-200 text-lg md:text-sm lg:text-xl hover:text-red-500`}
+                    >
+                      {Menu.title}
+                    </span>
+                  </div>
                 </div>
-              </Link>
+              )}
             </li>
           ))}
         </ul>
