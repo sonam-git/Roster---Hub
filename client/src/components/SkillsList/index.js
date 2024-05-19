@@ -35,7 +35,7 @@ const SkillsList = ({ profile, skills, isLoggedInUser = false, isDarkMode }) => 
   };
 
   if (!skills.length) {
-    return <h3>No Skills Yet</h3>;
+    return <h3 className="text-center">No endorsed Skill yet</h3>;
   }
 
   return (

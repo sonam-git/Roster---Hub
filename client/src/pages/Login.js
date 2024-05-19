@@ -33,8 +33,8 @@ const Login = (props) => {
   };
 
   return (
-    <main className={`flex justify-center mb-4 `}>
-      <div className={`w-full max-w-md mt-5  `}>
+    <main className={`flex justify-center mb-4`}>
+      <div className={`w-full max-w-md mt-5`}>
         <div className={`shadow-md rounded px-8 pt-6 pb-8 mb-4`}>
           <h4 className="text-center text-2xl font-bold text-gray-900 dark:text-white mb-6">
             Login
@@ -44,7 +44,7 @@ const Login = (props) => {
               Success! You may now head <Link to="/me">back to the homepage.</Link>
             </p>
           ) : (
-            <form onSubmit={handleFormSubmit} className={`space-y-6 `}>
+            <form onSubmit={handleFormSubmit} className={`space-y-6`}>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
                   Email address
@@ -71,15 +71,22 @@ const Login = (props) => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="flex justify-between">
-              <button
-                className="bg-blue-500 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-200 hover:bg-blue-600"
-                style={{ cursor: "pointer" }}
-                type="submit"
-              >
-                Submit
-              </button>
-              <Link to="/signup" className="text-gray-600 hover:text-blue-500 mt-3 font-bold dark:text-white ">New User </Link>
+              <div className="flex justify-between items-center">
+                <button
+                  className="bg-blue-500 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-200 hover:bg-blue-600"
+                  style={{ cursor: "pointer" }}
+                  type="submit"
+                >
+                  Submit
+                </button>
+                <Link to="/signup" className="text-gray-600 hover:text-blue-500 mt-3 font-bold dark:text-white">
+                  New User
+                </Link>
+              </div>
+              <div className="text-right mt-2">
+                <Link to="/forgot-password" className="text-gray-600 hover:text-blue-500 font-bold dark:text-white">
+                  Forgot Password?
+                </Link>
               </div>
             </form>
           )}

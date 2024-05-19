@@ -11,6 +11,7 @@ scalar Upload
     phoneNumber: String
     profilePic: String
     skills: [Skill]
+    posts: [Post]
     socialMediaLinks: [SocialMediaLink]
     receivedMessages: [Message]
     sentMessages: [Message]
@@ -20,6 +21,13 @@ scalar Upload
      _id: ID!
     skillText: String
     skillAuthor: String
+    createdAt: String!
+  }
+
+  type Post {
+    _id: ID!
+    postText: String
+    postAuthor: String!
     createdAt: String!
   }
 
@@ -38,6 +46,7 @@ scalar Upload
     link: String!
   }
 
+ 
   type Auth {
     token: ID!
     profile: Profile
@@ -51,6 +60,8 @@ scalar Upload
     skill(skillId: ID!) : Skill
     receivedMessages: [Message]!
     socialMediaLinks(userId: ID!): [SocialMediaLink]!
+    posts: [Post]
+    post(postId: ID!): Post
   }
  
   type Mutation {
@@ -66,6 +77,9 @@ scalar Upload
     updateName(name: String!): Profile
     updatePassword(currentPassword: String!, newPassword: String!): Profile
     deleteProfile(profileId: ID!):Profile
+    addPost(postText: String!): Post
+    updatePost(postId: ID!, postText: String!): Post
+    removePost(postId: ID!): Post
   }
 `;
 

@@ -41,6 +41,13 @@ const profileSchema = new Schema({
       ref: "Skill",
     },
   ],
+  posts: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Post',
+    }
+  ],
+
   socialMediaLinks: [ 
     {
       type: Schema.Types.ObjectId,

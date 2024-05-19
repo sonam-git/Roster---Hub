@@ -61,6 +61,11 @@ const Header = () => {
 
         <div className="flex items-center justify-between">
           <div className="flex items-center">
+          <Link
+                  to={'/'}
+                  className="flex items-center w-full no-underline"
+                  style={{ textDecoration: 'none' }}
+                >
             <img
               src={logoImage}
               className={`cursor-pointer duration-500 ${
@@ -75,6 +80,7 @@ const Header = () => {
             >
               RosterHub
             </h1>
+            </Link>
           </div>
           <button
             onClick={toggleDarkMode}

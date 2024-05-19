@@ -17,6 +17,7 @@ import Footer from './components/Footer';
 import Roster from './pages/Roster';
 import Message from './pages/Message';
 import Skill from './pages/Skill';
+import ForgotPassword from './pages/ForgetPassword';
 
 import { ThemeProvider, ThemeContext } from './components/ThemeContext';
 
@@ -55,6 +56,7 @@ function AppContent() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/me" element={<Profile />} />
           <Route path="/profiles/:profileId" element={<Profile />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} /> 
         </Routes>
       </div>
       <Footer className="w-full h-18" />

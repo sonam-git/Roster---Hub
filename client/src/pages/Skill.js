@@ -56,7 +56,7 @@ const Skill = ({isDarkMode}) => {
           {profile.skills?.length > 0 ? (
             <>
               <h2 className="text-center mt-4 mb-2 font-bold text-lg">
-                {profileId ? `${profile.name}'s` : "Your"} friends have endorsed
+                {profileId ? `${profile.name}'s` : "You & Your"} friends have endorsed
                 these {profile.skills ? profile.skills.length : 0} skill
                 {profile.skills && profile.skills.length === 1 ? "" : "s"}
               </h2>
