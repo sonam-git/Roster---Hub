@@ -155,3 +155,35 @@ export const SEND_RESET_PASSWORD_EMAIL = gql`
     }
   }
 `;
+
+export const ADD_POST = gql`
+  mutation addPost($postText: String!) {
+    addPost(postText: $postText) {
+      _id
+      postText
+      postAuthor
+      createdAt
+    }
+  }
+`;
+
+export const REMOVE_POST = gql`
+mutation RemovePost($postId: ID!) {
+  removePost(postId: $postId) {
+    _id
+    postText
+    postAuthor
+  }
+}
+`;
+
+export const UPDATE_POST = gql`
+  mutation updatePost($postId: ID!, $postText: String!) {
+    updatePost(postId: $postId, postText: $postText) {
+      _id
+      postText
+      postAuthor
+      createdAt
+    }
+  }
+`;

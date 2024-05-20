@@ -1,9 +1,8 @@
-// src/components/MyProfile.js
 import React, { useState, useContext } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { QUERY_ME } from '../../utils/queries';
 import { SAVE_SOCIAL_MEDIA_LINK } from '../../utils/mutations';
-import { RiTShirt2Line } from 'react-icons/ri'; 
+import { RiTShirt2Line } from 'react-icons/ri';
 import { FaUser } from 'react-icons/fa';
 import ProfilePicUploader from '../ProfilePicUploader';
 import ProfileManagement from '../ProfileManangement';
@@ -13,16 +12,19 @@ import { ThemeContext } from '../ThemeContext';
 import { FaPhone } from 'react-icons/fa';
 import PostForm from '../PostForm';
 
-const MyProfile = ({ isLoggedInUser }) => {
+
+const MyProfile = () => {
   const { isDarkMode } = useContext(ThemeContext);
   const { loading, data } = useQuery(QUERY_ME);
   const [selectedSocialMedia, setSelectedSocialMedia] = useState(null);
   const [socialMediaLink, setSocialMediaLink] = useState("");
   const [saveSocialMediaLink] = useMutation(SAVE_SOCIAL_MEDIA_LINK);
+  const [selectedView, setSelectedView] = useState('posts'); // New state for selected view
 
   if (loading) return <div>Loading...</div>;
 
   const me = data?.me;
+  console.log(me.posts)
 
   const saveLink = async () => {
     try {
@@ -42,77 +44,92 @@ const MyProfile = ({ isLoggedInUser }) => {
 
   return (
     <>
-<div className={`md:flex md:space-x-2 mb-6 md:mb-0 rounded-lg ${isDarkMode ? 'bg-gray-500 text-white' : 'bg-white text-black'}`}>
-  <div className={`md:w-2/5  md:mb-0 p-2 `}>
-    <div className={`wd-full rounded-lg overflow-hidden shadow-md ${isDarkMode ? 'bg-gray-700' : 'bg-white'}`}>
-      <div className={`w-full h-[200px] flex items-center justify-center ${isDarkMode ? 'bg-gray-600' : 'bg-gray-300'}`}>
-        <div className="w-40 h-40 rounded-full bg-white relative overflow-hidden">
-          <img
-            src={me?.profilePic || ProfileAvatar}
-            alt="Profile"
-            className="rounded-full w-40 h-40 mx-auto mb-4"
-          />
-        </div>
+      <div className={`md:flex md:space-x-2 mb-6 md:mb-0 rounded-lg ${isDarkMode ? 'bg-gray-500 text-white' : 'bg-white text-black'}`}>
+        <div className={`md:w-2/5 md:mb-0 p-2`}>
+          <div className={`wd-full rounded-lg overflow-hidden shadow-md ${isDarkMode ? 'bg-gray-700' : 'bg-white'}`}>
+            <div className={`w-full h-[200px] flex items-center justify-center ${isDarkMode ? 'bg-gray-600' : 'bg-gray-300'}`}>
+              <div className="w-40 h-40 rounded-full bg-white relative overflow-hidden">
+                <img
+                  src={me?.profilePic || ProfileAvatar}
+                  alt="Profile"
+                  className="rounded-full w-40 h-40 mx-auto mb-4"
+                />
+              </div>
+            </div>
+            <div className="py-10 px-6 grid grid-cols-1 gap-6">
+              <ProfilePicUploader profileId={me._id} profilePicUrl={me.profilePic} isDarkMode={isDarkMode} />
+              <div className="flex flex-col items-center">
+                <h3 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-black-700'}`}>
+                  {me?.name[0].toUpperCase() + me?.name.slice(1)}
+                </h3>
+                <div className={`flex items-center space-x-4 p-4 shadow-lg rounded-md ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                  {me?.position && (
+                    <p className={`font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                      <FaUser className="mr-2 text-xl inline mb-1" />
+                      {me?.position}
+                    </p>
+                  )}
+                  {me?.jerseyNumber && (
+                    <p className={`font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                      <RiTShirt2Line className="mr-2 text-2xl inline" /> {me?.jerseyNumber}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center justify-center space-x-4 p-4 dark:bg-gray-800 shadow-lg rounded-md">
+                <div className="flex space-x-4">
+                  <span
+                    className={`mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center ${isDarkMode ? 'bg-gray-600' : 'bg-[#1DA1F2]'}`}
+                    onClick={() => setSelectedSocialMedia("twitter")}
+                  >
+                    <i className="fa-brands fa-twitter text-white"></i>
+                  </span>
+                  <span
+                    className={`mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center ${isDarkMode ? 'bg-gray-600' : 'bg-[#162666]'}`}
+                    onClick={() => setSelectedSocialMedia("facebook")}
+                  >
+                    <i className="fa-brands fa-facebook text-white"></i>
+                  </span>
+                  <span
+                    className={`mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center ${isDarkMode ? 'bg-gray-600' : 'bg-[#0077b5]'}`}
+                    onClick={() => setSelectedSocialMedia("linkedin")}
+                  >
+                    <i className="fa-brands fa-linkedin-in text-white"></i>
+                  </span>
+                </div>
+                <a
+                  href={`tel:${me?.phoneNumber}`}
+                  className={`flex items-center justify-center bg-indigo-600 text-white px-3 py-2 rounded-full font-semibold uppercase text-sm hover:bg-indigo-800 shadow-md ${isDarkMode ? 'bg-indigo-800' : 'bg-indigo-600'}`}
+                >
+                  <FaPhone className="w-3 h-5" />
+                </a>
+              </div>
+            </div>
+            <div className="navbar flex justify-center mb-4">
+        <button
+          className={`px-4 py-2 rounded-l-lg ${selectedView === 'settings' ? 'bg-indigo-600 text-white' : 'bg-gray-300 text-gray-700'} transition duration-300 ease-in-out`}
+          onClick={() => setSelectedView('settings')}
+        >
+          Setting
+        </button>
+        <button
+          className={`px-4 py-2 rounded-r-lg ${selectedView === 'posts' ? 'bg-indigo-600 text-white' : 'bg-gray-300 text-gray-700'} transition duration-300 ease-in-out`}
+          onClick={() => setSelectedView('posts')}
+        >
+          Post
+        </button>
       </div>
-      <div className="py-10 px-6 grid grid-cols-1 gap-6">
-        <ProfilePicUploader profileId={me._id} profilePicUrl={me.profilePic} isDarkMode={isDarkMode} />
-        <div className="flex flex-col items-center">
-          <h3 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-black-700'}`}>
-            {me?.name[0].toUpperCase() + me?.name.slice(1)}
-          </h3>
-          <div className={`flex items-center space-x-4 p-4 shadow-lg rounded-md ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
-          {me?.position && (
-            <p className={`font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-              <FaUser className="mr-2 text-xl inline mb-1" />
-              {me?.position}
-            </p>
-          )}
-          {me?.jerseyNumber && (
-            <p className={`font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-              <RiTShirt2Line className="mr-2 text-2xl inline" /> {me?.jerseyNumber}
-            </p>
-          )}
           </div>
+          
         </div>
-        <div className="flex items-center justify-center space-x-4 p-4 dark:bg-gray-800 shadow-lg rounded-md">
-    <div className="flex space-x-4">
-      <span
-        className={`mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center ${isDarkMode ? 'bg-gray-600' : 'bg-[#1DA1F2]'}`}
-        onClick={() => setSelectedSocialMedia("twitter")}
-      >
-        <i className="fa-brands fa-twitter text-white"></i>
-      </span>
-      <span
-        className={`mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center ${isDarkMode ? 'bg-gray-600' : 'bg-[#162666]'}`}
-        onClick={() => setSelectedSocialMedia("facebook")}
-      >
-        <i className="fa-brands fa-facebook text-white"></i>
-      </span>
-      <span
-        className={`mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center ${isDarkMode ? 'bg-gray-600' : 'bg-[#0077b5]'}`}
-        onClick={() => setSelectedSocialMedia("linkedin")}
-      >
-        <i className="fa-brands fa-linkedin-in text-white"></i>
-      </span>
-    </div>
-    <a
-      href={`tel:${me?.phoneNumber}`}
-      className={`flex items-center justify-center bg-indigo-600 text-white px-3 py-2 rounded-full font-semibold uppercase text-sm hover:bg-indigo-800 shadow-md ${isDarkMode ? 'bg-indigo-800' : 'bg-indigo-600'}`}
-    >
-      <FaPhone className="w-3 h-5" />
-    </a>
-  </div>
+        <div className={`md:w-3/5 md:mb-0 p-2`}>
+          {selectedView === 'posts' ? (
+              <PostForm />
+          ) : (
+       <ProfileManagement me={me} isDarkMode={isDarkMode} />
+          )}
+        </div>
       </div>
-    </div>
-  </div>
-  <div className={`md:w-3/5  md:mb-0 p-2 `}>
-  <ProfileManagement me={me} isDarkMode={isDarkMode} />
-  </div>
- 
-</div>
-<div className='mt-4'>
-    <PostForm/>
-  </div>
       {selectedSocialMedia && (
         <div className="fixed z-10 inset-0 overflow-y-auto flex justify-center items-center">
           <div className="bg-gray-900 bg-opacity-50 absolute inset-0"></div>

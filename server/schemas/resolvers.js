@@ -1,5 +1,5 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { Profile, Skill, Message, SocialMediaLink } = require("../models");
+const { Profile, Skill, Message, SocialMediaLink,Post } = require("../models");
 const { signToken } = require("../utils/auth");
 const cloudinary = require("cloudinary").v2;
 require("dotenv").config();
@@ -27,7 +27,8 @@ const resolvers = {
         .populate({
           path: "sentMessages",
           populate: [{ path: "sender" }, { path: "recipient" }],
-        });
+        })
+        .populate('posts');;
     },
     // ************************** QUERY SINGLE PROFILE *******************************************//
     profile: async (parent, { profileId }) => {
@@ -58,7 +59,8 @@ const resolvers = {
           .populate({
             path: "socialMediaLinks",
             populate: { path: "link" },
-          });
+          })
+          .populate('posts');
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -88,6 +90,28 @@ const resolvers = {
         return socialMediaLinks;
       } catch (error) {
         throw new Error("Failed to fetch social media links: " + error.message);
+      }
+    },
+  // ************************** QUERY POSTS *******************************************//
+    posts: async () => {
+      try {
+        const posts = await Post.find().sort({ createdAt: -1 });
+        return posts;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    // finds a post by its posttId
+    post: async (parent, { postId }) => {
+      try {
+        const post = await Post.findById(postId);
+        if (post) {
+          return post;
+        } else {
+          throw new Error("Post not found");
+        }
+      } catch (err) {
+        throw new Error(err);
       }
     },
   },
@@ -370,6 +394,80 @@ const resolvers = {
         throw new Error("Failed to update password.");
       }
     },
+
+    // ************************** ADD POST *******************************************//
+    addPost: async (parent, { postText }, context) => {
+      if (!context.user) {
+        throw new AuthenticationError("You need to be logged in!");
+      }
+
+      if (postText.trim() === "") {
+        throw new Error("Post body must not be empty");
+      }
+
+      try {
+        // Create the post
+        const post = await Post.create({
+          postText,
+          postAuthor: context.user.name,
+          createdAt: new Date().toISOString()
+        });
+
+        // Update the profile to include the post
+        await Profile.findOneAndUpdate(
+          { _id: context.user._id },
+          { $addToSet: { posts: post._id } }
+        );
+        return post;
+      } catch (err) {
+        console.error('Error creating post:', err);
+        throw new Error('Error creating post');
+      }
+    },
+
+    // ************************** UPDATE POST  *******************************************//
+    updatePost: async (_, { postId, postText }, context) => {
+      // Check if the user is authenticated
+      if (!context.user) {
+        throw new AuthenticationError("You need to be logged in!");
+      }
+
+      try {
+        // Find the post by postId
+        const post = await Post.findById(postId);
+
+        if (!post) {
+          throw new Error("Post not found.");
+        }
+
+        // Check if the current user is the author of the post
+        if (post.postAuthor !== context.user.name) {
+          throw new AuthenticationError("You are not the author of this post.");
+        }
+
+        // Update the postText
+        post.postText = postText;
+        await post.save();
+
+        return post;
+      } catch (error) {
+        throw new Error("Failed to update the post.");
+      }
+    },
+
+    // ************************** DELETE POST *******************************************//
+    removePost: async (parent, { postId }, context) => {
+      if (!context.user) {
+        throw new AuthenticationError('You need to be logged in!');
+      }
+      try {
+        return Post.findOneAndDelete({_id: postId})
+      } catch (error) {
+        console.error('Error deleting post:', error);
+        throw new Error('Error deleting post.');
+      }
+    },
+
     // ************************** DELETE PROFILE *******************************************//
     deleteProfile: async (_, { profileId }, context) => {
       if (!context.user) {

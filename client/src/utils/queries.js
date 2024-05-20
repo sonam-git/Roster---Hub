@@ -97,6 +97,13 @@ export const QUERY_ME = gql`
         skillAuthor
         createdAt
       }
+      posts {
+        _id
+        postText
+        postAuthor
+        createdAt
+      }
+     
       receivedMessages {
         _id
         text
@@ -143,4 +150,26 @@ export const RECEIVED_MESSAGES = gql`
       }
     }
   }
+`;
+
+export const GET_POSTS = gql`
+query Posts {
+  posts {
+    _id
+    postAuthor
+    postText
+    createdAt
+  }
+}
+`;
+
+export const GET_POST = gql`
+query Post($postId: ID!) {
+  post(postId: $postId) {
+    _id
+    createdAt
+    postAuthor
+    postText
+  }
+}
 `;
