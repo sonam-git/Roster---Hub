@@ -5,7 +5,7 @@ import Post from '../Post';
 
 const PAGE_SIZE = 3; // Number of posts per page
 
-const PostsList = ({ userName, loggedInUserName }) => {
+const PostsList = ({ userName, loggedInUserName,post }) => {
   const { loading, data, error } = useQuery(GET_POSTS);
   const [currentPage, setCurrentPage] = useState(1); // Current page number
 
@@ -21,10 +21,11 @@ const PostsList = ({ userName, loggedInUserName }) => {
     return <div>No posts yet</div>;
   }
 
-  // Determine posts to display based on loggedInUserName and userName
-  const postsToDisplay = data.posts.filter(post =>
-    post.postAuthor === loggedInUserName || post.postAuthor === userName
-  );
+  //Determine posts to display based on loggedInUserName and userName
+  // const postsToDisplay = data.posts.filter(post =>
+  //   post.postAuthor === loggedInUserName || post.postAuthor === userName
+  // );
+  const postsToDisplay = post ? data.posts.filter(post => post.postAuthor === userName) : data.posts.filter(post => post.userId === userName);
 
   if (postsToDisplay.length === 0) {
     return <div>No posts yet</div>;

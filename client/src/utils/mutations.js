@@ -187,3 +187,47 @@ export const UPDATE_POST = gql`
     }
   }
 `;
+
+export const ADD_COMMENT = gql`
+  mutation addComment($postId: ID!, $commentText: String!) {
+    addComment(postId: $postId, commentText: $commentText) {
+      _id
+      comments {
+        _id
+        commentText
+        commentAuthor
+        createdAt
+      }
+    }
+  }
+`;
+
+export const UPDATE_COMMENT = gql`
+  mutation updateComment($postId: ID!, $commentId: ID!, $commentText: String!) {
+    updateComment(postId: $postId, commentId: $commentId, commentText: $commentText) {
+      _id
+      comments {
+        _id
+        commentText
+        commentAuthor
+        createdAt
+      }
+    }
+  }
+`;
+
+export const REMOVE_COMMENT = gql`
+  mutation removeComment($postId: ID!, $commentId: ID!) {
+    removeComment(postId: $postId, commentId: $commentId) {
+      _id
+      postText
+      postAuthor
+      createdAt
+      comments {
+        commentText
+        commentAuthor
+        createdAt
+      }
+    }
+  }
+`;

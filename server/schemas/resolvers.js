@@ -95,7 +95,7 @@ const resolvers = {
   // ************************** QUERY POSTS *******************************************//
     posts: async () => {
       try {
-        const posts = await Post.find().sort({ createdAt: -1 });
+        const posts = await Post.find().sort({ createdAt: -1 }).populate('comments');
         return posts;
       } catch (err) {
         throw new Error(err);
@@ -104,7 +104,7 @@ const resolvers = {
     // finds a post by its posttId
     post: async (parent, { postId }) => {
       try {
-        const post = await Post.findById(postId);
+        const post = await Post.findById(postId).populate('comments');;
         if (post) {
           return post;
         } else {
@@ -468,6 +468,66 @@ const resolvers = {
       }
     },
 
+     // ************************** ADD COMMENT *******************************************//
+     addComment: async (parent, { postId, commentText }, context) => {
+      if (context.user) {
+        try {
+          const newComment = {
+            commentText,
+            commentAuthor: context.user.name,
+            createdAt: new Date().toISOString()
+          };
+
+          const updatedPost = await Post.findOneAndUpdate(
+            { _id: postId },
+            { $push: { comments: newComment } },
+            { new: true, runValidators: true }
+          );
+
+          return updatedPost;
+        } catch (err) {
+          console.error(err);
+          throw new Error('Error adding comment');
+        }
+      }
+      throw new AuthenticationError('Not logged in');
+    },
+  
+// ************************** UPDATE COMMENT *******************************************//
+    updateComment: async (parent, { postId, commentId, commentText }, context) => {
+      if (context.user) {
+        const post = await Post.findOneAndUpdate(
+          { _id: postId, 'comments._id': commentId, 'comments.commentAuthor': context.user.name },
+          {
+            $set: {
+              'comments.$.commentText': commentText,
+            },
+          },
+          { new: true }
+        );
+        return post;
+      }
+      throw new AuthenticationError('You need to be logged in!');
+    },
+
+ // ************************** REMOVE COMMENT *******************************************//
+    removeComment: async (parent, { postId, commentId }, context) => {
+      if (context.user) {
+        return Post.findOneAndUpdate(
+          { _id: postId },
+          {
+            $pull: {
+              comments: {
+                _id: commentId,
+                commentAuthor: context.user.name,
+              },
+            },
+          },
+          { new: true }
+        );
+      }
+      throw new AuthenticationError("You need to be logged in!");
+    },
     // ************************** DELETE PROFILE *******************************************//
     deleteProfile: async (_, { profileId }, context) => {
       if (!context.user) {
@@ -496,6 +556,8 @@ const resolvers = {
         throw new Error("Failed to remove profile");
       }
     },
+
+   
   },
 };
 

@@ -59,6 +59,7 @@ export const QUERY_SINGLE_PROFILE = gql`
         skillAuthor
         createdAt
       }
+      
       receivedMessages {
         _id
         text
@@ -102,6 +103,7 @@ export const QUERY_ME = gql`
         postText
         postAuthor
         createdAt
+       
       }
      
       receivedMessages {
@@ -159,6 +161,12 @@ query Posts {
     postAuthor
     postText
     createdAt
+    comments {
+      commentText
+      _id
+      commentAuthor
+      createdAt
+    }
   }
 }
 `;
@@ -170,6 +178,12 @@ query Post($postId: ID!) {
     createdAt
     postAuthor
     postText
+    comments {
+      commentText
+      _id
+      commentAuthor
+      createdAt
+    }
   }
 }
 `;

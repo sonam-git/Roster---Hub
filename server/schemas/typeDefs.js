@@ -29,6 +29,14 @@ scalar Upload
     postText: String
     postAuthor: String!
     createdAt: String!
+    comments: [Comment]
+  }
+
+  type Comment {
+    _id: ID!
+    commentText: String!
+    commentAuthor: String!
+    createdAt: String!
   }
 
   type Message {
@@ -80,6 +88,9 @@ scalar Upload
     addPost(postText: String!): Post
     updatePost(postId: ID!, postText: String!): Post
     removePost(postId: ID!): Post
+    addComment(postId: ID!, commentText: String!): Post
+    updateComment(postId: ID!, commentId: ID!, commentText: String!): Post
+    removeComment(postId: ID!, commentId: ID!): Post
   }
 `;
 

@@ -24,8 +24,7 @@ const MyProfile = () => {
   if (loading) return <div>Loading...</div>;
 
   const me = data?.me;
-  console.log(me.posts)
-
+  
   const saveLink = async () => {
     try {
       await saveSocialMediaLink({
