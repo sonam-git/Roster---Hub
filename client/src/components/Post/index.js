@@ -87,7 +87,7 @@ const Post = ({ post }) => {
   return (
     <div className="bg-gray-100 dark:bg-gray-800 shadow-md rounded-lg p-4 mb-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold">{post?.postAuthor}</h3>
+        <h3 className="text-sm md:text-md lg:text-lg xl:text-xl ">{post?.postAuthor}</h3>
         {Auth.loggedIn() && Auth.getProfile().data._id === post.userId && (
           <div className="flex space-x-2">
             <PencilAltIcon

@@ -198,6 +198,7 @@ query Posts {
       _id
       commentAuthor
       createdAt
+      userId
     }
   }
 }
@@ -216,6 +217,7 @@ query Post($postId: ID!) {
       _id
       commentAuthor
       createdAt
+      userId
     }
   }
 }

@@ -11,16 +11,17 @@ const ProfileManagement = ({me ,isDarkMode}) => {
       <div className={` rounded-lg shadow-md p-6 max-w-2xl ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-white text-black'}`}>
         <div className="flex justify-between items-center mb-4">
           <button
-            className={`px-4 py-2 rounded-md ${activeComponent === 'userInfo' ? 'bg-blue-200 text-dark' : 'bg-gray-200 text-gray-900'}`}
+            className={`text-xs md:text-md lg:text-lg xl:text-xl px-2 py-2 rounded-md ${activeComponent === 'userInfo' ? 'bg-blue-200 text-dark' : 'bg-gray-200 text-gray-900'}`}
             onClick={() => setActiveComponent('userInfo')}
           >
-            User Info Form <FaEdit className="inline ml-2" />
+            Setting <FaEdit className="inline ml-2" />
           </button>
+  
           <button
-            className={`px-4 py-2 rounded-md ${activeComponent === 'profileSettings' ? 'bg-blue-200 text-dark' : 'bg-gray-200 text-gray-900'}`}
+            className={`px-2 py-2 text-xs md:text-md lg:text-lg xl:text-xl rounded-md ${activeComponent === 'profileSettings' ? 'bg-blue-200 text-dark' : 'bg-gray-200 text-gray-900'}`}
             onClick={() => setActiveComponent('profileSettings')}
           >
-            Profile Setting <FaEdit className="inline ml-2" />
+            Account Setting <FaEdit className="inline ml-2" />
           </button>
         </div>
         <div className={`my-9 p-4 border border-dotted border-gray-300 rounded ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-white text-black'}`}>

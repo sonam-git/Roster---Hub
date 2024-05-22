@@ -16,6 +16,11 @@ const commentSchema = new Schema({
       type: Date,
       default: Date.now,
     },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Profile',
+      required: true,
+    }
   });
   const Comment = model("Comment", commentSchema);
 

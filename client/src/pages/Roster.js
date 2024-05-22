@@ -1,4 +1,3 @@
-// src/pages/Roster.js
 import React from 'react';
 import { useQuery } from '@apollo/client';
 import ProfileList from '../components/ProfileList';
@@ -17,7 +16,7 @@ const Roster = () => {
   }
 
   return (
-    <main>
+    <main style={{ margin: 0, padding: 0 }}> {/* Apply custom styles to reset margin and padding */}
       <div className="flex-row justify-center">
         <div className="col-12 col-md-10 my-3">
           {/* Conditional rendering based on authentication status */}

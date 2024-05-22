@@ -53,17 +53,17 @@ const ProfileList = ({ profiles, title }) => {
             <div className="grid grid-cols-2 items-center">
               {/* Column 1: Name and Jersey Number */}
               <div>
-                <h4 className="font-bold">{profile.name}</h4>
+                <h4  className="text-sm md:text-md lg:text-lg xl:text-xl ">{profile.name}</h4>
                 <p className="font-bold">
                   <RiTShirt2Line className="mr-2 text-xl inline" /> {profile.jerseyNumber}
                 </p>
               </div>
               {/* Column 2: Image */}
-              <div className="flex justify-center items-center">
+              <div className="flex justify-end items-center">
                 <img
                   src={profile?.profilePic || ProfileAvatar}
                   alt="Profile"
-                  className="rounded-full w-24 h-24"
+                  className="rounded-full w-24 h-24 sm:w-20 sm:h-20 md:w-16 md:h-16 lg:w-24 lg:h-24"
                 />
               </div>
             </div>
@@ -75,7 +75,7 @@ const ProfileList = ({ profiles, title }) => {
                 onClick={() => handleChatClick(profile)}
               >
                 <AiOutlineMessage className={`mr-2 text-2xl ${isDarkMode ? 'text-white' : 'text-black'}`} />
-                <span>{isDarkMode ? 'Chat' : 'Chat'}</span>
+                <span className='text-sm md:text-md lg:text-lg xl:text-xl'>{isDarkMode ? 'Chat' : 'Chat'}</span>
               </button>
               {/* Player info button */}
               <Link
@@ -84,7 +84,7 @@ const ProfileList = ({ profiles, title }) => {
               >
               
                 <RiProfileLine className={`mr-2 text-2xl ${isDarkMode ? 'text-white' : 'text-black'}`} />
-                <span className={`mr-2 text-md ${isDarkMode ? 'text-white hover:text-blue-300' : 'text-black hover:text-blue-700'}`}>
+                <span className={`mr-2 text-sm md:text-md lg:text-lg xl:text-xl ${isDarkMode ? 'text-white hover:text-blue-300' : 'text-black hover:text-blue-700'}`}>
                   {isDarkMode ? 'View Profile' : 'View Profile'}</span>
               </Link>
             </div>

@@ -6,6 +6,7 @@ import { GET_POSTS } from "../../utils/queries";
 import Auth from "../../utils/auth";
 
 const CommentList = ({ post, comments }) => {
+
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [commentText, setCommentText] = useState("");
   const [deleteSuccessMessage, setDeleteSuccessMessage] = useState("");
@@ -90,7 +91,7 @@ const CommentList = ({ post, comments }) => {
                 <p className="text-gray-600 dark:text-gray-300 mt-1">
                   {comment.commentText}
                 </p>
-                {Auth.loggedIn() && Auth.getProfile().data.name === comment.commentAuthor && 
+                {Auth.loggedIn() && Auth.getProfile().data._id === comment.userId && 
                   (
                     <div className="flex space-x-2">
                       <PencilAltIcon

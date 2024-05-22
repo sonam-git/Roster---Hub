@@ -443,7 +443,7 @@ const resolvers = {
         }
 
         // Check if the current user is the author of the post
-        if (post.postAuthor !== context.user.name) {
+        if (post.userId !== context.user._id) {
           throw new AuthenticationError("You are not the author of this post.");
         }
 
@@ -477,7 +477,8 @@ const resolvers = {
          const newComment = {
            commentText,
            commentAuthor: context.user.name,
-           createdAt: new Date().toISOString()
+           createdAt: new Date().toISOString(),
+           userId: context.user._id,
          };
 
          const updatedPost = await Post.findOneAndUpdate(
@@ -499,7 +500,7 @@ const resolvers = {
     updateComment: async (parent, { postId, commentId, commentText }, context) => {
       if (context.user) {
         const post = await Post.findOneAndUpdate(
-          { _id: postId, 'comments._id': commentId, 'comments.commentAuthor': context.user.name },
+          { _id: postId, 'comments._id': commentId, 'comments.userId': context.user._id },
           {
             $set: {
               'comments.$.commentText': commentText,

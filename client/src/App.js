@@ -13,7 +13,7 @@ import Profile from './pages/Profile';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Header from './components/Header';
-import Footer from './components/Footer';
+// import Footer from './components/Footer';
 import Roster from './pages/Roster';
 import Message from './pages/Message';
 import Skill from './pages/Skill';
@@ -45,7 +45,7 @@ function AppContent() {
   const { isDarkMode } = useContext(ThemeContext);
 
   return (
-    <div className={`flex flex-row min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
+    <div className={`flex min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
       <Header />
       <div className="flex-1">
         <Routes>
@@ -60,7 +60,7 @@ function AppContent() {
           <Route path="/forgot-password" element={<ForgotPassword />} /> 
         </Routes>
       </div>
-      <Footer className="w-full h-18" />
+      {/* <Footer className="w-full h-18" /> */}
     </div>
   );
 }

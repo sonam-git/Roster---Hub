@@ -5,7 +5,7 @@ import { FaUser } from 'react-icons/fa';
 import { RiTShirt2Line } from 'react-icons/ri'; 
 import { FaPhone } from 'react-icons/fa';
 
-const ProfileCard = ({ profile, isDarkMode,  handleChatClick }) => {
+const ProfileCard = ({ profile, isDarkMode}) => {
   
   // Function to render social media icons with links
   const renderSocialMediaIcons = () => {
@@ -58,7 +58,7 @@ const ProfileCard = ({ profile, isDarkMode,  handleChatClick }) => {
         </div>
         <div className="py-10 px-6 grid grid-cols-1 gap-6">
           <div className="flex flex-col items-center">
-            <h3 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-black-700'}`}>
+            <h3 className={`text-sm md:text-md lg:text-lg xl:text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-black-700'}`}>
               {profile.name[0].toUpperCase() + profile.name.slice(1)}
             </h3>
             <div className={`flex items-center space-x-4 p-4 shadow-lg rounded-md dark:bg-gray-800`}>

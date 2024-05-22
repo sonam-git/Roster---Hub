@@ -38,6 +38,7 @@ scalar Upload
     commentText: String!
     commentAuthor: String!
     createdAt: String!
+    userId: ID!
   }
 
   type Message {

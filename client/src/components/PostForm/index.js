@@ -43,11 +43,10 @@ const PostForm = () => {
       setTimeout(() => setErrorMessage(""), 3000);
     }
   };
-  
 
   return (
     <div>
-      <h4 className="text-xl lg:text-xl xl:text-2xl font-bold mb-2 ml-3">
+      <h4 className="text-sm md:text-md lg:text-lg xl:text-2xl font-bold mb-2 ml-3">
         What's on your mind?
       </h4>
       {Auth.loggedIn() ? (

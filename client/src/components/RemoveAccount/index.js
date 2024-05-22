@@ -11,7 +11,7 @@ const RemoveAccount = ({ onRemove,profileId  }) => {
     <div>
       <button
         onClick={() => setShowModal(true)}
-        className="bg-red-400 hover:bg-red-600 text-white font-semibold py-2 px-4 ml-2 rounded-md mt-4"
+        className="text-xs md:text-md lg:text-lg xl:text-xl bg-red-400 hover:bg-red-600 text-white font-semibold py-2 px-2 ml-2 rounded-md mt-4"
       >
         Delete Account
       </button>

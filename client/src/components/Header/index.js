@@ -52,7 +52,7 @@ const Header = () => {
       >
         <img
           src={controlImage}
-          className={`absolute cursor-pointer right-3 top-9 w-8 border-dark-blue border-2 rounded-full bg-white transform ${
+          className={`absolute cursor-pointer right-3 top-5 w-8 border-dark-blue border-2 rounded-full bg-white transform ${
             open ? '' : 'rotate-180'
           } `}
           onClick={toggleMenu}
@@ -68,13 +68,19 @@ const Header = () => {
                 >
             <img
               src={logoImage}
-              className={`cursor-pointer duration-500 ${
+              className={`cursor-pointer duration-500 mr-2 ${
                 open && 'rotate-[360deg]'
               }`}
               alt="logo"
             />
+             <button
+            onClick={toggleDarkMode}
+            className="text-white p-2 rounded-full bg-gray-700 dark:bg-gray-500"
+          >
+            {isDarkMode ? '☀️' : '🌙'}
+          </button>
             <h1
-              className={`dark:text-white origin-left font-medium text-2xl duration-200 ml-4  ${
+              className={`dark:text-white origin-left mt-5 font-medium text-2xl duration-200 ml-2  ${
                 !open && 'scale-0'
               }`}
             >
@@ -82,12 +88,6 @@ const Header = () => {
             </h1>
             </Link>
           </div>
-          <button
-            onClick={toggleDarkMode}
-            className="text-white p-2 rounded-full bg-gray-700 dark:bg-gray-500"
-          >
-            {isDarkMode ? '☀️' : '🌙'}
-          </button>
         </div>
         <ul className="pt-6">
           {Menus.map((Menu, index) => (
@@ -138,18 +138,7 @@ const Header = () => {
       <div className="flex-1 p-7">
         <Outlet />
       </div>
-      <div className="md:hidden bottom-4 right-4 z-50">
-        <button
-          onClick={toggleMenu}
-          className="bg-gray-900 text-white p-3 border-dark rounded-full shadow-lg focus:outline-none"
-        >
-          <img
-            src={controlImage}
-            className={`w-6 h-6 ${open ? 'rotate-180' : ''}`}
-            alt="toggle menu"
-          />
-        </button>
-      </div>
+     
     </div>
   );
 };

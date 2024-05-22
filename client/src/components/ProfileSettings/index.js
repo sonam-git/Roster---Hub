@@ -22,6 +22,7 @@ const ProfileSettings = ({ isDarkMode }) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [errorNameMessage, setErrorNameMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [passwordSuccessMessage, setPasswordSuccessMessage] = useState("");
@@ -33,6 +34,11 @@ const ProfileSettings = ({ isDarkMode }) => {
  
 
   const handleNameUpdate = async () => {
+    if (!name) {
+      setErrorNameMessage('Please provide desired new name');
+      setTimeout(() => setErrorNameMessage(""), 3000); 
+      return;
+    }
     try {
       await updateName({ variables: { name }, refetchQueries: [QUERY_ME] });
       setSuccessMessage("Your name has been changed successfully.");
@@ -46,6 +52,12 @@ const ProfileSettings = ({ isDarkMode }) => {
   };
 
   const handlePasswordChange = async () => {
+    // Validate inputs
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setErrorMessage('Please provide all inputs');
+      setTimeout(() => setErrorMessage(""), 3000); // Clear error message after 3 seconds
+      return;
+    }
     try {
       if (newPassword !== confirmPassword) {
         setErrorMessage("Passwords do not match.");
@@ -82,10 +94,18 @@ const ProfileSettings = ({ isDarkMode }) => {
 
   return (
     <div className={`max-w-md mx-auto ${isDarkMode ? 'dark:text-white' : ''}`}>
-      <h2 className="text-xl font-semibold mb-4">Update Name</h2>
+      <h2 className="text-sm md:text-md lg:text-lg xl:text-xl font-semibold mb-4">Update Name</h2>
+      {errorNameMessage && (
+        <div
+          className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-2 rounded relative"
+          role="alert"
+        >
+          <span className="block sm:inline ">{errorNameMessage}</span>
+        </div>
+      )}
       {successMessage && (
         <div
-          className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+          className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 mb-2 rounded relative"
           role="alert"
         >
           <span className="block sm:inline">{successMessage}</span>
@@ -101,15 +121,15 @@ const ProfileSettings = ({ isDarkMode }) => {
         />
         <button
           onClick={handleNameUpdate}
-          className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 ml-2 rounded-md"
+          className="text-xs md:text-md lg:text-lg xl:text-xl bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 ml-2 rounded-md"
         >
           Update
         </button>
       </div>
-      <h2 className="text-xl font-semibold my-6">Update Password</h2>
+      <h2 className="text-sm md:text-md lg:text-lg xl:text-xl font-semibold my-6">Update Password</h2>
       {errorMessage && (
         <div
-          className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+          className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-2 rounded relative"
           role="alert"
         >
           <span className="block sm:inline">{errorMessage}</span>
@@ -117,7 +137,7 @@ const ProfileSettings = ({ isDarkMode }) => {
       )}
       {passwordSuccessMessage && (
         <div
-          className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+          className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 mb-2 rounded relative"
           role="alert"
         >
           <span className="block sm:inline">{passwordSuccessMessage}</span>
@@ -147,7 +167,7 @@ const ProfileSettings = ({ isDarkMode }) => {
       <div className="flex justify-between items-center mb-4">
         <button
           onClick={handlePasswordChange}
-          className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md mt-4"
+          className="text-xs md:text-md lg:text-lg xl:text-xl bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-2 rounded-md mt-4"
         >
           Change Password
         </button>
