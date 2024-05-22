@@ -157,9 +157,10 @@ export const SEND_RESET_PASSWORD_EMAIL = gql`
 `;
 
 export const ADD_POST = gql`
-  mutation addPost($postText: String!) {
-    addPost(postText: $postText) {
+  mutation addPost($profileId: ID!, $postText: String!) {
+    addPost(profileId: $profileId, postText: $postText) {
       _id
+      userId
       postText
       postAuthor
       createdAt
@@ -187,7 +188,6 @@ export const UPDATE_POST = gql`
     }
   }
 `;
-
 export const ADD_COMMENT = gql`
   mutation addComment($postId: ID!, $commentText: String!) {
     addComment(postId: $postId, commentText: $commentText) {

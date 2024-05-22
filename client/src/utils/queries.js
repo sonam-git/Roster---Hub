@@ -9,6 +9,19 @@ export const QUERY_PROFILES = gql`
       position
       phoneNumber
       profilePic
+      posts {
+        _id
+        postText
+        postAuthor
+        createdAt
+        userId
+        comments {
+          _id
+          commentText
+          commentAuthor
+          createdAt
+        }
+      }
       socialMediaLinks { 
         _id
         userId
@@ -47,6 +60,19 @@ export const QUERY_SINGLE_PROFILE = gql`
       position
       phoneNumber
       profilePic
+      posts {
+        _id
+        postText
+        postAuthor
+        createdAt
+        userId
+        comments {
+          _id
+          commentText
+          commentAuthor
+          createdAt
+        }
+      }
       socialMediaLinks {
         _id
         userId
@@ -103,9 +129,14 @@ export const QUERY_ME = gql`
         postText
         postAuthor
         createdAt
-       
+        userId
+        comments {
+          commentText
+          commentAuthor
+          createdAt
+          _id
+        }
       }
-     
       receivedMessages {
         _id
         text
@@ -158,6 +189,7 @@ export const GET_POSTS = gql`
 query Posts {
   posts {
     _id
+    userId
     postAuthor
     postText
     createdAt
@@ -175,6 +207,7 @@ export const GET_POST = gql`
 query Post($postId: ID!) {
   post(postId: $postId) {
     _id
+    userId
     createdAt
     postAuthor
     postText

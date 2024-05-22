@@ -1,19 +1,17 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { PencilAltIcon, TrashIcon, ChatAltIcon } from "@heroicons/react/solid";
+import { PencilAltIcon, TrashIcon} from "@heroicons/react/solid";
 import { REMOVE_COMMENT, UPDATE_COMMENT } from "../../utils/mutations";
 import { GET_POSTS } from "../../utils/queries";
 import Auth from "../../utils/auth";
 
-const CommentList = ({ post, comments, loggedInUserName }) => {
+const CommentList = ({ post, comments }) => {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [commentText, setCommentText] = useState("");
   const [deleteSuccessMessage, setDeleteSuccessMessage] = useState("");
   const [updateSuccessMessage, setUpdateSuccessMessage] = useState("");
 
-  const [removeComment] = useMutation(REMOVE_COMMENT, {
-    refetchQueries: [{ query: GET_POSTS }],
-  });
+  const [removeComment] = useMutation(REMOVE_COMMENT,{refetchQueries: [{ query: GET_POSTS }]} );
 
   const [updateComment] = useMutation(UPDATE_COMMENT, {
     refetchQueries: [{ query: GET_POSTS }],
@@ -34,7 +32,6 @@ const CommentList = ({ post, comments, loggedInUserName }) => {
   };
 
   const handleUpdateComment = async (postId, commentId) => {
-    console.log(postId, commentId);
     try {
       await updateComment({ variables: { postId, commentId, commentText } });
       setEditingCommentId(null);
@@ -63,14 +60,10 @@ const CommentList = ({ post, comments, loggedInUserName }) => {
             className="bg-gray-50 dark:bg-gray-700 shadow-sm rounded-lg p-3 mb-3"
           >
             <div className="flex justify-between items-center">
-              <h4 className="text-md font-semibold">{comment.commentAuthor}</h4>
+              <h4 className="text-sm font-semibold">{comment.commentAuthor}</h4>
               <small className="text-gray-500">
                 {new Date(parseInt(comment.createdAt)).toLocaleString()}
               </small>
-              <ChatAltIcon
-                className="h-5 w-5 text-green-500 cursor-pointer"
-                title="Comment"
-              />
             </div>
             {editingCommentId === comment._id ? (
               <div>
@@ -98,7 +91,7 @@ const CommentList = ({ post, comments, loggedInUserName }) => {
                   {comment.commentText}
                 </p>
                 {Auth.loggedIn() &&
-                  loggedInUserName === comment.commentAuthor && (
+                  (
                     <div className="flex space-x-2">
                       <PencilAltIcon
                         className="h-5 w-5 text-blue-500 cursor-pointer"
@@ -120,7 +113,7 @@ const CommentList = ({ post, comments, loggedInUserName }) => {
           </div>
         ))
       ) : (
-        <p className="text-gray-500">No comments yet</p>
+        <p className="text-gray-500 text-center">No comments yet</p>
       )}
     </div>
   );

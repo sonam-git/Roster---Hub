@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_POSTS } from '../../utils/queries';
 import Post from '../Post';
+import Auth from '../../utils/auth';
 
 const PAGE_SIZE = 3; // Number of posts per page
 
-const PostsList = ({ userName, loggedInUserName,post }) => {
+const PostsList = ({ profileId }) => {
   const { loading, data, error } = useQuery(GET_POSTS);
+  const loggedInUserId = Auth.getProfile().data._id;
+  
   const [currentPage, setCurrentPage] = useState(1); // Current page number
 
   if (loading) {
@@ -18,17 +21,19 @@ const PostsList = ({ userName, loggedInUserName,post }) => {
   }
 
   if (!data || !data.posts || !data.posts.length) {
-    return <div>No posts yet</div>;
+    return <h3 className='text-xl font-bold'>No posts yet</h3>;
   }
 
-  //Determine posts to display based on loggedInUserName and userName
-  // const postsToDisplay = data.posts.filter(post =>
-  //   post.postAuthor === loggedInUserName || post.postAuthor === userName
-  // );
-  const postsToDisplay = post ? data.posts.filter(post => post.postAuthor === userName) : data.posts.filter(post => post.userId === userName);
+  const userPost = data.posts.filter(post => post.userId === profileId);
+  const myPost = data.posts.filter(post => post.userId === loggedInUserId);
+
+  // Determine posts to display based on profileId
+  const postsToDisplay = profileId
+    ? userPost
+    : [...myPost, ...data.posts.filter(post => post.userId !== loggedInUserId)];
 
   if (postsToDisplay.length === 0) {
-    return <div>No posts yet</div>;
+    return <h3 className='text-xl font-bold text-left'>No posts yet</h3>;
   }
 
   // Calculate total number of pages
@@ -47,7 +52,7 @@ const PostsList = ({ userName, loggedInUserName,post }) => {
   return (
     <div className="space-y-4">
       {paginatedPosts.map((post) => (
-        <Post key={post._id} post={post} loggedInUserName={loggedInUserName}/>
+        <Post key={post._id} post={post} />
       ))}
       <div className="flex justify-center mt-4">
         {Array.from({ length: totalPages }, (_, index) => (

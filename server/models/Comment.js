@@ -15,8 +15,7 @@ const commentSchema = new Schema({
     createdAt: {
       type: Date,
       default: Date.now,
-      get: (timestamp) => dateFormat(timestamp),
-    },
+    }
   });
   const Comment = model("Comment", commentSchema);
 

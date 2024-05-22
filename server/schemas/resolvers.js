@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const { AuthenticationError } = require("apollo-server-express");
 const { Profile, Skill, Message, SocialMediaLink,Post } = require("../models");
 const { signToken } = require("../utils/auth");
@@ -28,7 +29,7 @@ const resolvers = {
           path: "sentMessages",
           populate: [{ path: "sender" }, { path: "recipient" }],
         })
-        .populate('posts');;
+        .populate('posts');
     },
     // ************************** QUERY SINGLE PROFILE *******************************************//
     profile: async (parent, { profileId }) => {
@@ -41,7 +42,7 @@ const resolvers = {
         .populate({
           path: "socialMediaLinks",
           populate: { path: "link" },
-        });
+        }).populate('posts');
     },
     // ************************** QUERY ME (LOGIN USER) *******************************************//
     me: async (parent, args, context) => {
@@ -396,7 +397,7 @@ const resolvers = {
     },
 
     // ************************** ADD POST *******************************************//
-    addPost: async (parent, { postText }, context) => {
+    addPost: async (parent, { profileId, postText }, context) => {
       if (!context.user) {
         throw new AuthenticationError("You need to be logged in!");
       }
@@ -410,12 +411,13 @@ const resolvers = {
         const post = await Post.create({
           postText,
           postAuthor: context.user.name,
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
+          userId: context.user._id,
         });
 
         // Update the profile to include the post
         await Profile.findOneAndUpdate(
-          { _id: context.user._id },
+          { _id: profileId },
           { $addToSet: { posts: post._id } }
         );
         return post;
@@ -468,31 +470,31 @@ const resolvers = {
       }
     },
 
-     // ************************** ADD COMMENT *******************************************//
-     addComment: async (parent, { postId, commentText }, context) => {
-      if (context.user) {
-        try {
-          const newComment = {
-            commentText,
-            commentAuthor: context.user.name,
-            createdAt: new Date().toISOString()
-          };
+    // ************************** ADD COMMENT *******************************************//
+    addComment: async (parent, { postId, commentText }, context) => {
+     if (context.user) {
+       try {
+         const newComment = {
+           commentText,
+           commentAuthor: context.user.name,
+           createdAt: new Date().toISOString()
+         };
 
-          const updatedPost = await Post.findOneAndUpdate(
-            { _id: postId },
-            { $push: { comments: newComment } },
-            { new: true, runValidators: true }
-          );
+         const updatedPost = await Post.findOneAndUpdate(
+           { _id: postId },
+           { $push: { comments: newComment } },
+           { new: true, runValidators: true }
+         );
 
-          return updatedPost;
-        } catch (err) {
-          console.error(err);
-          throw new Error('Error adding comment');
-        }
-      }
-      throw new AuthenticationError('Not logged in');
-    },
-  
+         return updatedPost;
+       } catch (err) {
+         console.error(err);
+         throw new Error('Error adding comment');
+       }
+     }
+     throw new AuthenticationError('Not logged in');
+   },
+
 // ************************** UPDATE COMMENT *******************************************//
     updateComment: async (parent, { postId, commentId, commentText }, context) => {
       if (context.user) {

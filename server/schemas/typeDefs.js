@@ -30,6 +30,7 @@ scalar Upload
     postAuthor: String!
     createdAt: String!
     comments: [Comment]
+    userId: ID!
   }
 
   type Comment {
@@ -85,7 +86,7 @@ scalar Upload
     updateName(name: String!): Profile
     updatePassword(currentPassword: String!, newPassword: String!): Profile
     deleteProfile(profileId: ID!):Profile
-    addPost(postText: String!): Post
+    addPost( profileId: ID!,postText: String!): Post
     updatePost(postId: ID!, postText: String!): Post
     removePost(postId: ID!): Post
     addComment(postId: ID!, commentText: String!): Post

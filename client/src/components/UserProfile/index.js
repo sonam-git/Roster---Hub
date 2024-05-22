@@ -29,12 +29,12 @@ const UserProfile = ({ profile }) => {
         {showSkills ? (
           <>
             <SkillsList skills={profile.skills || []} isDarkMode={isDarkMode} profile={profile} />
-            <div className={`absolute bottom-0 left-0 right-0 p-2 ${isDarkMode ? 'bg-gray-500' : 'bg-white'}`}>
+            <div className={`mt-4 ${isDarkMode ? 'bg-gray-500' : 'bg-white'}`}>
               <SkillForm profileId={profile._id} teamMate={profile.name} />
             </div>
           </>
         ) : (
-          <PostsList profileId={profile._id} isDarkMode={isDarkMode} userName = {profile.name} /> // Render posts list for the user
+          <PostsList profileId={profile._id} isDarkMode={isDarkMode}  /> 
         )}
       </div>
     </div>

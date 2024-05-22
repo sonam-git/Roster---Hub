@@ -4,4 +4,5 @@ const Message = require('./Message');
 const SocialMediaLink = require('./SocialMediaLink')
 const Post = require('./Post')
 
-module.exports = { Profile, Skill, Message,SocialMediaLink,Post};
+
+module.exports = { Profile, Skill, Message,SocialMediaLink,Post,};

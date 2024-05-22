@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { PencilAltIcon, TrashIcon, ChatAltIcon } from '@heroicons/react/solid';
+import { PencilAltIcon, TrashIcon, ChatAltIcon, XIcon } from '@heroicons/react/solid';
 import { REMOVE_POST, UPDATE_POST, ADD_COMMENT } from '../../utils/mutations';
 import { GET_POSTS } from '../../utils/queries';
 import Auth from '../../utils/auth';
 import CommentList from '../CommentList';
 
-const Post = ({ post, loggedInUserName }) => {
+const PAGE_SIZE = 1; // Number of comments per page
+
+const Post = ({ post }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [postText, setPostText] = useState(post.postText);
   const [isEdited, setIsEdited] = useState(false);
   const [isCommenting, setIsCommenting] = useState(false);
   const [commentText, setCommentText] = useState('');
   const [showComments, setShowComments] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [removePost] = useMutation(REMOVE_POST, {
     refetchQueries: [{ query: GET_POSTS }],
@@ -24,6 +27,10 @@ const Post = ({ post, loggedInUserName }) => {
 
   const [addComment] = useMutation(ADD_COMMENT, {
     refetchQueries: [{ query: GET_POSTS }],
+    onCompleted: () => {
+      setCurrentPage(1); // Reset to first page after adding a comment
+      setShowComments(true);
+    }
   });
 
   const handleDelete = async () => {
@@ -36,10 +43,10 @@ const Post = ({ post, loggedInUserName }) => {
 
   const handleUpdate = async () => {
     try {
-      const updatedPost = await updatePost({ variables: { postId: post._id, postText } });
+      const { data } = await updatePost({ variables: { postId: post._id, postText } });
       setIsEditing(false);
       setIsEdited(true);
-      setPostText({ ...post, createdAt: updatedPost.data.updatePost.createdAt });
+      setPostText(data.updatePost.postText);
     } catch (err) {
       console.error(err);
     }
@@ -57,17 +64,31 @@ const Post = ({ post, loggedInUserName }) => {
 
   const handleComment = () => {
     setIsCommenting(true);
+    setShowComments(true);
   };
 
   const toggleComments = () => {
     setShowComments(!showComments);
+    if (!showComments) {
+      setCurrentPage(1);
+    }
   };
+
+  const showNextComments = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const showPreviousComments = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const paginatedComments = post.comments.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   return (
     <div className="bg-gray-100 dark:bg-gray-800 shadow-md rounded-lg p-4 mb-4">
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-semibold">{post?.postAuthor}</h3>
-        {Auth.loggedIn() && loggedInUserName === post.postAuthor && (
+        {Auth.loggedIn() && Auth.getProfile().data._id === post.userId && (
           <div className="flex space-x-2">
             <PencilAltIcon
               className="h-5 w-5 text-blue-500 cursor-pointer"
@@ -86,11 +107,19 @@ const Post = ({ post, loggedInUserName }) => {
           title="Comment"
           onClick={handleComment}
         />
-        <ChatAltIcon
-          className="h-5 w-5 text-green-500 cursor-pointer"
-          title="Show Comments"
-          onClick={toggleComments}
-        />
+        {!showComments ? (
+          <ChatAltIcon
+            className="h-5 w-5 text-indigo-400 cursor-pointer"
+            title="Show Comments"
+            onClick={toggleComments}
+          />
+        ) : (
+          <XIcon
+            className="h-5 w-5 text-indigo-400 cursor-pointer"
+            title="Close Comments"
+            onClick={toggleComments}
+          />
+        )}
       </div>
       {isEditing ? (
         <div>
@@ -148,7 +177,29 @@ const Post = ({ post, loggedInUserName }) => {
           </button>
         </div>
       )}
-      {showComments && <CommentList comments={post.comments} loggedInUserName={loggedInUserName} post={post} />}
+      {showComments && (
+        <div>
+          <CommentList comments={paginatedComments} post={post} />
+          {post.comments.length > PAGE_SIZE && (
+            <div className="flex justify-between mt-2">
+              <button
+                onClick={showPreviousComments}
+                className="px-3 py-1 bg-gray-500 text-white rounded"
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              <button
+                onClick={showNextComments}
+                className="px-3 py-1 bg-gray-500 text-white rounded"
+                disabled={currentPage * PAGE_SIZE >= post.comments.length}
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

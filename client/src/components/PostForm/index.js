@@ -9,9 +9,11 @@ import PostsList from "../PostsList";
 const PostForm = () => {
   const [postText, setPostText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
- const loggedInUserName = Auth.getProfile().data.name;
+ const userId = Auth.getProfile().data._id;
+
   const [addPost] = useMutation(ADD_POST, {
-    update(cache, { data: { addPost } }) {
+     variables: { profileId:userId },
+  update(cache, { data: { addPost } }) {
       try {
         const { posts } = cache.readQuery({ query: GET_POSTS }) || { posts: [] };
         cache.writeQuery({
@@ -34,11 +36,14 @@ const PostForm = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     try {
-      await addPost({ variables: { postText } });
+      await addPost({ variables: { profileId: userId, postText } });
     } catch (err) {
       console.error(err);
+      setErrorMessage(err.message);
+      setTimeout(() => setErrorMessage(""), 3000);
     }
   };
+  
 
   return (
     <div>
@@ -73,7 +78,7 @@ const PostForm = () => {
               </div>
             )}
           </form>
-          <PostsList loggedInUserName = {loggedInUserName}/>
+          <PostsList />
         </>
       ) : (
         <p>
