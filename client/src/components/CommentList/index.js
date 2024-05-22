@@ -90,7 +90,7 @@ const CommentList = ({ post, comments }) => {
                 <p className="text-gray-600 dark:text-gray-300 mt-1">
                   {comment.commentText}
                 </p>
-                {Auth.loggedIn() &&
+                {Auth.loggedIn() && Auth.getProfile().data.name === comment.commentAuthor && 
                   (
                     <div className="flex space-x-2">
                       <PencilAltIcon
