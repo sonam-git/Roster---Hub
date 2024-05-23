@@ -164,6 +164,14 @@ export const ADD_POST = gql`
       postText
       postAuthor
       createdAt
+      userId
+      comments{
+        _id
+      userId
+      commentText
+      commentAuthor
+      createdAt
+      }
     }
   }
 `;
@@ -185,6 +193,14 @@ export const UPDATE_POST = gql`
       postText
       postAuthor
       createdAt
+      userId
+      comments{
+        _id
+      userId
+      commentText
+      commentAuthor
+      createdAt
+      }
     }
   }
 `;

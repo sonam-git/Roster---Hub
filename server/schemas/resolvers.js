@@ -413,6 +413,7 @@ const resolvers = {
           postAuthor: context.user.name,
           createdAt: new Date().toISOString(),
           userId: context.user._id,
+          comments: []
         });
 
         // Update the profile to include the post
@@ -443,7 +444,7 @@ const resolvers = {
         }
 
         // Check if the current user is the author of the post
-        if (post.userId !== context.user._id) {
+        if (post.userId.toString()  !== context.user._id) {
           throw new AuthenticationError("You are not the author of this post.");
         }
 

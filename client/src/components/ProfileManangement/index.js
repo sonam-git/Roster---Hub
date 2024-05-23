@@ -14,7 +14,7 @@ const ProfileManagement = ({me ,isDarkMode}) => {
             className={`text-xs md:text-md lg:text-lg xl:text-xl px-2 py-2 rounded-md ${activeComponent === 'userInfo' ? 'bg-blue-200 text-dark' : 'bg-gray-200 text-gray-900'}`}
             onClick={() => setActiveComponent('userInfo')}
           >
-            Setting <FaEdit className="inline ml-2" />
+            Profile Setting <FaEdit className="inline ml-2" />
           </button>
   
           <button
