@@ -5,14 +5,13 @@ import { RESET_PASSWORD } from "../utils/mutations";
 
 const PasswordReset = () => {
   const [newPassword, setNewPassword] = useState("");
-  const [resetPassword, {  error }] = useMutation(RESET_PASSWORD);
+  const [resetPassword, { error }] = useMutation(RESET_PASSWORD);
   const { token } = useParams();
-  console.log(token)
   const navigate = useNavigate();
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const handleChange = (event) => {
     const { value } = event.target;
-    console.log(value)
     setNewPassword(value);
   };
 
@@ -20,12 +19,18 @@ const PasswordReset = () => {
     event.preventDefault();
     try {
       const { data } = await resetPassword({
-        variables: { token: token, newPassword: newPassword }
+        variables: { token: token, newPassword: newPassword },
       });
-      console.log(data)
-      if (data && data.resetPassword && data.resetPassword.message === "Password has been successfully reset.") {
-        // Reset password successful, navigate to login page
-        navigate("/login");
+      if (
+        data &&
+        data.resetPassword &&
+        data.resetPassword.message === "Password has been successfully reset."
+      ) {
+        // Reset password successful, show success message and navigate to login page
+        setShowSuccessMessage(true);
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000); // Navigate to login page after 3 seconds
       }
     } catch (e) {
       console.error("Error resetting password:", e);
@@ -64,6 +69,11 @@ const PasswordReset = () => {
               Submit
             </button>
           </form>
+          {showSuccessMessage && (
+            <div className="text-center text-green-600 mt-2">
+              Password has been successfully reset.
+            </div>
+          )}
         </div>
         {error && (
           <div
