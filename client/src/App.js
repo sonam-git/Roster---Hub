@@ -13,7 +13,7 @@ import Profile from './pages/Profile';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Header from './components/Header';
-// import Footer from './components/Footer';
+import Footer from './components/Footer';
 import Roster from './pages/Roster';
 import Message from './pages/Message';
 import Skill from './pages/Skill';
@@ -21,6 +21,7 @@ import ForgotPassword from './pages/ForgetPassword';
 
 
 import { ThemeProvider, ThemeContext } from './components/ThemeContext';
+import PasswordReset from './pages/PasswordReset';
 
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -45,9 +46,10 @@ function AppContent() {
   const { isDarkMode } = useContext(ThemeContext);
 
   return (
+    <>
     <div className={`flex min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
       <Header />
-      <div className="flex-1">
+      <div className="flex-1  ">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/roster" element={<Roster />} />
@@ -58,10 +60,12 @@ function AppContent() {
           <Route path="/me" element={<Profile />} />
           <Route path="/profiles/:profileId" element={<Profile />} />
           <Route path="/forgot-password" element={<ForgotPassword />} /> 
+          <Route path="/reset-password/:token" element={<PasswordReset/>} />
         </Routes>
       </div>
-      {/* <Footer className="w-full h-18" /> */}
     </div>
+    <Footer  />
+    </>
   );
 }
 

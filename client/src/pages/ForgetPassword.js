@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { SEND_RESET_PASSWORD_EMAIL } from "../utils/mutations"; // This should be your mutation to send a reset email
+import { SEND_RESET_PASSWORD_EMAIL } from "../utils/mutations";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -21,20 +21,24 @@ const ForgotPassword = () => {
   };
 
   return (
-    <main className={`flex justify-center mb-4`}>
-      <div className={`w-full max-w-md mt-5`}>
-        <div className={`shadow-md rounded px-8 pt-6 pb-8 mb-4`}>
+    <main className="flex justify-center mb-4">
+      <div className="w-full max-w-md mt-5">
+        <div className="shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <h4 className="text-center text-2xl font-bold text-gray-900 dark:text-white mb-6">
             Forgot Password
           </h4>
           {data ? (
-            <p className="text-center text-gray-900">
-              If an account with that email exists, a reset link has been sent.
+            <p className="text-center text-gray-900 dark:text-white">
+               {data.sendResetPasswordEmail.message}
+              {/* If an account with that email exists, a reset link has been sent. */}
             </p>
           ) : (
-            <form onSubmit={handleFormSubmit} className={`space-y-6`}>
+            <form onSubmit={handleFormSubmit} className="space-y-6">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
+                >
                   Email address
                 </label>
                 <input
@@ -57,7 +61,10 @@ const ForgotPassword = () => {
           )}
         </div>
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <div
+            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+            role="alert"
+          >
             <span className="block sm:inline">{error.message}</span>
           </div>
         )}

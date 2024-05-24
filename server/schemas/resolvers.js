@@ -1,9 +1,12 @@
-const mongoose = require('mongoose');
-const { AuthenticationError } = require("apollo-server-express");
+require("dotenv").config();
+const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+const bcrypt = require('bcrypt');
+const { AuthenticationError,UserInputError  } = require("apollo-server-express");
 const { Profile, Skill, Message, SocialMediaLink,Post } = require("../models");
 const { signToken } = require("../utils/auth");
 const cloudinary = require("cloudinary").v2;
-require("dotenv").config();
+const secret = process.env.JWT_SECRET;
 cloudinary.config({
   cloud_name: "dey5y9jip",
   api_key: "279571669115484",
@@ -413,7 +416,6 @@ const resolvers = {
           postAuthor: context.user.name,
           createdAt: new Date().toISOString(),
           userId: context.user._id,
-          comments: []
         });
 
         // Update the profile to include the post
@@ -444,7 +446,7 @@ const resolvers = {
         }
 
         // Check if the current user is the author of the post
-        if (post.userId.toString()  !== context.user._id) {
+        if (post.userId !== context.user._id) {
           throw new AuthenticationError("You are not the author of this post.");
         }
 
@@ -561,8 +563,90 @@ const resolvers = {
       }
     },
 
-   
+        // ************************** FORGOT PASSWORD FUNCTIONALITY *******************************************//
+        sendResetPasswordEmail: async (_, { email }) => {
+          try {
+          const user = await Profile.findOne({ email });
+          if (!user) {
+            return { message: "If an account with that email exists, a reset link has been sent." };
+          }
+    
+          const resetToken = signToken({ email: user.email, name: user.name, _id: user._id });
+    
+          const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+              user: process.env.EMAIL_USER, 
+              pass: process.env.EMAIL_PASSWORD, 
+            },
+          });
+    
+          const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Password Reset',
+            text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
+                   Please click on the following link, or paste this into your browser to complete the process:\n\n
+                   http://localhost:3000/reset-password/${resetToken}\n\n
+                   If you did not request this, please ignore this email and your password will remain unchanged.\n`
+          };
+    
+          await transporter.sendMail(mailOptions);
+    
+          return { message: "If an account with that email exists, a reset link has been sent." };
+        } catch (error) {
+          console.error(error);
+          return { message: "An error occurred while sending the reset email." };
+        }
+        },
+ // ************************** RESET PASSWORD FUNCTIONALITY *******************************************//
+ resetPassword: async (_, { token, newPassword }) => {
+  try {
+    const decoded = jwt.verify(token, secret);
+    const user = await Profile.findOne({ email: decoded.data.email });
+
+    if (!user) {
+      throw new UserInputError('Invalid token or user does not exist');
+    }
+
+    // Set the new password using the method defined in the Profile model
+    user.password = newPassword;
+    await user.save();
+
+    return { message: "Password has been successfully reset." };
+  } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      throw new AuthenticationError("Password reset token has expired.");
+    } else if (error instanceof jwt.JsonWebTokenError) {
+      throw new AuthenticationError("Password reset token is invalid.");
+    } else {
+      throw new AuthenticationError("An error occurred during password reset.");
+    }
+  }
+}
+
   },
 };
 
 module.exports = resolvers;
+
+// resetPassword: async (_, { newPassword },context) => {
+ 
+//   try {
+//     const profile = await Profile.findById(context.user._id);
+//         if (!profile) {
+//           throw new Error("Profile not found!");
+//         }
+
+// console.log(profile)
+//     // Update the password with the new password
+//     const hashedPassword = await bcrypt.hash(newPassword, 10);
+//     profile.password = hashedPassword;
+//     await  profile.save();
+
+//     return { message: "Password has been successfully reset." };
+//   } catch (error) {
+//     console.error("Error resetting password:", error);
+//     return { message: "Failed to reset password." };
+//   }
+// }

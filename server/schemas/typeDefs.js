@@ -55,7 +55,9 @@ scalar Upload
     type: String!
     link: String!
   }
-
+  type ResponseMessage {
+    message: String!
+  }
  
   type Auth {
     token: ID!
@@ -93,6 +95,8 @@ scalar Upload
     addComment(postId: ID!, commentText: String!): Post
     updateComment(postId: ID!, commentId: ID!, commentText: String!): Post
     removeComment(postId: ID!, commentId: ID!): Post
+    sendResetPasswordEmail(email: String!): ResponseMessage!
+    resetPassword(token: String!, newPassword: String!): ResponseMessage!
   }
 `;
 

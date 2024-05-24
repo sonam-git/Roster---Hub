@@ -21,7 +21,7 @@ const UserProfile = ({ profile }) => {
         <div className="flex justify-between items-center mb-4">
           <button 
             onClick={toggleView} 
-            className={`px-4 py-2 rounded-full font-semibold text-sm ${showSkills ? 'bg-indigo-600 text-white' : 'bg-gray-800 text-white'} hover:bg-gray-800  hover:text-indigo-800`}
+            className={`px-4 py-2  rounded-lg font-semibold text-sm ${showSkills ? 'bg-blue-600 text-white' : 'bg-blue-600 text-white'} hover:bg-gray-800  hover:text-indigo-800`}
           >
             {showSkills ? 'Show Posts' : 'Show Skills'}
           </button>

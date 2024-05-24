@@ -171,7 +171,7 @@ const Header = () => {
           ))}
         </ul>
       </div>
-      <div className="flex-1 p-7">
+      <div className="flex-1 p-7 ">
         <Outlet />
       </div>
     </div>
