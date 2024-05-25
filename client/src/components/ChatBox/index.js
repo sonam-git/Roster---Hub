@@ -67,13 +67,13 @@ const ChatBox = ({ recipient, onCloseModal, isDarkMode }) => {
       <>
         {!messageSent && (
           <Modal showModal={!messageSent} onClose={handleCloseModal}>
-            <div className={`rounded-lg shadow-md p-6 `}>
+            <div className={`rounded-lg shadow-md p-6 dark:bg-gray-300 `}>
               <h3 className="text-xl font-bold mb-4 card-header bg-dark text-light p-2 m-0 rounded-md">
                 Chat with{" "}
                 {recipient.name[0].toUpperCase() + recipient.name.slice(1)}
               </h3>
               {/* Container with fixed height and vertical scrolling */}
-              <div className={`conversation-container max-h-80 overflow-y-auto ${isDarkMode ? 'bg-gray-500 text-white' : 'bg-white text-black'}`}>
+              <div className={`conversation-container p-2 max-h-80 overflow-y-auto ${isDarkMode ? 'bg-gray-500 text-white' : 'bg-white text-black'}`}>
                 {/* Reverse the order of messages to display the latest at the bottom */}
                 {messages.map((msg, index) => (
                   <div key={index} className="mb-2">

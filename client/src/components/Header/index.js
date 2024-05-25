@@ -21,7 +21,7 @@ const Header = () => {
 
   const handleLogout = () => {
     Auth.logout();
-    navigate("/");
+    navigate("/login");
   };
 
   const Menus = Auth.loggedIn()
@@ -120,8 +120,8 @@ const Header = () => {
               key={index}
               className={`flex rounded-md p-2 cursor-pointer items-center gap-x-4 mt-2 ${
                 location.pathname === Menu.path
-                  ? "bg-gray-300 dark:bg-gray-100"
-                  : "text-gray-400 dark:text-gray-300"
+                  ? "bg-gray-800 dark:bg-gray-100"
+                  : "text-gray-400 dark:text-gray-100"
               }`}
               onClick={Menu.action ? Menu.action : null}
             >
@@ -135,12 +135,12 @@ const Header = () => {
                     <img
                       src={Menu.src}
                       alt={Menu.title}
-                      className="w-10 sm:w-8 md:w-6 lg:w-10 mr-2 p-1 hover:bg-red-400 rounded-full"
+                      className="w-10 sm:w-8 md:w-6 lg:w-10 mr-2 p-1 dark:hover:bg-white hover:bg-gray-800 rounded-full"
                     />
                     <span
                       className={`${
                         !open && "hidden"
-                      } origin-left duration-200 text-base sm:text-sm md:text-xs lg:text-lg hover:text-red-500`}
+                      } origin-left duration-200 text-base sm:text-sm md:text-xs lg:text-lg hover:text-red-600 dark:hover:text-red-400`}
                     >
                       {Menu.title}
                     </span>
@@ -155,12 +155,12 @@ const Header = () => {
                     <img
                       src={Menu.src}
                       alt={Menu.title}
-                      className="w-10 mr-2 p-1 hover:bg-red-400 rounded-full"
+                      className="w-10 mr-2 p-1 hover:bg-gray-800 dark:hover:bg-white rounded-full"
                     />
                     <span
                       className={`${
                         !open && "hidden"
-                      } origin-left duration-200 text-lg md:text-sm lg:text-xl hover:text-red-500`}
+                      } origin-left duration-200 text-lg md:text-sm lg:text-lg text-blue-500 font-bold hover:text-red-500`}
                     >
                       {Menu.title}
                     </span>
