@@ -23,15 +23,17 @@ const ForgotPassword = () => {
   return (
     <main className="flex justify-center mb-4">
       <div className="w-full max-w-md mt-5">
-        <div className="shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div className="shadow-md rounded px-8 pt-6 pb-8 mb-4 dark:bg-gray-800">
           <h4 className="text-center text-2xl font-bold text-gray-900 dark:text-white mb-6">
             Forgot Password
           </h4>
           {data ? (
-            <p className="text-center text-gray-900 dark:text-white">
-               {data.sendResetPasswordEmail.message}
-              {/* If an account with that email exists, a reset link has been sent. */}
-            </p>
+           <div className="p-4 bg-gray-100 dark:bg-gray-600 shadow-lg rounded-md">
+           <p className="text-center p-5 dark:bg-gray-600 dark:text-white">
+             {data.sendResetPasswordEmail.message}
+           </p>
+         </div>
+         
           ) : (
             <form onSubmit={handleFormSubmit} className="space-y-6">
               <div>
@@ -51,7 +53,7 @@ const ForgotPassword = () => {
                 />
               </div>
               <button
-                className="bg-blue-500 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-200 hover:bg-blue-600"
+                className="bg-blue-500 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-200 hover:bg-blue-800"
                 style={{ cursor: "pointer" }}
                 type="submit"
               >

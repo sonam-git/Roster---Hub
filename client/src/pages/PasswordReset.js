@@ -40,7 +40,7 @@ const PasswordReset = () => {
   return (
     <main className="flex justify-center mb-4">
       <div className="w-full max-w-md mt-5">
-        <div className="shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div className="shadow-md rounded px-8 pt-6 pb-8 mb-4  dark:bg-gray-800">
           <h4 className="text-center text-2xl font-bold text-gray-900 dark:text-white mb-6">
             Reset Password
           </h4>
@@ -70,8 +70,10 @@ const PasswordReset = () => {
             </button>
           </form>
           {showSuccessMessage && (
-            <div className="text-center text-green-600 mt-2">
-              Password has been successfully reset.
+            <div className="  mt-2 p-4 bg-white dark:bg-gray-600 shadow-lg rounded-md">
+              <p className="text-center p-4 text-green-600 dark:text-white dark:bg-gray-600">
+                Password has been successfully reset.
+              </p>
             </div>
           )}
         </div>

@@ -45,13 +45,13 @@ const Header = () => {
   return (
     <div
       className={`flex min-h-screen ${
-        isDarkMode ? "bg-gray-800 text-white" : "bg-white text-black"
+        isDarkMode ? " text-white" : "bg-white text-black"
       }`}
     >
       <div
         className={`${
-          open ? "w-72" : "w-28"
-        } h-full p-5 pt-8 transition-all duration-300 z-50 lg:static fixed`}
+          open ? "w-55" : "w-28"
+        } h-full p-5 pt-2 transition-all duration-300 z-50 lg:static fixed`}
         style={{
           top: "0",
           left: "0",
@@ -135,12 +135,12 @@ const Header = () => {
                     <img
                       src={Menu.src}
                       alt={Menu.title}
-                      className="w-10 mr-2 p-1 hover:bg-red-400 rounded-full"
+                      className="w-10 sm:w-8 md:w-6 lg:w-10 mr-2 p-1 hover:bg-red-400 rounded-full"
                     />
                     <span
                       className={`${
                         !open && "hidden"
-                      } origin-left duration-200 text-lg md:text-sm lg:text-xl hover:text-red-500`}
+                      } origin-left duration-200 text-base sm:text-sm md:text-xs lg:text-lg hover:text-red-500`}
                     >
                       {Menu.title}
                     </span>
@@ -148,7 +148,7 @@ const Header = () => {
                 </Link>
               ) : (
                 <div
-                  className="flex items-center w-full no-underline"
+                  className="flex items-center w-full no-underline "
                   style={{ textDecoration: "none" }}
                 >
                   <div className="flex items-center">
@@ -171,7 +171,7 @@ const Header = () => {
           ))}
         </ul>
       </div>
-      <div className="flex-1 p-7 ">
+      <div className="flex-1 ">
         <Outlet />
       </div>
     </div>

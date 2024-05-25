@@ -37,7 +37,7 @@ const Signup = () => {
   return (
     <main className={`flex justify-center mb-4`}>
       <div className={`w-full max-w-md mt-5 `}>
-        <div className={`shadow-md rounded px-8 pt-6 pb-8 mb-4`}>
+        <div className={`shadow-md rounded px-8 pt-6 pb-8 mb-4 dark:bg-gray-800`}>
           <h4 className="text-center text-2xl font-bold text-gray-900 mb-6 dark:text-white">Sign Up</h4>
           {data ? (
             <p className="text-center text-gray-900">
@@ -80,13 +80,13 @@ const Signup = () => {
               />
               <div className="flex justify-between">
                 <button
-                  className="bg-blue-500 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-200 hover:bg-blue-600"
+                  className="bg-blue-500 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-200 hover:bg-blue-800  "
                   style={{ cursor: 'pointer' }}
                   type="submit"
                 >
                   Submit
                 </button>
-                <Link to="/login" className="text-gray-600 hover:text-blue-500 ml-2 mt-3 font-bold dark:text-white">Already Have An Account ?</Link>
+                <Link to="/login" className="text-gray-600 hover:text-blue-500 ml-2 mt-3 hover:no-underline dark:text-white dark:hover:text-blue-400">Already Have An Account ?</Link>
               </div>
             </form>
           )}
