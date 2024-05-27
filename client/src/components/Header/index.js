@@ -60,7 +60,7 @@ const Header = () => {
       >
         <img
           src={controlImage}
-          className={`absolute cursor-pointer right-3 top-5 w-8 border-dark-blue border-2 rounded-full bg-white transform ${
+          className={`absolute cursor-pointer right-3 mt-3 w-8 border-dark-blue border-2 rounded-full bg-white transform ${
             open ? "" : "rotate-180"
           }`}
           onClick={toggleMenu}
@@ -80,8 +80,8 @@ const Header = () => {
                 }`}
                 alt="logo"
               />
-              <h1
-                className={`dark:text-white origin-left mt-5 font-medium text-2xl duration-200 ml-2 ${
+            <h1
+                className={`dark:text-white origin-left mt-5 font-medium text-sm lg:text-2xl duration-200 ${
                   !open && "scale-0"
                 }`}
               >

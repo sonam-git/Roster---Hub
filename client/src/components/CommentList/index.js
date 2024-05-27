@@ -1,21 +1,42 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { PencilAltIcon, TrashIcon} from "@heroicons/react/solid";
+import { PencilAltIcon, TrashIcon } from "@heroicons/react/solid";
 import { REMOVE_COMMENT, UPDATE_COMMENT } from "../../utils/mutations";
 import { GET_POSTS } from "../../utils/queries";
 import Auth from "../../utils/auth";
 
 const CommentList = ({ post, comments }) => {
-
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [commentText, setCommentText] = useState("");
   const [deleteSuccessMessage, setDeleteSuccessMessage] = useState("");
   const [updateSuccessMessage, setUpdateSuccessMessage] = useState("");
 
-  const [removeComment] = useMutation(REMOVE_COMMENT,{refetchQueries: [{ query: GET_POSTS }]} );
+  const [removeComment] = useMutation(REMOVE_COMMENT, {
+    update(cache, { data: { removeComment } }) {
+      try {
+        const { posts } = cache.readQuery({ query: GET_POSTS });
+        cache.writeQuery({
+          qyery: GET_POSTS,
+          data: { posts: [...posts, removeComment] },
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  });
 
   const [updateComment] = useMutation(UPDATE_COMMENT, {
-    refetchQueries: [{ query: GET_POSTS }],
+    update(cache, { data: { updateComment } }) {
+      try {
+        const { posts } = cache.readQuery({ query: GET_POSTS });
+        cache.writeQuery({
+          qyery: GET_POSTS,
+          data: { posts: [...posts, updateComment] },
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
   });
 
   const postId = post._id;
@@ -91,8 +112,8 @@ const CommentList = ({ post, comments }) => {
                 <p className="text-gray-600 dark:text-gray-300 mt-1">
                   {comment.commentText}
                 </p>
-                {Auth.loggedIn() && Auth.getProfile().data._id === comment.userId && 
-                  (
+                {Auth.loggedIn() &&
+                  Auth.getProfile().data._id === comment.userId && (
                     <div className="flex space-x-2">
                       <PencilAltIcon
                         className="h-5 w-5 text-blue-500 cursor-pointer"

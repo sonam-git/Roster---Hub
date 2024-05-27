@@ -44,6 +44,7 @@ const Post = ({ post }) => {
   const handleUpdate = async () => {
     try {
       const { data } = await updatePost({ variables: { postId: post._id, postText } });
+      console.log(data)
       setIsEditing(false);
       setIsEdited(true);
       setPostText(data.updatePost.postText);

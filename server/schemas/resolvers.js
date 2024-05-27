@@ -8,9 +8,9 @@ const { signToken } = require("../utils/auth");
 const cloudinary = require("cloudinary").v2;
 const secret = process.env.JWT_SECRET;
 cloudinary.config({
-  cloud_name: "dey5y9jip",
-  api_key: "279571669115484",
-  api_secret: "ms63UupjyfnTLl07NGMlh3H-LpU",
+  cloud_name:process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret:process.env.API_SECRET,
 });
 
 const resolvers = {
@@ -432,33 +432,42 @@ const resolvers = {
 
     // ************************** UPDATE POST  *******************************************//
     updatePost: async (_, { postId, postText }, context) => {
-      // Check if the user is authenticated
       if (!context.user) {
         throw new AuthenticationError("You need to be logged in!");
       }
-
+    
       try {
+        // Log input details
+        console.log(`Attempting to update post with ID: ${postId} by user: ${context.user._id}`);
+    
         // Find the post by postId
         const post = await Post.findById(postId);
-
+    
         if (!post) {
+          // console.error(`Post with ID: ${postId} not found.`);
           throw new Error("Post not found.");
         }
-
+    
         // Check if the current user is the author of the post
-        if (post.userId !== context.user._id) {
+        if (post.userId.toString() !== context.user._id) { // Ensure types match
+          // console.error(`User: ${context.user._id} is not the author of post: ${postId}.`);
           throw new AuthenticationError("You are not the author of this post.");
         }
-
+    
         // Update the postText
         post.postText = postText;
+    
+        // Save the updated post
         await post.save();
-
+    
+        // console.log(`Post with ID: ${postId} successfully updated.`);
         return post;
       } catch (error) {
+        // console.error('Error in updatePost resolver:', error);
         throw new Error("Failed to update the post.");
       }
     },
+    
 
     // ************************** DELETE POST *******************************************//
     removePost: async (parent, { postId }, context) => {
@@ -629,24 +638,3 @@ const resolvers = {
 };
 
 module.exports = resolvers;
-
-// resetPassword: async (_, { newPassword },context) => {
- 
-//   try {
-//     const profile = await Profile.findById(context.user._id);
-//         if (!profile) {
-//           throw new Error("Profile not found!");
-//         }
-
-// console.log(profile)
-//     // Update the password with the new password
-//     const hashedPassword = await bcrypt.hash(newPassword, 10);
-//     profile.password = hashedPassword;
-//     await  profile.save();
-
-//     return { message: "Password has been successfully reset." };
-//   } catch (error) {
-//     console.error("Error resetting password:", error);
-//     return { message: "Failed to reset password." };
-//   }
-// }

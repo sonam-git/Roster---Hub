@@ -199,19 +199,10 @@ export const UPDATE_POST = gql`
     updatePost(postId: $postId, postText: $postText) {
       _id
       postText
-      postAuthor
-      createdAt
-      userId
-      comments{
-        _id
-      userId
-      commentText
-      commentAuthor
-      createdAt
-      }
     }
   }
 `;
+
 export const ADD_COMMENT = gql`
   mutation addComment($postId: ID!, $commentText: String!) {
     addComment(postId: $postId, commentText: $commentText) {
