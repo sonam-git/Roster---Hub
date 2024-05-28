@@ -1,17 +1,14 @@
 require("dotenv").config();
-const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
-const bcrypt = require('bcrypt');
-const { AuthenticationError,UserInputError  } = require("apollo-server-express");
-const { Profile, Skill, Message, SocialMediaLink,Post } = require("../models");
+const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+const {
+  AuthenticationError,
+  UserInputError,
+} = require("apollo-server-express");
+const { Profile, Skill, Message, SocialMediaLink, Post } = require("../models");
 const { signToken } = require("../utils/auth");
-const cloudinary = require("cloudinary").v2;
+const cloudinary = require("../utils/cloudinary");
 const secret = process.env.JWT_SECRET;
-cloudinary.config({
-  cloud_name:process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY,
-  api_secret:process.env.API_SECRET,
-});
 
 const resolvers = {
   // ############ QUERIES ########## //
@@ -32,7 +29,7 @@ const resolvers = {
           path: "sentMessages",
           populate: [{ path: "sender" }, { path: "recipient" }],
         })
-        .populate('posts');
+        .populate("posts");
     },
     // ************************** QUERY SINGLE PROFILE *******************************************//
     profile: async (parent, { profileId }) => {
@@ -45,7 +42,8 @@ const resolvers = {
         .populate({
           path: "socialMediaLinks",
           populate: { path: "link" },
-        }).populate('posts');
+        })
+        .populate("posts");
     },
     // ************************** QUERY ME (LOGIN USER) *******************************************//
     me: async (parent, args, context) => {
@@ -64,7 +62,7 @@ const resolvers = {
             path: "socialMediaLinks",
             populate: { path: "link" },
           })
-          .populate('posts');
+          .populate("posts");
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -96,10 +94,12 @@ const resolvers = {
         throw new Error("Failed to fetch social media links: " + error.message);
       }
     },
-  // ************************** QUERY POSTS *******************************************//
+    // ************************** QUERY POSTS *******************************************//
     posts: async () => {
       try {
-        const posts = await Post.find().sort({ createdAt: -1 }).populate('comments');
+        const posts = await Post.find()
+          .sort({ createdAt: -1 })
+          .populate("comments");
         return posts;
       } catch (err) {
         throw new Error(err);
@@ -108,7 +108,7 @@ const resolvers = {
     // finds a post by its posttId
     post: async (parent, { postId }) => {
       try {
-        const post = await Post.findById(postId).populate('comments');;
+        const post = await Post.findById(postId).populate("comments");
         if (post) {
           return post;
         } else {
@@ -425,8 +425,8 @@ const resolvers = {
         );
         return post;
       } catch (err) {
-        console.error('Error creating post:', err);
-        throw new Error('Error creating post');
+        console.error("Error creating post:", err);
+        throw new Error("Error creating post");
       }
     },
 
@@ -435,97 +435,98 @@ const resolvers = {
       if (!context.user) {
         throw new AuthenticationError("You need to be logged in!");
       }
-    
+
       try {
-        // Log input details
-        console.log(`Attempting to update post with ID: ${postId} by user: ${context.user._id}`);
-    
         // Find the post by postId
         const post = await Post.findById(postId);
-    
+
         if (!post) {
-          // console.error(`Post with ID: ${postId} not found.`);
           throw new Error("Post not found.");
         }
-    
+
         // Check if the current user is the author of the post
-        if (post.userId.toString() !== context.user._id) { // Ensure types match
-          // console.error(`User: ${context.user._id} is not the author of post: ${postId}.`);
+        if (post.userId.toString() !== context.user._id) {
+          // Ensure types match
           throw new AuthenticationError("You are not the author of this post.");
         }
-    
+
         // Update the postText
         post.postText = postText;
-    
+
         // Save the updated post
         await post.save();
-    
-        // console.log(`Post with ID: ${postId} successfully updated.`);
+
         return post;
       } catch (error) {
-        // console.error('Error in updatePost resolver:', error);
         throw new Error("Failed to update the post.");
       }
     },
-    
 
     // ************************** DELETE POST *******************************************//
     removePost: async (parent, { postId }, context) => {
       if (!context.user) {
-        throw new AuthenticationError('You need to be logged in!');
+        throw new AuthenticationError("You need to be logged in!");
       }
       try {
-        return Post.findOneAndDelete({_id: postId})
+        return Post.findOneAndDelete({ _id: postId });
       } catch (error) {
-        console.error('Error deleting post:', error);
-        throw new Error('Error deleting post.');
+        console.error("Error deleting post:", error);
+        throw new Error("Error deleting post.");
       }
     },
 
     // ************************** ADD COMMENT *******************************************//
     addComment: async (parent, { postId, commentText }, context) => {
-     if (context.user) {
-       try {
-         const newComment = {
-           commentText,
-           commentAuthor: context.user.name,
-           createdAt: new Date().toISOString(),
-           userId: context.user._id,
-         };
+      if (context.user) {
+        try {
+          const newComment = {
+            commentText,
+            commentAuthor: context.user.name,
+            createdAt: new Date().toISOString(),
+            userId: context.user._id,
+          };
 
-         const updatedPost = await Post.findOneAndUpdate(
-           { _id: postId },
-           { $push: { comments: newComment } },
-           { new: true, runValidators: true }
-         );
+          const updatedPost = await Post.findOneAndUpdate(
+            { _id: postId },
+            { $push: { comments: newComment } },
+            { new: true, runValidators: true }
+          );
 
-         return updatedPost;
-       } catch (err) {
-         console.error(err);
-         throw new Error('Error adding comment');
-       }
-     }
-     throw new AuthenticationError('Not logged in');
-   },
+          return updatedPost;
+        } catch (err) {
+          console.error(err);
+          throw new Error("Error adding comment");
+        }
+      }
+      throw new AuthenticationError("Not logged in");
+    },
 
-// ************************** UPDATE COMMENT *******************************************//
-    updateComment: async (parent, { postId, commentId, commentText }, context) => {
+    // ************************** UPDATE COMMENT *******************************************//
+    updateComment: async (
+      parent,
+      { postId, commentId, commentText },
+      context
+    ) => {
       if (context.user) {
         const post = await Post.findOneAndUpdate(
-          { _id: postId, 'comments._id': commentId, 'comments.userId': context.user._id },
+          {
+            _id: postId,
+            "comments._id": commentId,
+            "comments.userId": context.user._id,
+          },
           {
             $set: {
-              'comments.$.commentText': commentText,
+              "comments.$.commentText": commentText,
             },
           },
           { new: true }
         );
         return post;
       }
-      throw new AuthenticationError('You need to be logged in!');
+      throw new AuthenticationError("You need to be logged in!");
     },
 
- // ************************** REMOVE COMMENT *******************************************//
+    // ************************** REMOVE COMMENT *******************************************//
     removeComment: async (parent, { postId, commentId }, context) => {
       if (context.user) {
         return Post.findOneAndUpdate(
@@ -572,68 +573,79 @@ const resolvers = {
       }
     },
 
-        // ************************** FORGOT PASSWORD FUNCTIONALITY *******************************************//
-        sendResetPasswordEmail: async (_, { email }) => {
-          try {
-          const user = await Profile.findOne({ email });
-          if (!user) {
-            return { message: "If an account with that email exists, a reset link has been sent." };
-          }
-    
-          const resetToken = signToken({ email: user.email, name: user.name, _id: user._id });
-    
-          const transporter = nodemailer.createTransport({
-            service: 'Gmail',
-            auth: {
-              user: process.env.EMAIL_USER, 
-              pass: process.env.EMAIL_PASSWORD, 
-            },
-          });
-    
-          const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: 'Password Reset',
-            text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
+    // ************************** FORGOT PASSWORD FUNCTIONALITY *******************************************//
+    sendResetPasswordEmail: async (_, { email }) => {
+      try {
+        const user = await Profile.findOne({ email });
+        if (!user) {
+          return {
+            message:
+              "If an account with that email exists, a reset link has been sent.",
+          };
+        }
+
+        const resetToken = signToken({
+          email: user.email,
+          name: user.name,
+          _id: user._id,
+        });
+
+        const transporter = nodemailer.createTransport({
+          service: "Gmail",
+          auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASSWORD,
+          },
+        });
+
+        const mailOptions = {
+          from: process.env.EMAIL_USER,
+          to: email,
+          subject: "Password Reset",
+          text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
                    Please click on the following link, or paste this into your browser to complete the process:\n\n
                    http://localhost:3000/reset-password/${resetToken}\n\n
-                   If you did not request this, please ignore this email and your password will remain unchanged.\n`
-          };
-    
-          await transporter.sendMail(mailOptions);
-    
-          return { message: "If an account with that email exists, a reset link has been sent." };
-        } catch (error) {
-          console.error(error);
-          return { message: "An error occurred while sending the reset email." };
+                   If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+        };
+
+        await transporter.sendMail(mailOptions);
+
+        return {
+          message:
+            "If an account with that email exists, a reset link has been sent.",
+        };
+      } catch (error) {
+        console.error(error);
+        return { message: "An error occurred while sending the reset email." };
+      }
+    },
+    // ************************** RESET PASSWORD FUNCTIONALITY *******************************************//
+    resetPassword: async (_, { token, newPassword }) => {
+      try {
+        const decoded = jwt.verify(token, secret);
+        const user = await Profile.findOne({ email: decoded.data.email });
+
+        if (!user) {
+          throw new UserInputError("Invalid token or user does not exist");
         }
-        },
- // ************************** RESET PASSWORD FUNCTIONALITY *******************************************//
- resetPassword: async (_, { token, newPassword }) => {
-  try {
-    const decoded = jwt.verify(token, secret);
-    const user = await Profile.findOne({ email: decoded.data.email });
 
-    if (!user) {
-      throw new UserInputError('Invalid token or user does not exist');
-    }
+        // Set the new password using the method defined in the Profile model
+        user.password = newPassword;
+        await user.save();
 
-    // Set the new password using the method defined in the Profile model
-    user.password = newPassword;
-    await user.save();
-
-    return { message: "Password has been successfully reset." };
-  } catch (error) {
-    if (error instanceof jwt.TokenExpiredError) {
-      throw new AuthenticationError("Password reset token has expired.");
-    } else if (error instanceof jwt.JsonWebTokenError) {
-      throw new AuthenticationError("Password reset token is invalid.");
-    } else {
-      throw new AuthenticationError("An error occurred during password reset.");
-    }
-  }
-}
-
+        return { message: "Password has been successfully reset." };
+      } catch (error) {
+        if (error instanceof jwt.TokenExpiredError) {
+          throw new AuthenticationError("Password reset token has expired.");
+        } else if (error instanceof jwt.JsonWebTokenError) {
+          throw new AuthenticationError("Password reset token is invalid.");
+        } else {
+          throw new AuthenticationError(
+            "An error occurred during password reset."
+          );
+        }
+      }
+    },
   },
 };
 
