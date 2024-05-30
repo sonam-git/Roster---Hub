@@ -68,7 +68,7 @@ const Skill = ({isDarkMode}) => {
               />
             </>
           ) : (
-            <h2 className="text-center mt-4 mb-2 font-bold text-lg">
+            <h2 className="text-center mt-4 mb-2 font-bold text-lg pt-5">
               No endorsed Skill yet
             </h2>
           )}

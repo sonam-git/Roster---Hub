@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
 import Auth from "../../utils/auth";
 import { ThemeContext } from "../ThemeContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import controlImage from "../../assets/images/iconizer-arrow-left.png";
 import logoImage from "../../assets/images/rh-logo.png";
 import chartFillImage from "../../assets/images/iconizer-home.png";
@@ -14,7 +16,7 @@ import loginImage from "../../assets/images/iconizer-login.png";
 import signupImage from "../../assets/images/iconizer-signup.png";
 
 const Header = () => {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { isDarkMode, toggleDarkMode } = useContext(ThemeContext);
@@ -43,37 +45,25 @@ const Header = () => {
   };
 
   return (
-    <div
-      className={`flex min-h-screen  ${
-        isDarkMode ? " text-white" : "bg-white text-black"
-      }`}
-    >
+    <div className={`flex min-h-screen ${isDarkMode ? "text-white" : "bg-white text-black"}`}>
       <div
-        className={`${
-          open ? "w-55" : "w-28"
-        } h-full p-5 pt-2 transition-all duration-300 z-50 lg:static fixed`}
-        style={{
-          top: "0",
-          left: "0",
-          backgroundColor: isDarkMode ? "#1f2937" : "#f3f6f4",
-        }}
+        className={`fixed lg:static top-0 left-0 h-full p-5 pt-2 transition-all duration-300 z-50 ${
+          open ? "w-55" : "hidden lg:block lg:w-28"
+        } ${isDarkMode ? "bg-gray-800" : "bg-gray-100"} lg:bg-transparent`}
       >
         <img
           src={controlImage}
-          className={`absolute cursor-pointer right-3 mt-2 w-6 md:w-8 lg:w-10 border-dark-blue border-2 rounded-full bg-white transform ${
+          className={`absolute cursor-pointer right-3 mt-2 w-6 md:w-8 lg:w-10 border-dark-blue border-2 rounded-full bg-white transform transition-transform duration-300 ${
             open ? "" : "rotate-180"
-          }`}
+          }hidden lg:block`}
           onClick={toggleMenu}
           alt="toggle menu"
         />
 
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Link
-              to={"/"}
-              className="flex items-center w-full no-underline"
-              style={{ textDecoration: "none" }}
-            >
+            <Link to={"/"} className="flex items-center w-full no-underline"
+            style={{ textDecoration: "none" }}>
               <img
                 src={logoImage}
                 className={`dark:text-white cursor-pointer duration-500 w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 pt-5 ${
@@ -99,20 +89,13 @@ const Header = () => {
             }`}
             onClick={toggleDarkMode}
           >
-            <button
-              className="flex items-center w-full no-underline"
-              style={{ textDecoration: "none" }}
-            >
+            <button className="flex items-center w-full no-underline">
               <div className="flex items-center">
                 <span className="text-white p-1.5 md:p-2 lg:p-2.5 rounded-full bg-gray-700 dark:bg-gray-500">
-                  {isDarkMode ? "☀️" : "🌙 "}
+                  {isDarkMode ? "☀️" : "🌙"}
                 </span>
-                <span
-                  className={`${
-                    !open && "hidden"
-                  } origin-left duration-200 text-sm md:text-base lg:text-lg font-serif ml-2 md:ml-4 lg:ml-6 hover:text-blue-400`}
-                >
-                  {isDarkMode ? "Light Mode" : "Dark Mode "}
+                <span className={`${!open && "hidden"} origin-left duration-200 text-sm md:text-base lg:text-lg font-serif ml-2 md:ml-4 lg:ml-6 hover:text-blue-400`}>
+                  {isDarkMode ? "Light Mode" : "Dark Mode"}
                 </span>
               </div>
             </button>
@@ -129,42 +112,28 @@ const Header = () => {
               onClick={Menu.action ? Menu.action : null}
             >
               {Menu.path ? (
-                <Link
-                  to={Menu.path}
-                  className="flex items-center w-full no-underline"
-                  style={{ textDecoration: "none" }}
-                >
+                <Link to={Menu.path} className="flex items-center w-full no-underline"
+                style={{ textDecoration: "none" }}>
                   <div className="flex items-center">
                     <img
                       src={Menu.src}
                       alt={Menu.title}
-                      className="w-8 md:w-8 lg:w-10 mr-2 p-1 dark:hover:bg-white hover:bg-gray-800 rounded-full"
+                      className="w-8 md:w-8 lg:w-10 mr-2 p-1 dark:hover:bg-white hover:bg-gray-800 rounded-full transition-all duration-300"
                     />
-                    <span
-                      className={`${
-                        !open && "hidden"
-                      } origin-left duration-200 text-sm md:text-base lg:text-lg hover:text-red-600 dark:hover:text-red-400`}
-                    >
+                    <span className={`${!open && "hidden"} origin-left duration-200 text-sm md:text-base lg:text-lg hover:text-red-600 dark:hover:text-red-400 ` }>
                       {Menu.title}
                     </span>
                   </div>
                 </Link>
               ) : (
-                <div
-                  className="flex items-center w-full no-underline"
-                  style={{ textDecoration: "none" }}
-                >
+                <div className="flex items-center w-full no-underline">
                   <div className="flex items-center">
                     <img
                       src={Menu.src}
                       alt={Menu.title}
-                      className="w-6 md:w-8 lg:w-10 mr-2 p-1 hover:bg-gray-800 dark:hover:bg-white rounded-full"
+                      className="w-6 md:w-8 lg:w-10 mr-2 p-1 hover:bg-gray-800 dark:hover:bg-white rounded-full transition-all duration-300"
                     />
-                    <span
-                      className={`${
-                        !open && "hidden"
-                      } origin-left duration-200 text-sm md:text-base lg:text-lg text-blue-600 font-bold hover:text-red-500`}
-                    >
+                    <span className={`${!open && "hidden"} origin-left duration-200 text-sm md:text-base lg:text-lg text-blue-600 font-bold hover:text-red-500`}>
                       {Menu.title}
                     </span>
                   </div>
@@ -174,7 +143,13 @@ const Header = () => {
           ))}
         </ul>
       </div>
-      <div className="flex-1 ">
+      <div className="flex-1">
+        <button
+          className="fixed justify-center top-8 left-2 lg:hidden p-2 rounded-md bg-blue-900 text-white z-50"
+          onClick={toggleMenu}
+        >
+          <FontAwesomeIcon icon={open ? faTimes : faBars} />
+        </button>
         <Outlet />
       </div>
     </div>
