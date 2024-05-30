@@ -48,7 +48,7 @@ const ProfileList = ({ profiles, title }) => {
         {currentProfiles.map((profile) => (
           <div
             key={profile._id}
-            className={`rounded-lg shadow-xl p-6 ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
+            className={`rounded-lg shadow-xl p-6 ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-blue-100 text-black'}`}
           >
             <div className="grid grid-cols-2 items-center">
               {/* Column 1: Name and Jersey Number */}

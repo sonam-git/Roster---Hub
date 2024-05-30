@@ -3,7 +3,7 @@ import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
 import Auth from "../../utils/auth";
 import { ThemeContext } from "../ThemeContext";
 import controlImage from "../../assets/images/iconizer-arrow-left.png";
-import logoImage from "../../assets/images/logo.png";
+import logoImage from "../../assets/images/rh-logo.png";
 import chartFillImage from "../../assets/images/iconizer-home.png";
 import chatImage from "../../assets/images/iconizer-message.png";
 import skillImage from "../../assets/images/iconizer-skill.png";
@@ -44,7 +44,7 @@ const Header = () => {
 
   return (
     <div
-      className={`flex min-h-screen ${
+      className={`flex min-h-screen  ${
         isDarkMode ? " text-white" : "bg-white text-black"
       }`}
     >
@@ -60,12 +60,13 @@ const Header = () => {
       >
         <img
           src={controlImage}
-          className={`absolute cursor-pointer right-3 mt-3 w-8 border-dark-blue border-2 rounded-full bg-white transform ${
+          className={`absolute cursor-pointer right-3 mt-2 w-6 md:w-8 lg:w-10 border-dark-blue border-2 rounded-full bg-white transform ${
             open ? "" : "rotate-180"
           }`}
           onClick={toggleMenu}
           alt="toggle menu"
         />
+
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <Link
@@ -75,12 +76,12 @@ const Header = () => {
             >
               <img
                 src={logoImage}
-                className={`cursor-pointer duration-500 mr-2 ${
+                className={`dark:text-white cursor-pointer duration-500 w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 pt-5 ${
                   open && "rotate-[360deg]"
                 }`}
                 alt="logo"
               />
-            <h1
+              <h1
                 className={`dark:text-white origin-left mt-5 font-medium text-sm lg:text-2xl duration-200 ${
                   !open && "scale-0"
                 }`}
@@ -90,6 +91,7 @@ const Header = () => {
             </Link>
           </div>
         </div>
+
         <ul className="pt-6">
           <li
             className={`flex rounded-md p-2 cursor-pointer items-center gap-x-4 mt-2 ${
@@ -102,19 +104,20 @@ const Header = () => {
               style={{ textDecoration: "none" }}
             >
               <div className="flex items-center">
-                <span className="text-white p-2  rounded-full bg-gray-700 dark:bg-gray-500">
+                <span className="text-white p-1.5 md:p-2 lg:p-2.5 rounded-full bg-gray-700 dark:bg-gray-500">
                   {isDarkMode ? "☀️" : "🌙 "}
                 </span>
                 <span
                   className={`${
                     !open && "hidden"
-                  } origin-left duration-200 text-lg md:text-sm lg:text-xl font-serif  ml-4 hover:text-blue-400`}
+                  } origin-left duration-200 text-sm md:text-base lg:text-lg font-serif ml-2 md:ml-4 lg:ml-6 hover:text-blue-400`}
                 >
                   {isDarkMode ? "Light Mode" : "Dark Mode "}
                 </span>
               </div>
             </button>
           </li>
+
           {Menus.map((Menu, index) => (
             <li
               key={index}
@@ -135,12 +138,12 @@ const Header = () => {
                     <img
                       src={Menu.src}
                       alt={Menu.title}
-                      className="w-10 sm:w-8 md:w-6 lg:w-10 mr-2 p-1 dark:hover:bg-white hover:bg-gray-800 rounded-full"
+                      className="w-8 md:w-8 lg:w-10 mr-2 p-1 dark:hover:bg-white hover:bg-gray-800 rounded-full"
                     />
                     <span
                       className={`${
                         !open && "hidden"
-                      } origin-left duration-200 text-base sm:text-sm md:text-xs lg:text-lg hover:text-red-600 dark:hover:text-red-400`}
+                      } origin-left duration-200 text-sm md:text-base lg:text-lg hover:text-red-600 dark:hover:text-red-400`}
                     >
                       {Menu.title}
                     </span>
@@ -148,19 +151,19 @@ const Header = () => {
                 </Link>
               ) : (
                 <div
-                  className="flex items-center w-full no-underline "
+                  className="flex items-center w-full no-underline"
                   style={{ textDecoration: "none" }}
                 >
                   <div className="flex items-center">
                     <img
                       src={Menu.src}
                       alt={Menu.title}
-                      className="w-10 mr-2 p-1 hover:bg-gray-800 dark:hover:bg-white rounded-full"
+                      className="w-6 md:w-8 lg:w-10 mr-2 p-1 hover:bg-gray-800 dark:hover:bg-white rounded-full"
                     />
                     <span
                       className={`${
                         !open && "hidden"
-                      } origin-left duration-200 text-lg md:text-sm lg:text-lg text-blue-500 font-bold hover:text-red-500`}
+                      } origin-left duration-200 text-sm md:text-base lg:text-lg text-blue-600 font-bold hover:text-red-500`}
                     >
                       {Menu.title}
                     </span>

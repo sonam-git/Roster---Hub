@@ -44,13 +44,13 @@ const MyProfile = () => {
     <>
       <div
         className={`md:flex md:space-x-2 mb-6 md:mb-0 rounded-lg ${
-          isDarkMode ? "bg-gray-500 text-white" : "bg-white text-black"
+          isDarkMode ? "bg-gray-500 text-white" : "bg-blue-100 text-black"
         }`}
       >
-        <div className={`md:w-2/5 md:mb-0 p-2`}>
+        <div className={`md:w-2/5 md:mb-0 p-2 `}>
           <div
             className={`wd-full rounded-lg overflow-hidden shadow-md ${
-              isDarkMode ? "bg-gray-700" : "bg-white"
+              isDarkMode ? "bg-gray-700" : "bg-blue-50"
             }`}
           >
             <div
@@ -66,13 +66,13 @@ const MyProfile = () => {
                 />
               </div>
             </div>
-            <div className="py-10 px-6 grid grid-cols-1 gap-6">
+            <div className="py-10 px-6 grid grid-cols-1 gap-6 ">
               <ProfilePicUploader
                 profileId={me._id}
                 profilePicUrl={me.profilePic}
                 isDarkMode={isDarkMode}
               />
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center ">
                 <h3
                   className={`text-sm md:text-md lg:text-lg xl:text-xl font-semibold ${
                     isDarkMode ? "text-white" : "text-black-700"
@@ -191,8 +191,8 @@ const MyProfile = () => {
       {selectedSocialMedia && (
         <div className="fixed z-10 inset-0 overflow-y-auto flex justify-center items-center">
           <div className="bg-gray-900 bg-opacity-50 absolute inset-0"></div>
-          <div className="relative bg-white rounded-lg shadow-md p-6">
-            <label className="block text-lg font-semibold mb-2">
+          <div className="relative bg-white  rounded-lg shadow-md p-6">
+            <label className="block text-lg font-semibold mb-2 dark:text-gray-800">
               Insert{" "}
               {selectedSocialMedia.charAt(0).toUpperCase() +
                 selectedSocialMedia.slice(1)}{" "}

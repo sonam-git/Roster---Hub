@@ -26,7 +26,7 @@ const Message = ({ isLoggedInUser ,isDarkMode }) => {
   return (
     <>
       {/* Message List */}
-      <div className="container mt-5">
+      <div className="container mt-5  m,m">
         <MessageList
           messages={profile?.receivedMessages || []}
           isLoggedInUser={!profileId && true}

@@ -50,12 +50,12 @@ const Skill = ({isDarkMode}) => {
   }
 
   return (
-    <div className="container ">
+    <div className="container bg-blue-100 dark:bg-gray-800  ">
       {Auth.loggedIn() && Auth.getProfile().data._id === profile._id && (
         <>
           {profile.skills?.length > 0 ? (
             <>
-              <h2 className="text-center mt-4 mb-2 font-bold text-lg">
+              <h2 className="text-center mt-4 mb-2 font-bold text-lg pt-2">
                 {profileId ? `${profile.name}'s` : "You & Your"} friends have endorsed
                 these {profile.skills ? profile.skills.length : 0} skill
                 {profile.skills && profile.skills.length === 1 ? "" : "s"}

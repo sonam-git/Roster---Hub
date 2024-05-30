@@ -13,11 +13,11 @@ const UserProfile = ({ profile }) => {
   };
 
   return (
-    <div className={`md:flex md:space-x-2 mb-6 md:mb-0 rounded-lg ${isDarkMode ? 'bg-gray-500 text-white' : 'bg-white text-black'}`}>
+    <div className={`md:flex md:space-x-2 mb-6 md:mb-0 p-5 rounded-lg ${isDarkMode ? 'bg-gray-500 text-white' : 'bg-gray-100 text-black'}`}>
       <div className={`md:w-2/5 md:mb-0 p-2`}>
         <ProfileCard profile={profile} isDarkMode={isDarkMode} />
       </div>
-      <div className={`md:w-4/5 md:m-2 mr-2 p-2 rounded-lg shadow-md max-w-2xl relative ${isDarkMode ? 'bg-gray-700' : 'bg-white'}`}>
+      <div className={`md:w-4/5 md:m-2 mr-2 p-2 rounded-lg shadow-md max-w-2xl relative ${isDarkMode ? 'bg-gray-700' : 'bg-blue-100'}`}>
         <div className="flex justify-between items-center mb-4">
           <button 
             onClick={toggleView} 

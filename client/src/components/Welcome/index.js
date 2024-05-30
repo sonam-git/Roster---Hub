@@ -6,7 +6,7 @@ const Welcome = ({ username }) => {
   const { isDarkMode } = useContext(ThemeContext);
 
   return (
-    <div className={`flex flex-col items-center justify-center rounded-lg shadow-xl ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gradient-to-br from-indigo-800 to-white text-black'} p-8`}>
+    <div className={`flex flex-col items-center justify-center rounded-lg shadow-xl ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gradient-to-br from-blue-800 to-white text-black'} p-8`}>
       <h1 className="text-center font-bold mb-8 text-sm md:text-xl lg:text-2xl xl:text-2xl">
         Welcome <span className="text-yellow-200 text-sm md:text-md lg:text-lg xl:text-2xl">{username}</span> 
       </h1>
