@@ -146,7 +146,7 @@ const Header = () => {
       </div>
       <div className="flex-1">
         <button
-          className={`fixed justify-center top-8 left-2 lg:hidden p-2 rounded-md ${isDarkMode ? "bg-gray-800 text-white" : "bg-gray-200 text-black"} z-50`}
+          className={`fixed justify-center top-7 left-2 lg:hidden p-2 rounded-md ${isDarkMode ? "bg-gray-800 text-white" : "bg-gray-200 text-black"} z-50`}
           onClick={toggleMenu}
         >
           <FontAwesomeIcon icon={open ? faTimes : faBars} />
