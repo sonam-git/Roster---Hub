@@ -45,20 +45,21 @@ const Header = () => {
   };
 
   return (
-    <div className={`flex min-h-screen ${isDarkMode ? "text-white" : "bg-white text-black"}`}>
+    <div className={`flex min-h-screen ${isDarkMode ? "bg-gray-800 text-white" : "bg-gray-200 text-black"}`}>
       <div
         className={`fixed lg:static top-0 left-0 h-full p-5 pt-2 transition-all duration-300 z-50 ${
           open ? "w-55" : "hidden lg:block lg:w-28"
         } ${isDarkMode ? "bg-gray-800" : "bg-gray-100"} lg:bg-transparent`}
       >
-        <img
-          src={controlImage}
-          className={`absolute cursor-pointer right-3 mt-2 w-6 md:w-8 lg:w-10 border-dark-blue border-2 rounded-full bg-white transform transition-transform duration-300 ${
-            open ? "" : "rotate-180"
-          }hidden lg:block`}
-          onClick={toggleMenu}
-          alt="toggle menu"
-        />
+     <img
+  src={controlImage}
+  className={`hidden md:block absolute cursor-pointer right-3 mt-2 w-6 md:w-8 lg:w-10 border-dark-blue border-2 rounded-full bg-white transform transition-transform duration-300 ${
+    open ? "" : "rotate-180"
+  }`}
+  onClick={toggleMenu}
+  alt="toggle menu"
+/>
+
 
         <div className="flex items-center justify-between">
           <div className="flex items-center">
@@ -145,7 +146,7 @@ const Header = () => {
       </div>
       <div className="flex-1">
         <button
-          className="fixed justify-center top-8 left-2 lg:hidden p-2 rounded-md bg-blue-900 text-white z-50"
+          className={`fixed justify-center top-8 left-2 lg:hidden p-2 rounded-md ${isDarkMode ? "bg-gray-800 text-white" : "bg-gray-200 text-black"} z-50`}
           onClick={toggleMenu}
         >
           <FontAwesomeIcon icon={open ? faTimes : faBars} />
