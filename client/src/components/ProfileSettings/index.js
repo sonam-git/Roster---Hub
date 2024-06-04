@@ -96,50 +96,38 @@ const ProfileSettings = ({ isDarkMode }) => {
     <div className={`max-w-md mx-auto ${isDarkMode ? 'dark:text-white' : ''}`}>
       <h2 className="text-sm md:text-md lg:text-lg xl:text-xl font-semibold mb-4">Update Name</h2>
       {errorNameMessage && (
-        <div
-          className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-2 rounded relative"
-          role="alert"
-        >
-          <span className="block sm:inline ">{errorNameMessage}</span>
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-2 rounded relative" role="alert">
+          <span className="block sm:inline">{errorNameMessage}</span>
         </div>
       )}
       {successMessage && (
-        <div
-          className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 mb-2 rounded relative"
-          role="alert"
-        >
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 mb-2 rounded relative" role="alert">
           <span className="block sm:inline">{successMessage}</span>
         </div>
       )}
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4">
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:text-base"
           placeholder="Enter your new name"
         />
         <button
           onClick={handleNameUpdate}
-          className="text-xs md:text-md lg:text-lg xl:text-xl bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 ml-2 rounded-md"
+          className="w-full sm:w-auto text-sm sm:text-base bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 sm:ml-2 mt-2 sm:mt-0 rounded-md"
         >
           Update
         </button>
       </div>
       <h2 className="text-sm md:text-md lg:text-lg xl:text-xl font-semibold my-6">Update Password</h2>
       {errorMessage && (
-        <div
-          className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-2 rounded relative"
-          role="alert"
-        >
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-2 rounded relative" role="alert">
           <span className="block sm:inline">{errorMessage}</span>
         </div>
       )}
       {passwordSuccessMessage && (
-        <div
-          className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 mb-2 rounded relative"
-          role="alert"
-        >
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 mb-2 rounded relative" role="alert">
           <span className="block sm:inline">{passwordSuccessMessage}</span>
         </div>
       )}
@@ -147,36 +135,36 @@ const ProfileSettings = ({ isDarkMode }) => {
         type="password"
         value={currentPassword}
         onChange={(e) => setCurrentPassword(e.target.value)}
-        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 mb-2"
+        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:text-base mb-2"
         placeholder="Enter current password"
       />
       <input
         type="password"
         value={newPassword}
         onChange={(e) => setNewPassword(e.target.value)}
-        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 mb-2"
+        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:text-base mb-2"
         placeholder="Enter new password"
       />
       <input
         type="password"
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
-        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 mb-2"
+        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:text-base mb-2"
         placeholder="Confirm your new password"
       />
-  <div className="flex flex-col md:flex-row justify-between items-center mb-4">
-  <button
-    onClick={handlePasswordChange}
-    className="text-xs md:text-md lg:text-lg xl:text-xl bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-2 rounded-md mt-4 md:mt-0"
-  >
-    Change Password
-  </button>
-  <RemoveAccount onRemove={handleRemove} profileId={userId} />
-  {showFarewell && <FarewellModal onClose={handleLogout} />}
-</div>
-
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
+        <button
+          onClick={handlePasswordChange}
+          className="w-full sm:w-auto text-sm sm:text-base bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md mt-4 sm:mt-0"
+        >
+          Change Password
+        </button>
+        <RemoveAccount onRemove={handleRemove} profileId={userId} />
+        {showFarewell && <FarewellModal onClose={handleLogout} />}
+      </div>
     </div>
   );
+  
 };
 
 export default ProfileSettings;

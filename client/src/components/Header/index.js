@@ -5,7 +5,8 @@ import { ThemeContext } from "../ThemeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import controlImage from "../../assets/images/iconizer-arrow-left.png";
-import logoImage from "../../assets/images/rh-logo.png";
+import lightLogo from "../../assets/images/roster-hub-logo.png";
+import darkLogo from "../../assets/images/dark-logo.png";
 import chartFillImage from "../../assets/images/iconizer-home.png";
 import chatImage from "../../assets/images/iconizer-message.png";
 import skillImage from "../../assets/images/iconizer-skill.png";
@@ -66,7 +67,7 @@ const Header = () => {
             <Link to={"/"} className="flex items-center w-full no-underline"
             style={{ textDecoration: "none" }}>
               <img
-                src={logoImage}
+                src={isDarkMode ? darkLogo : lightLogo}
                 className={`dark:text-white cursor-pointer duration-500 w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 pt-5 ${
                   open && "rotate-[360deg]"
                 }`}
@@ -145,14 +146,20 @@ const Header = () => {
         </ul>
       </div>
       <div className="flex-1">
+        <div>
+          
+        </div>
         <button
-          className={`fixed justify-center top-7 left-2 lg:hidden p-2 rounded-md ${isDarkMode ? "bg-gray-800 text-white" : "bg-gray-200 text-black"} z-50`}
+          className={`fixed justify-center top-2 left-4 lg:hidden p-2 rounded-md ${isDarkMode ? "bg-gray-800 text-white" : "bg-gray-200 text-black"} z-50`}
           onClick={toggleMenu}
         >
           <FontAwesomeIcon icon={open ? faTimes : faBars} />
+          
         </button>
+       
         <Outlet />
       </div>
+      
     </div>
   );
 };

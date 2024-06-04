@@ -122,7 +122,7 @@ const MyProfile = () => {
               <div className="flex items-center justify-center p-4 dark:bg-gray-800 shadow-lg rounded-md">
                 <div className="grid grid-cols-2 gap-4 sm:flex sm:space-x-4">
                   <span
-                    className={`mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center ${
+                    className={` cursor-pointer mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center ${
                       isDarkMode ? "bg-gray-600" : "bg-[#1DA1F2]"
                     }`}
                     onClick={() => setSelectedSocialMedia("twitter")}
@@ -130,15 +130,15 @@ const MyProfile = () => {
                     <i className="fa-brands fa-twitter text-white"></i>
                   </span>
                   <span
-                    className={`mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center ${
+                    className={`cursor-pointer mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center ${
                       isDarkMode ? "bg-gray-600" : "bg-[#162666]"
                     }`}
                     onClick={() => setSelectedSocialMedia("facebook")}
                   >
-                    <i className="fa-brands fa-facebook text-white"></i>
+                    <i className=" fa-brands fa-facebook text-white"></i>
                   </span>
                   <span
-                    className={`mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center ${
+                    className={`cursor-pointer mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center ${
                       isDarkMode ? "bg-gray-600" : "bg-[#0077b5]"
                     }`}
                     onClick={() => setSelectedSocialMedia("linkedin")}

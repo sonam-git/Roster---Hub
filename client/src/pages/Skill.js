@@ -75,7 +75,7 @@ const Skill = ({isDarkMode}) => {
         </>
       )}
 
-      <div className="my-4 p-4 border border-dotted border-gray-300 rounded">
+      <div className="my-4 p-4">
         <SkillForm profileId={profile._id} />
       </div>
     </div>

@@ -33,7 +33,7 @@ const MessageList = ({ messages, isLoggedInUser = false, isDarkMode }) => {
     }
   };
 
-  const [displayedMessages, setDisplayedMessages] = useState(3);
+  const [displayedMessages, setDisplayedMessages] = useState(2);
   const [showChatModal, setShowChatModal] = useState(false);
   const [selectedRecipient, setSelectedRecipient] = useState(null);
 
@@ -48,19 +48,21 @@ const MessageList = ({ messages, isLoggedInUser = false, isDarkMode }) => {
 
   return (
     <>
-      <div className="flex items-center">
-        <h1 className="text-xl lg:text-xl xl:text-2xl font-bold mb-2 text-center">
-          Message Box
-        </h1>
-        <MailIcon className="h-6 w-6 mr-1 mb-2 ml-2" />
-        <span
-          style={{ fontSize: "1rem", fontWeight: "bold", marginBottom: 10 }}
-        >
-          {messages.length}
-          {messages.length === 1}
-        </span>
-      </div>
-      <div className={`overflow-auto max-h-80 my-4 grid grid-cols-1 gap-4 `}>
+<div className="text-center py-8">
+  <h1 className="text-xl lg:text-xl xl:text-2xl font-bold mb-2">
+    Message Box
+  </h1>
+  <div className="flex items-center justify-center">
+    <MailIcon className="h-6 w-6 mr-1 mb-2 ml-2" />
+    <span style={{ fontSize: "1rem", fontWeight: "bold", marginBottom: 10 }}>
+      {messages.length}
+      {messages.length === 1}
+    </span>
+  </div>
+</div>
+
+
+      <div className={`overflow-auto max-h-100 my-4 grid grid-cols-1 gap-4 `}>
         {messages.slice(0, displayedMessages).map((message) => (
           <div key={message._id} className="col-span-1">
             <div className="border border-gray-300 rounded-lg p-4 mb-4">
@@ -99,12 +101,13 @@ const MessageList = ({ messages, isLoggedInUser = false, isDarkMode }) => {
         ))}
         {/* Display "View More Messages" button if there are more messages */}
         {displayedMessages < messages.length && (
-          <button
-            className="mt-2 bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded"
-            onClick={handleScroll}
-          >
-            View More Messages
-          </button>
+     <button
+     className="block w-1/4 mx-auto mt-2 bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-2 px-2 rounded"
+     onClick={handleScroll}
+   >
+     View More 
+   </button>
+   
         )}
       </div>
       {error && <div className="error-message">{error.message}</div>}

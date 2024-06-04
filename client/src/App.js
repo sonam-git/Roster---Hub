@@ -21,7 +21,6 @@ import ForgotPassword from "./pages/ForgetPassword";
 import PasswordReset from "./pages/PasswordReset";
 import { ThemeProvider, ThemeContext } from "./components/ThemeContext";
 
-
 // construct our main Graphql api endpoint
 const httpLink = createHttpLink({
   uri: "/graphql",
@@ -57,7 +56,7 @@ function AppContent() {
         }`}
       >
         <Header />
-        <div className="flex-1  ">
+        <div className="flex-1 mt-10"> {/* Add mt-4 class here */}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/roster" element={<Roster />} />

@@ -36,7 +36,7 @@ const Hero = () => {
             Login
           </Link>
           <Link
-            className="bg-gray-800 border border-gray-300 hover:no-underline  hover:bg-gray-100 text-gray-300 font-bold py-3 px-6 rounded-full"
+            className="bg-gray-800 border border-gray-300 hover:no-underline  hover:bg-gray-100 text-gray-300 font-bold py-3 px-6 rounded-full "
             to="/signup"
           >
             Signup

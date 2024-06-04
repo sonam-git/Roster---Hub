@@ -45,7 +45,7 @@ const SkillForm = ({ profileId, teamMate }) => {
   };
 
   return (
-    <div className="rounded-md bg-gray-300 dark:bg-gray-800">
+    <div className="rounded-md bg-gray-300 dark:bg-gray-900 p-5">
       <h4 className="text-xl lg:text-xl xl:text-2xl font-bold mb-2 ml-3 p-2">
         {profileId !== authProfileId
           ? `Endorse ${teamMate}`
