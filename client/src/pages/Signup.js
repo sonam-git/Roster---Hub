@@ -35,7 +35,7 @@ const Signup = () => {
   };
 
   return (
-    <main className={`flex justify-center mb-4`}>
+    <main className={`flex justify-center mb-4 px-2`}>
       <div className={`w-full max-w-md mt-5 `}>
         <div className={`shadow-xl rounded px-8 pt-6 pb-8 mb-4 dark:bg-gray-800`}>
           <h4 className="text-center text-2xl font-bold text-gray-900 mb-6 dark:text-white">Sign Up</h4>
@@ -86,7 +86,7 @@ const Signup = () => {
                 >
                   Submit
                 </button>
-                <Link to="/login" className="text-gray-600 hover:text-blue-500 ml-2 mt-3 hover:no-underline dark:text-white dark:hover:text-blue-400">Already Have An Account ?</Link>
+                <Link to="/login" className="text-gray-600 hover:text-blue-500 ml-1 mt-3 hover:no-underline dark:text-white dark:hover:text-blue-400">Already Have An Account ?</Link>
               </div>
             </form>
           )}
