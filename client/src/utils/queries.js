@@ -222,3 +222,13 @@ query Post($postId: ID!) {
   }
 }
 `;
+
+export const GET_SKILLS = gql`
+query Skills {
+  skills {
+    skillText
+    skillAuthor
+    createdAt
+  }
+}
+`;

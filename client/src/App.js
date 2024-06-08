@@ -51,7 +51,7 @@ function AppContent() {
   return (
     <>
       <div
-        className={`flex min-h-screen ${
+        className={` flex min-h-screen ${
           isDarkMode ? "bg-gray-900 text-white" : "bg-white text-black"
         }`}
       >

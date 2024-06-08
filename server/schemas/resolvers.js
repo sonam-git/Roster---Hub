@@ -118,6 +118,16 @@ const resolvers = {
         throw new Error(err);
       }
     },
+      // ************************** QUERY SKILLS *******************************************//
+    skills: async () => {
+        try {
+          const skills = await Skill.find()
+            .sort({ createdAt: -1 })
+          return skills;
+        } catch (err) {
+          throw new Error(err);
+        }
+      },
   },
   // ########## MUTAIIONS ########### //
   Mutation: {
