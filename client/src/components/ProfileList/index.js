@@ -1,17 +1,17 @@
-// src/components/ProfileList.js
 import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import ChatBox from '../ChatBox'; // Import the ChatBox component
-import { AiOutlineMessage } from 'react-icons/ai'; // Import the chat icon
-import { RiProfileLine, RiTShirt2Line } from 'react-icons/ri'; // Import the profile icon
+import ChatBox from '../ChatBox';
+import { AiOutlineMessage, AiFillStar, AiOutlineStar } from 'react-icons/ai'; // Import the chat and star icons
+import { RiProfileLine, RiTShirt2Line } from 'react-icons/ri';
 import Auth from '../../utils/auth';
 import ProfileAvatar from '../../assets/images/profile-avatar.png';
 import { ThemeContext } from '../ThemeContext';
+import RatingModal from '../RatingModal'; // Import the RatingModal component
 
 const ProfileList = ({ profiles, title }) => {
-
   const { isDarkMode } = useContext(ThemeContext);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [ratingProfile, setRatingProfile] = useState(null); // State for rating modal
   const [currentPage, setCurrentPage] = useState(1);
   const profilesPerPage = 6;
 
@@ -23,8 +23,16 @@ const ProfileList = ({ profiles, title }) => {
     setSelectedUser(null); // Reset selectedUser state when modal is closed
   };
 
+  const handleRatingClick = (profile) => {
+    setRatingProfile(profile);
+  };
+
+  const handleRatingModalClose = () => {
+    setRatingProfile(null); // Reset ratingProfile state when rating modal is closed
+  };
+
   if (!profiles.length) {
-    return <h3>No Profiles Yet </h3>;
+    return <h3>No Profiles Yet</h3>;
   }
 
   // Get the ID of the logged-in user
@@ -42,10 +50,33 @@ const ProfileList = ({ profiles, title }) => {
     currentPage * profilesPerPage
   );
 
+  // Helper function to render stars
+  const renderStars = (rating) => {
+    const fullStars = Math.floor(rating);
+    const halfStar = rating - fullStars >= 0.5;
+    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+    return (
+      <div className="flex items-center">
+        {Array(fullStars)
+          .fill()
+          .map((_, index) => (
+            <AiFillStar key={index} className="text-yellow-500" />
+          ))}
+        {halfStar && <AiOutlineStar key="half" className="text-yellow-500" />}
+        {Array(emptyStars)
+          .fill()
+          .map((_, index) => (
+            <AiOutlineStar key={index + fullStars + 1} className="text-gray-400" />
+          ))}
+      </div>
+    );
+  };
+
   return (
-    <div className={`p-6 rounded-lg  ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
+    <div className={`p-6 rounded-lg ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
       <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-center">{title}</h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4 ">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
         {currentProfiles.map((profile) => (
           <div
             key={profile._id}
@@ -54,10 +85,17 @@ const ProfileList = ({ profiles, title }) => {
             <div className="grid grid-cols-2 items-center">
               {/* Column 1: Name and Jersey Number */}
               <div>
-                <h4  className="text-sm md:text-md lg:text-lg xl:text-xl ">{profile.name}</h4>
+                <div className="flex items-center">
+                  <h4 className="text-sm md:text-md lg:text-lg xl:text-xl">{profile.name}</h4>
+                </div>
                 <p className="font-bold">
                   <RiTShirt2Line className="mr-2 text-xl inline" /> {profile.jerseyNumber}
                 </p>
+                {/* Display star rating below jersey number */}
+                <div className="mt-2">
+                  {renderStars(profile.averageRating)}
+                  <p className="text-sm">{profile.averageRating.toFixed(1)} / 5</p>
+                </div>
               </div>
               {/* Column 2: Image */}
               <div className="flex justify-end items-center">
@@ -78,15 +116,23 @@ const ProfileList = ({ profiles, title }) => {
                 <AiOutlineMessage className={`mr-2 text-2xl ${isDarkMode ? 'text-white' : 'text-black'}`} />
                 <span className='text-sm md:text-md lg:text-lg xl:text-xl'>{isDarkMode ? 'Chat' : 'Chat'}</span>
               </button>
+              {/* Rate button */}
+              <button
+                className="flex items-center"
+                onClick={() => handleRatingClick(profile)}
+              >
+                <AiFillStar className={`mr-2 text-2xl ${isDarkMode ? 'text-white' : 'text-black'}`} />
+                <span className='text-sm md:text-md lg:text-lg xl:text-xl'>{isDarkMode ? 'Rate' : 'Rate'}</span>
+              </button>
               {/* Player info button */}
               <Link
                 className="flex items-center hover:no-underline"
                 to={`/profiles/${profile._id}`}
               >
-              
                 <RiProfileLine className={`mr-2 text-2xl ${isDarkMode ? 'text-white' : 'text-black'}`} />
                 <span className={`mr-2 text-sm md:text-md lg:text-lg xl:text-xl ${isDarkMode ? 'text-white hover:text-blue-300' : 'text-black hover:text-blue-700'}`}>
-                  {isDarkMode ? 'View Profile' : 'View Profile'}</span>
+                  {isDarkMode ? 'View Profile' : 'View Profile'}
+                </span>
               </Link>
             </div>
           </div>
@@ -113,6 +159,10 @@ const ProfileList = ({ profiles, title }) => {
       {/* Render the chat box if a user is selected */}
       {selectedUser && (
         <ChatBox recipient={selectedUser} onCloseModal={handleModalClose} />
+      )}
+      {/* Render the rating modal if a profile is selected for rating */}
+      {ratingProfile && (
+        <RatingModal profile={ratingProfile} onClose={handleRatingModalClose} />
       )}
     </div>
   );

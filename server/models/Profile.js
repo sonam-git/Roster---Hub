@@ -1,6 +1,20 @@
 const { Schema, model } = require("mongoose");
 const bcrypt = require("bcrypt");
 
+const ratingSchema = new Schema({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "Profile",
+    required: true,
+  },
+  rating: {
+    type: Number,
+    min: 1,
+    max: 5,
+    required: true,
+  },
+});
+
 const profileSchema = new Schema({
   name: {
     type: String,
@@ -67,6 +81,12 @@ const profileSchema = new Schema({
       ref: "Message",
     },
   ],
+  averageRating: {
+    type: Number,
+    default: 0,
+  },
+   // field to store ratings
+  ratings: [ratingSchema],
 });
 
 // set up pre-save middleware to create password
@@ -83,6 +103,12 @@ profileSchema.methods.isCorrectPassword = async function (password) {
   return bcrypt.compare(password, this.password);
 };
 
+// Calculate and update the average rating
+profileSchema.methods.updateAverageRating = function () {
+  const totalRatings = this.ratings.length;
+  const sumRatings = this.ratings.reduce((sum, { rating }) => sum + rating, 0);
+  this.averageRating = totalRatings > 0 ? sumRatings / totalRatings : 0;
+};
 
 const Profile = model("Profile", profileSchema);
 

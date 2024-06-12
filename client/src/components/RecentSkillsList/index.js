@@ -30,9 +30,9 @@ const RecentSkillsList = () => {
         <ul>
           {topSkills.map((skill) => (
             <li key={skill._id} className="mb-2">
-              <div className={`card shadow-2xl rounded-md ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}>
+              <div className={`card shadow-2xl  rounded-md ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}>
                 <div className="card-header text-light p-2">
-                  <div className={`mb-2 font-bold p-2 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
+                  <div className={`mb-2  p-2 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
                     <span>{skill.skillText[0].toUpperCase() + skill.skillText.slice(1)}</span>
                   </div>
                   <div className="flex justify-between text-gray-200">

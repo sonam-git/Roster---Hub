@@ -9,6 +9,7 @@ export const QUERY_PROFILES = gql`
       position
       phoneNumber
       profilePic
+      averageRating
       posts {
         _id
         postText
@@ -61,6 +62,7 @@ export const QUERY_SINGLE_PROFILE = gql`
       position
       phoneNumber
       profilePic
+      averageRating
       posts {
         _id
         postText
@@ -114,6 +116,7 @@ export const QUERY_ME = gql`
       position
       phoneNumber
       profilePic
+      averageRating
       socialMediaLinks { 
         _id
         userId

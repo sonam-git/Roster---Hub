@@ -165,20 +165,25 @@ const Post = ({ post }) => {
             onClick={handleLike}
           />
           <span className="text-gray-700 dark:text-white">{likes}</span>
+     
           <ChatAltIcon
             className="h-5 w-5 text-green-500 cursor-pointer"
             title="Comment"
             onClick={handleComment}
           />
+        
           {!showComments ? (
+         <>
             <ChatAltIcon
-              className="h-5 w-5 text-indigo-400 cursor-pointer"
+              className="h-5 w-5 text-blue-500 cursor-pointer"
               title="Show Comments"
               onClick={toggleComments}
             />
+            <span className="text-gray-700 dark:text-white">{sortedComments.length}</span> 
+            </>
           ) : (
             <XIcon
-              className="h-5 w-5 text-indigo-400 cursor-pointer"
+              className="h-5 w-5 text-blue-500 cursor-pointer"
               title="Close Comments"
               onClick={toggleComments}
             />

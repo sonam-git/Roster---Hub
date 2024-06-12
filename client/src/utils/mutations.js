@@ -254,3 +254,17 @@ export const LIKE_POST = gql`
     }
   }
 `;
+
+
+export const RATE_PLAYER = gql`
+  mutation ratePlayer($profileId: ID!, $ratingInput: RatingInput!) {
+    ratePlayer(profileId: $profileId, ratingInput: $ratingInput) {
+      _id
+      ratings {
+        user
+        rating
+      }
+      averageRating
+    }
+  }
+`;

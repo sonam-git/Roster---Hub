@@ -5,7 +5,14 @@ const {
   AuthenticationError,
   UserInputError,
 } = require("apollo-server-express");
-const { Profile, Skill, Message, SocialMediaLink, Post ,Comment} = require("../models");
+const {
+  Profile,
+  Skill,
+  Message,
+  SocialMediaLink,
+  Post,
+  Comment,
+} = require("../models");
 const { signToken } = require("../utils/auth");
 const cloudinary = require("../utils/cloudinary");
 const secret = process.env.JWT_SECRET;
@@ -32,8 +39,8 @@ const resolvers = {
         .populate({
           path: "posts",
           populate: { path: "comments" },
-        })
-        // .populate("posts");
+        });
+      // .populate("posts");
     },
     // ************************** QUERY SINGLE PROFILE *******************************************//
     profile: async (parent, { profileId }) => {
@@ -72,7 +79,7 @@ const resolvers = {
           .populate({
             path: "posts",
             populate: { path: "comments" },
-          })
+          });
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -128,36 +135,46 @@ const resolvers = {
         throw new Error(err);
       }
     },
-        // ************************** QUERY COMMENTS *******************************************//
-        comments: async () => {
-          try {
-            const comments = await Comment.find()
-              .sort({ createdAt: -1 })
-             
-            return comments;
-          } catch (err) {
-            throw new Error(err);
-          }
-        },
-        // finds a comment by its commentId
-        comment: async (parent, { commentId }) => {
-          try {
-            const comment = await Comment.findById(commentId);
-              return comment;
-          } catch (err) {
-            throw new Error(err);
-          }
-        },
-      // ************************** QUERY SKILLS *******************************************//
+    // ************************** QUERY COMMENTS *******************************************//
+    comments: async () => {
+      try {
+        const comments = await Comment.find().sort({ createdAt: -1 });
+
+        return comments;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    // finds a comment by its commentId
+    comment: async (parent, { commentId }) => {
+      try {
+        const comment = await Comment.findById(commentId);
+        return comment;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    // ************************** QUERY SKILLS *******************************************//
     skills: async () => {
-        try {
-          const skills = await Skill.find()
-            .sort({ createdAt: -1 })
-          return skills;
-        } catch (err) {
-          throw new Error(err);
-        }
-      },
+      try {
+        const skills = await Skill.find().sort({ createdAt: -1 });
+        return skills;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    // ************************** QUERY RATING *******************************************//
+    getPlayerRating: async (_, { profileId }) => {
+      const profile = await Profile.findById(profileId);
+      if (!profile) {
+        throw new Error("Profile not found");
+      }
+      const totalRatings = profile.ratings.reduce(
+        (sum, r) => sum + r.rating,
+        0
+      );
+      return profile.ratings.length ? totalRatings / profile.ratings.length : 0;
+    },
   },
   // ########## MUTAIIONS ########### //
   Mutation: {
@@ -218,6 +235,53 @@ const resolvers = {
         throw new Error("Failed to update profile information");
       }
     },
+    // ************************** ADD RATING *******************************************//
+    ratePlayer: async (parent, { profileId, ratingInput }, context) => {
+      if (context.user) {
+        const profile = await Profile.findById(profileId);
+
+        // Find existing rating from the user
+        const existingRatingIndex = profile.ratings.findIndex(
+          (rating) => rating.user.toString() === ratingInput.user
+        );
+
+        if (existingRatingIndex !== -1) {
+          // Update existing rating
+          profile.ratings[existingRatingIndex].rating = ratingInput.rating;
+        } else {
+          // Add new rating
+          profile.ratings.push(ratingInput);
+        }
+
+        // Calculate and update the average rating
+        profile.updateAverageRating();
+
+        await profile.save();
+
+        return profile;
+      }
+      throw new AuthenticationError('You need to be logged in!');
+    },
+    // ratePlayer: async (_, { profileId, ratingInput }) => {
+    //   const { user, rating } = ratingInput;
+    //   const profile = await Profile.findById(profileId);
+    //   if (!profile) {
+    //     throw new Error("Profile not found");
+    //   }
+
+    //   const existingRating = profile.ratings.find(
+    //     (r) => r.user.toString() === user
+    //   );
+    //   if (existingRating) {
+    //     existingRating.rating = rating;
+    //   } else {
+    //     profile.ratings.push({ user, rating });
+    //   }
+
+    //   await profile.save();
+    //   return profile;
+    // },
+
     // ************************** UPLOAD PROFILE PIC USING CLOUDINARY  *******************************************//
     uploadProfilePic: async (_, { profileId, profilePic }, context) => {
       if (!context.user) {
@@ -521,14 +585,14 @@ const resolvers = {
         const userId = context.user._id;
 
         if (!post) {
-          throw new Error('Post not found');
+          throw new Error("Post not found");
         }
 
         const alreadyLiked = post.likedBy.includes(userId);
 
         if (alreadyLiked) {
           post.likes -= 1;
-          post.likedBy = post.likedBy.filter(id => id.toString() !== userId);
+          post.likedBy = post.likedBy.filter((id) => id.toString() !== userId);
         } else {
           post.likes += 1;
           post.likedBy.push(userId);
@@ -539,7 +603,7 @@ const resolvers = {
         return post;
       }
 
-      throw new AuthenticationError('Not logged in');
+      throw new AuthenticationError("Not logged in");
     },
     // ************************** ADD COMMENT *******************************************//
     addComment: async (parent, { postId, commentText }, context) => {
@@ -555,7 +619,7 @@ const resolvers = {
             postId,
             { $push: { comments: newComment._id } },
             { new: true }
-          ).populate('comments');
+          ).populate("comments");
 
           return updatedPost;
         } catch (err) {
@@ -567,7 +631,7 @@ const resolvers = {
     },
 
     // ************************** UPDATE COMMENT *******************************************//
-    updateComment: async (parent, {  commentId, commentText }, context) => {
+    updateComment: async (parent, { commentId, commentText }, context) => {
       if (context.user) {
         try {
           const updatedComment = await Comment.findOneAndUpdate(
@@ -590,7 +654,7 @@ const resolvers = {
     },
 
     // ************************** REMOVE COMMENT *******************************************//
-   removeComment: async (parent, { postId, commentId }, context) => {
+    removeComment: async (parent, { postId, commentId }, context) => {
       if (context.user) {
         try {
           const deletedComment = await Comment.findOneAndDelete({
@@ -606,7 +670,7 @@ const resolvers = {
             postId,
             { $pull: { comments: commentId } },
             { new: true }
-          ).populate('comments');
+          ).populate("comments");
 
           return updatedPost;
         } catch (err) {

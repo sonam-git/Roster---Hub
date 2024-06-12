@@ -15,6 +15,13 @@ scalar Upload
     socialMediaLinks: [SocialMediaLink]
     receivedMessages: [Message]
     sentMessages: [Message]
+    ratings: [Rating]
+    averageRating: Float
+  }
+
+  type Rating {
+    user: ID!
+    rating: Int!
   }
 
   type Skill {
@@ -61,6 +68,11 @@ scalar Upload
     message: String!
   }
  
+  input RatingInput {
+    user: ID!
+    rating: Int!
+  }
+
   type Auth {
     token: ID!
     profile: Profile
@@ -78,6 +90,7 @@ scalar Upload
     post(postId: ID!): Post
     comments:[Comment]
     comment(commentId : ID!): Comment
+   getPlayerRating(profileId: ID!): Float
   }
  
   type Mutation {
@@ -102,6 +115,7 @@ scalar Upload
     sendResetPasswordEmail(email: String!): ResponseMessage!
     resetPassword(token: String!, newPassword: String!): ResponseMessage!
     likePost(postId: ID!): Post
+    ratePlayer(profileId: ID!, ratingInput: RatingInput!): Profile
   }
 `;
 
