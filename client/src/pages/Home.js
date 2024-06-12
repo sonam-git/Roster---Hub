@@ -11,7 +11,7 @@ import RecentSkillsList from "../components/RecentSkillsList";
 const Home = () => {
   const { loading, data } = useQuery(QUERY_ME);
   const profile = data?.me || [];
-
+  
   // Check if the user is logged in
   const isLoggedIn = Auth.loggedIn();
   if (loading) {
@@ -19,22 +19,22 @@ const Home = () => {
   }
   
   return (
-    <main className="container">
+    <main className="container mx-auto p-4">
       <div className="flex flex-col items-center">
         {/* Welcome component taking full width */}
         {isLoggedIn ? (
           <>
-            <div className="w-full">
+            <div className="w-full mb-4">
               <Welcome username={profile.name} />
             </div>
-            <div className="w-full flex mt-4 mb-4">
-              {/* PostsList component taking 3/4 width */}
-              <div className="w-3/4 mr-4">
+            <div className="w-full flex flex-col lg:flex-row lg:space-x-4">
+              {/* PostsList component taking full width on small screens and 3/4 on larger screens */}
+              <div className="w-full lg:w-3/4 mb-4 lg:mb-0">
                 <PostsList />
               </div>
-              {/* RecentSkillsList component taking 1/4 width */}
-              <div className="w-1/4">
-                <RecentSkillsList skills={profile.skills} />
+              {/* RecentSkillsList component taking full width on small screens and 1/4 on larger screens */}
+              <div className="w-full lg:w-1/4">
+                <RecentSkillsList />
               </div>
             </div>
           </>

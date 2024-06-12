@@ -50,7 +50,7 @@ const Profile = () => {
       {profileId ? (
         <UserProfile profile={profile} />
       ) : (
-        <MyProfile isLoggedInUser={!profileId && true} />
+        <MyProfile isLoggedInUser={!profileId && true}  />
       )}
     </div>
   );

@@ -51,12 +51,12 @@ function AppContent() {
   return (
     <>
       <div
-        className={` flex min-h-screen ${
-          isDarkMode ? "bg-gray-900 text-white" : "bg-white text-black"
+        className={` flex min-h-screen  ${
+          isDarkMode ? "bg-gray-900 text-white" : "bg-gray-300 text-black"
         }`}
       >
         <Header />
-        <div className="flex-1 mt-10"> {/* Add mt-4 class here */}
+        <div className="flex-1 mt-10 "> {/* Add mt-4 class here */}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/roster" element={<Roster />} />

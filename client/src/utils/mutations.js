@@ -218,17 +218,15 @@ export const ADD_COMMENT = gql`
 `;
 
 export const UPDATE_COMMENT = gql`
-  mutation updateComment($postId: ID!, $commentId: ID!, $commentText: String!) {
-    updateComment(postId: $postId, commentId: $commentId, commentText: $commentText) {
-      _id
-      comments {
-        _id
-        commentText
-        commentAuthor
-        createdAt
-      }
-    }
+mutation updateComment( $commentId: ID!, $commentText: String!) {
+updateComment(commentId: $commentId, commentText: $commentText) {
+    _id
+    commentText
+    commentAuthor
+    createdAt
+    userId
   }
+}
 `;
 
 export const REMOVE_COMMENT = gql`
@@ -243,6 +241,16 @@ export const REMOVE_COMMENT = gql`
         commentAuthor
         createdAt
       }
+    }
+  }
+`;
+
+export const LIKE_POST = gql`
+  mutation likePost($postId: ID!) {
+    likePost(postId: $postId) {
+      _id
+      likes
+      likedBy
     }
   }
 `;

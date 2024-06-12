@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { SEND_RESET_PASSWORD_EMAIL } from "../utils/mutations";
 
@@ -23,7 +24,7 @@ const ForgotPassword = () => {
   return (
     <main className="flex justify-center mb-4 px-2">
       <div className="w-full max-w-md mt-5">
-        <div className="shadow-xl rounded px-8 pt-6 pb-8 mb-4 dark:bg-gray-800">
+        <div className="bg-gray-200 shadow-xl rounded px-8 pt-6 pb-8 mb-4 dark:bg-gray-800">
           <h4 className="text-center text-2xl font-bold text-gray-900 dark:text-white mb-6">
             Forgot Password
           </h4>
@@ -46,19 +47,32 @@ const ForgotPassword = () => {
                 <input
                   className="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   placeholder="Your email"
+                  required="true"
                   name="email"
                   type="email"
                   value={email}
                   onChange={handleChange}
                 />
               </div>
-              <button
-                className="bg-blue-500 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-200 hover:bg-blue-800"
-                style={{ cursor: "pointer" }}
-                type="submit"
-              >
-                Submit
-              </button>
+              <div className="flex space-x-4">
+  <button
+    className="bg-blue-500 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-200 hover:bg-blue-800"
+    style={{ cursor: "pointer" }}
+    type="submit"
+  >
+    Submit
+  </button>
+
+  <Link 
+    to="/login" 
+    className="bg-gray-400 text-gray-900 font-semibold py-2 px-4 rounded  hover:bg-gray-100 no-underline"
+    style={{ cursor: "pointer", textDecoration:'none' }}
+  >
+    Cancel
+  </Link>
+</div>
+
+     
             </form>
           )}
         </div>

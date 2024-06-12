@@ -11,6 +11,8 @@ const CommentList = ({ post, comments }) => {
   const [deleteSuccessMessage, setDeleteSuccessMessage] = useState("");
   const [updateSuccessMessage, setUpdateSuccessMessage] = useState("");
 
+  const postId = post._id;
+
   const [removeComment] = useMutation(REMOVE_COMMENT, {
     update(cache, { data: { removeComment } }) {
       try {
@@ -29,17 +31,26 @@ const CommentList = ({ post, comments }) => {
     update(cache, { data: { updateComment } }) {
       try {
         const { posts } = cache.readQuery({ query: GET_POSTS });
+        const updatedPosts = posts.map((p) => {
+          if (p._id === post._id) {
+            return {
+              ...p,
+              comments: p.comments.map((comment) =>
+                comment._id === updateComment._id ? updateComment : comment
+              ),
+            };
+          }
+          return p;
+        });
         cache.writeQuery({
-          qyery: GET_POSTS,
-          data: { posts: [...posts, updateComment] },
+          query: GET_POSTS,
+          data: { posts: updatedPosts },
         });
       } catch (error) {
         console.log(error);
       }
     },
   });
-
-  const postId = post._id;
 
   const handleDeleteComment = async (postId, commentId) => {
     try {
@@ -53,9 +64,9 @@ const CommentList = ({ post, comments }) => {
     }
   };
 
-  const handleUpdateComment = async (postId, commentId) => {
+  const handleUpdateComment = async (commentId) => {
     try {
-      await updateComment({ variables: { postId, commentId, commentText } });
+      await updateComment({ variables: { commentId, commentText } });
       setEditingCommentId(null);
       setCommentText("");
       setUpdateSuccessMessage("Comment updated successfully");
@@ -70,7 +81,7 @@ const CommentList = ({ post, comments }) => {
   return (
     <div className="mt-4 border-t pt-4">
       {deleteSuccessMessage && (
-        <p className="text-green-500">{deleteSuccessMessage}</p>
+        <p className="text-red-500">{deleteSuccessMessage}</p>
       )}
       {updateSuccessMessage && (
         <p className="text-green-500">{updateSuccessMessage}</p>
@@ -81,12 +92,6 @@ const CommentList = ({ post, comments }) => {
             key={comment._id}
             className="bg-gray-50 dark:bg-gray-700 shadow-sm rounded-lg p-3 mb-3"
           >
-            <div className="flex justify-between items-center">
-              <h4 className="text-sm font-semibold">{comment.commentAuthor}</h4>
-              <small className="text-gray-500">
-                {new Date(parseInt(comment.createdAt)).toLocaleString()}
-              </small>
-            </div>
             {editingCommentId === comment._id ? (
               <div>
                 <textarea
@@ -95,7 +100,7 @@ const CommentList = ({ post, comments }) => {
                   className="w-full p-2 mt-2 border rounded dark:text-black"
                 />
                 <button
-                  onClick={() => handleUpdateComment(postId, comment._id)}
+                  onClick={() => handleUpdateComment(comment._id)}
                   className="px-3 py-1 bg-blue-500 text-white rounded mt-2"
                 >
                   Save
@@ -109,27 +114,37 @@ const CommentList = ({ post, comments }) => {
               </div>
             ) : (
               <>
-                <p className="text-gray-600 dark:text-gray-300 mt-1">
+                <h4 className="text-sm font-semibold text-left">
+                  {comment.commentAuthor}
+                </h4>
+                <p className="text-gray-600 dark:text-gray-300 mt-1 text-left text-sm sm:text-base">
                   {comment.commentText}
                 </p>
-                {Auth.loggedIn() &&
-                  Auth.getProfile().data._id === comment.userId && (
-                    <div className="flex space-x-2">
-                      <PencilAltIcon
-                        className="h-5 w-5 text-blue-500 cursor-pointer"
-                        title="Update"
-                        onClick={() => {
-                          setEditingCommentId(comment._id);
-                          setCommentText(comment.commentText);
-                        }}
-                      />
-                      <TrashIcon
-                        className="h-5 w-5 text-red-500 cursor-pointer"
-                        title="Delete"
-                        onClick={() => handleDeleteComment(postId, comment._id)}
-                      />
-                    </div>
-                  )}
+                <div className="flex justify-between items-center mt-2">
+                  <div className="text-gray-500 text-xs sm:text-sm">
+                    {new Date(parseInt(comment.createdAt)).toLocaleString()}
+                  </div>
+                  {Auth.loggedIn() &&
+                    Auth.getProfile().data._id === comment.userId && (
+                      <div className="flex space-x-2">
+                        <PencilAltIcon
+                          className="h-5 w-5 text-blue-500 cursor-pointer"
+                          title="Update"
+                          onClick={() => {
+                            setEditingCommentId(comment._id);
+                            setCommentText(comment.commentText);
+                          }}
+                        />
+                        <TrashIcon
+                          className="h-5 w-5 text-red-500 cursor-pointer"
+                          title="Delete"
+                          onClick={() =>
+                            handleDeleteComment(postId, comment._id)
+                          }
+                        />
+                      </div>
+                    )}
+                </div>
               </>
             )}
           </div>

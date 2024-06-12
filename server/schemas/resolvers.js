@@ -5,7 +5,7 @@ const {
   AuthenticationError,
   UserInputError,
 } = require("apollo-server-express");
-const { Profile, Skill, Message, SocialMediaLink, Post } = require("../models");
+const { Profile, Skill, Message, SocialMediaLink, Post ,Comment} = require("../models");
 const { signToken } = require("../utils/auth");
 const cloudinary = require("../utils/cloudinary");
 const secret = process.env.JWT_SECRET;
@@ -29,7 +29,11 @@ const resolvers = {
           path: "sentMessages",
           populate: [{ path: "sender" }, { path: "recipient" }],
         })
-        .populate("posts");
+        .populate({
+          path: "posts",
+          populate: { path: "comments" },
+        })
+        // .populate("posts");
     },
     // ************************** QUERY SINGLE PROFILE *******************************************//
     profile: async (parent, { profileId }) => {
@@ -43,7 +47,10 @@ const resolvers = {
           path: "socialMediaLinks",
           populate: { path: "link" },
         })
-        .populate("posts");
+        .populate({
+          path: "posts",
+          populate: { path: "comments" },
+        });
     },
     // ************************** QUERY ME (LOGIN USER) *******************************************//
     me: async (parent, args, context) => {
@@ -62,7 +69,10 @@ const resolvers = {
             path: "socialMediaLinks",
             populate: { path: "link" },
           })
-          .populate("posts");
+          .populate({
+            path: "posts",
+            populate: { path: "comments" },
+          })
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -118,6 +128,26 @@ const resolvers = {
         throw new Error(err);
       }
     },
+        // ************************** QUERY COMMENTS *******************************************//
+        comments: async () => {
+          try {
+            const comments = await Comment.find()
+              .sort({ createdAt: -1 })
+             
+            return comments;
+          } catch (err) {
+            throw new Error(err);
+          }
+        },
+        // finds a comment by its commentId
+        comment: async (parent, { commentId }) => {
+          try {
+            const comment = await Comment.findById(commentId);
+              return comment;
+          } catch (err) {
+            throw new Error(err);
+          }
+        },
       // ************************** QUERY SKILLS *******************************************//
     skills: async () => {
         try {
@@ -484,23 +514,48 @@ const resolvers = {
         throw new Error("Error deleting post.");
       }
     },
+    // ************************** LIKE POST *******************************************//
+    likePost: async (parent, { postId }, context) => {
+      if (context.user) {
+        const post = await Post.findById(postId);
+        const userId = context.user._id;
 
+        if (!post) {
+          throw new Error('Post not found');
+        }
+
+        const alreadyLiked = post.likedBy.includes(userId);
+
+        if (alreadyLiked) {
+          post.likes -= 1;
+          post.likedBy = post.likedBy.filter(id => id.toString() !== userId);
+        } else {
+          post.likes += 1;
+          post.likedBy.push(userId);
+        }
+
+        await post.save();
+
+        return post;
+      }
+
+      throw new AuthenticationError('Not logged in');
+    },
     // ************************** ADD COMMENT *******************************************//
     addComment: async (parent, { postId, commentText }, context) => {
       if (context.user) {
         try {
-          const newComment = {
+          const newComment = await Comment.create({
             commentText,
             commentAuthor: context.user.name,
-            createdAt: new Date().toISOString(),
             userId: context.user._id,
-          };
+          });
 
-          const updatedPost = await Post.findOneAndUpdate(
-            { _id: postId },
-            { $push: { comments: newComment } },
-            { new: true, runValidators: true }
-          );
+          const updatedPost = await Post.findByIdAndUpdate(
+            postId,
+            { $push: { comments: newComment._id } },
+            { new: true }
+          ).populate('comments');
 
           return updatedPost;
         } catch (err) {
@@ -512,45 +567,52 @@ const resolvers = {
     },
 
     // ************************** UPDATE COMMENT *******************************************//
-    updateComment: async (
-      parent,
-      { postId, commentId, commentText },
-      context
-    ) => {
+    updateComment: async (parent, {  commentId, commentText }, context) => {
       if (context.user) {
-        const post = await Post.findOneAndUpdate(
-          {
-            _id: postId,
-            "comments._id": commentId,
-            "comments.userId": context.user._id,
-          },
-          {
-            $set: {
-              "comments.$.commentText": commentText,
-            },
-          },
-          { new: true }
-        );
-        return post;
+        try {
+          const updatedComment = await Comment.findOneAndUpdate(
+            { _id: commentId, userId: context.user._id },
+            { commentText },
+            { new: true }
+          );
+
+          if (!updatedComment) {
+            throw new Error("Comment not found or not authorized");
+          }
+
+          return updatedComment;
+        } catch (err) {
+          console.error(err);
+          throw new Error("Error updating comment");
+        }
       }
       throw new AuthenticationError("You need to be logged in!");
     },
 
     // ************************** REMOVE COMMENT *******************************************//
-    removeComment: async (parent, { postId, commentId }, context) => {
+   removeComment: async (parent, { postId, commentId }, context) => {
       if (context.user) {
-        return Post.findOneAndUpdate(
-          { _id: postId },
-          {
-            $pull: {
-              comments: {
-                _id: commentId,
-                commentAuthor: context.user.name,
-              },
-            },
-          },
-          { new: true }
-        );
+        try {
+          const deletedComment = await Comment.findOneAndDelete({
+            _id: commentId,
+            userId: context.user._id,
+          });
+
+          if (!deletedComment) {
+            throw new Error("Comment not found or not authorized");
+          }
+
+          const updatedPost = await Post.findByIdAndUpdate(
+            postId,
+            { $pull: { comments: commentId } },
+            { new: true }
+          ).populate('comments');
+
+          return updatedPost;
+        } catch (err) {
+          console.error(err);
+          throw new Error("Error removing comment");
+        }
       }
       throw new AuthenticationError("You need to be logged in!");
     },

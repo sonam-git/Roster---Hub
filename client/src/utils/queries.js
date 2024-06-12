@@ -20,6 +20,7 @@ export const QUERY_PROFILES = gql`
           commentText
           commentAuthor
           createdAt
+          userId
         }
       }
       socialMediaLinks { 
@@ -71,6 +72,7 @@ export const QUERY_SINGLE_PROFILE = gql`
           commentText
           commentAuthor
           createdAt
+          userId
         }
       }
       socialMediaLinks {
@@ -131,10 +133,11 @@ export const QUERY_ME = gql`
         createdAt
         userId
         comments {
+          _id
           commentText
           commentAuthor
           createdAt
-          _id
+          userId
         }
       }
       receivedMessages {
@@ -200,6 +203,8 @@ query Posts {
       createdAt
       userId
     }
+    likes
+    likedBy
   }
 }
 `;
@@ -219,6 +224,8 @@ query Post($postId: ID!) {
       createdAt
       userId
     }
+    likes
+    likedBy
   }
 }
 `;
@@ -226,9 +233,33 @@ query Post($postId: ID!) {
 export const GET_SKILLS = gql`
 query Skills {
   skills {
+    _id
     skillText
     skillAuthor
     createdAt
   }
 }
 `;
+
+export const GET_COMMENTS = gql`
+query Comments {
+  comments {
+    _id
+    commentText
+    commentAuthor
+    createdAt
+    userId
+  }
+}`;
+
+export const GET_COMMENT = gql`
+query Comment($commentId: ID!) {
+  comment(commentId: $commentId) {
+    _id
+    commentText
+    commentAuthor
+    createdAt
+    userId
+  }
+}`;
+

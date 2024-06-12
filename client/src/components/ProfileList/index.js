@@ -9,6 +9,7 @@ import ProfileAvatar from '../../assets/images/profile-avatar.png';
 import { ThemeContext } from '../ThemeContext';
 
 const ProfileList = ({ profiles, title }) => {
+
   const { isDarkMode } = useContext(ThemeContext);
   const [selectedUser, setSelectedUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,7 +24,7 @@ const ProfileList = ({ profiles, title }) => {
   };
 
   if (!profiles.length) {
-    return <h3>No Profiles Yet</h3>;
+    return <h3>No Profiles Yet </h3>;
   }
 
   // Get the ID of the logged-in user

@@ -65,7 +65,7 @@ const MessageList = ({ messages, isLoggedInUser = false, isDarkMode }) => {
       <div className={`overflow-auto max-h-100 my-4 grid grid-cols-1 gap-4 `}>
         {messages.slice(0, displayedMessages).map((message) => (
           <div key={message._id} className="col-span-1">
-            <div className="border border-gray-300 rounded-lg p-4 mb-4">
+            <div className="border border-gray-800 dark:border-gray-100 rounded-lg p-4 mb-4">
               {/* Sender Information */}
               <p className="text-sm text-gray-500 mt-2">
                 From: {message?.sender.name} on {message.createdAt}

@@ -77,7 +77,7 @@ const PostForm = () => {
               </div>
             )}
           </form>
-          <PostsList />
+          <PostsList loggedInUserId ={ userId}/>
         </>
       ) : (
         <p>

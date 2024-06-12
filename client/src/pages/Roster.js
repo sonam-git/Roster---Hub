@@ -8,6 +8,7 @@ const Roster = () => {
   const { loading, data } = useQuery(QUERY_PROFILES);
   const profiles = data?.profiles || [];
 
+
   // Check if the user is logged in
   const isLoggedIn = Auth.loggedIn();
 

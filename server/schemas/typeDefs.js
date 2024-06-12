@@ -31,6 +31,8 @@ scalar Upload
     createdAt: String!
     comments: [Comment]
     userId: ID!
+    likes: Int
+    likedBy: [ID]
   }
 
   type Comment {
@@ -74,6 +76,8 @@ scalar Upload
     socialMediaLinks(userId: ID!): [SocialMediaLink]!
     posts: [Post]
     post(postId: ID!): Post
+    comments:[Comment]
+    comment(commentId : ID!): Comment
   }
  
   type Mutation {
@@ -93,10 +97,11 @@ scalar Upload
     updatePost(postId: ID!, postText: String!): Post
     removePost(postId: ID!): Post
     addComment(postId: ID!, commentText: String!): Post
-    updateComment(postId: ID!, commentId: ID!, commentText: String!): Post
+    updateComment( commentId: ID!, commentText: String!): Comment
     removeComment(postId: ID!, commentId: ID!): Post
     sendResetPasswordEmail(email: String!): ResponseMessage!
     resetPassword(token: String!, newPassword: String!): ResponseMessage!
+    likePost(postId: ID!): Post
   }
 `;
 

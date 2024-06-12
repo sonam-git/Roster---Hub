@@ -37,7 +37,7 @@ const Signup = () => {
   return (
     <main className={`flex justify-center mb-4 px-2`}>
       <div className={`w-full max-w-md mt-5 `}>
-        <div className={`shadow-xl rounded px-8 pt-6 pb-8 mb-4 dark:bg-gray-800`}>
+        <div className={` bg-gray-200 shadow-xl rounded px-8 pt-6 pb-8 mb-4 dark:bg-gray-800`}>
           <h4 className="text-center text-2xl font-bold text-gray-900 mb-6 dark:text-white">Sign Up</h4>
           {data ? (
             <p className="text-center text-gray-900">
