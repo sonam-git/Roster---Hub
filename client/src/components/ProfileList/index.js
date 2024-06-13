@@ -1,12 +1,13 @@
 import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import ChatBox from '../ChatBox';
-import { AiOutlineMessage, AiFillStar, AiOutlineStar } from 'react-icons/ai'; // Import the chat and star icons
+import { AiOutlineMessage, AiFillStar } from 'react-icons/ai'; // Import the chat and star icons
 import { RiProfileLine, RiTShirt2Line } from 'react-icons/ri';
 import Auth from '../../utils/auth';
 import ProfileAvatar from '../../assets/images/profile-avatar.png';
 import { ThemeContext } from '../ThemeContext';
-import RatingModal from '../RatingModal'; // Import the RatingModal component
+import RatingModal from '../RatingModal'; 
+import renderStars from "../../utils/renderStars";
 
 const ProfileList = ({ profiles, title }) => {
   const { isDarkMode } = useContext(ThemeContext);
@@ -50,28 +51,7 @@ const ProfileList = ({ profiles, title }) => {
     currentPage * profilesPerPage
   );
 
-  // Helper function to render stars
-  const renderStars = (rating) => {
-    const fullStars = Math.floor(rating);
-    const halfStar = rating - fullStars >= 0.5;
-    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
-    return (
-      <div className="flex items-center">
-        {Array(fullStars)
-          .fill()
-          .map((_, index) => (
-            <AiFillStar key={index} className="text-yellow-500" />
-          ))}
-        {halfStar && <AiOutlineStar key="half" className="text-yellow-500" />}
-        {Array(emptyStars)
-          .fill()
-          .map((_, index) => (
-            <AiOutlineStar key={index + fullStars + 1} className="text-gray-400" />
-          ))}
-      </div>
-    );
-  };
 
   return (
     <div className={`p-6 rounded-lg ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
