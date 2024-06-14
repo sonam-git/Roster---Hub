@@ -116,7 +116,7 @@ const resolvers = {
       try {
         const posts = await Post.find()
           .sort({ createdAt: -1 })
-          .populate("comments");
+          .populate("comments").populate("likedBy");
         return posts;
       } catch (err) {
         throw new Error(err);
@@ -125,7 +125,7 @@ const resolvers = {
     // finds a post by its posttId
     post: async (parent, { postId }) => {
       try {
-        const post = await Post.findById(postId).populate("comments");
+        const post = await Post.findById(postId).populate("comments").populate("likedBy");
         if (post) {
           return post;
         } else {
@@ -599,6 +599,7 @@ const resolvers = {
         }
 
         await post.save();
+        await post.populate("likedBy"); // Populate the likedBy field
 
         return post;
       }

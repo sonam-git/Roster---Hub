@@ -250,7 +250,10 @@ export const LIKE_POST = gql`
     likePost(postId: $postId) {
       _id
       likes
-      likedBy
+      likedBy {
+        _id
+        name
+      }
     }
   }
 `;

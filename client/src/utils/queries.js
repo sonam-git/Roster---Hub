@@ -207,7 +207,10 @@ query Posts {
       userId
     }
     likes
-    likedBy
+    likedBy {
+      _id
+      name
+    }
   }
 }
 `;
@@ -228,7 +231,10 @@ query Post($postId: ID!) {
       userId
     }
     likes
-    likedBy
+    likedBy {
+      _id
+      name
+    }
   }
 }
 `;

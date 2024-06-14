@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useMutation } from "@apollo/client";
+import { Link } from "react-router-dom";
+import { useMutation, useQuery } from "@apollo/client";
 import {
   PencilAltIcon,
   TrashIcon,
@@ -7,12 +8,18 @@ import {
   XIcon,
   HeartIcon,
 } from "@heroicons/react/solid";
-import { REMOVE_POST, UPDATE_POST, ADD_COMMENT, LIKE_POST } from "../../utils/mutations";
+import {
+  REMOVE_POST,
+  UPDATE_POST,
+  ADD_COMMENT,
+  LIKE_POST,
+} from "../../utils/mutations";
 import { GET_POSTS } from "../../utils/queries";
 import Auth from "../../utils/auth";
 import CommentList from "../CommentList";
 
 const Post = ({ post }) => {
+  const { refetch } = useQuery(GET_POSTS);
   const [isEditing, setIsEditing] = useState(false);
   const [postText, setPostText] = useState(post.postText);
   const [isEdited, setIsEdited] = useState(false);
@@ -21,6 +28,7 @@ const Post = ({ post }) => {
   const [showComments, setShowComments] = useState(false);
   const [likes, setLikes] = useState(post.likes);
   const [likedBy, setLikedBy] = useState(post.likedBy || []);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const [removePost] = useMutation(REMOVE_POST, {
     refetchQueries: [{ query: GET_POSTS }],
@@ -38,10 +46,13 @@ const Post = ({ post }) => {
   });
 
   const [likePost] = useMutation(LIKE_POST, {
-    refetchQueries: [{ query: GET_POSTS }],
-    onCompleted: (data) => {
+    onCompleted: async (data) => {
       setLikes(data.likePost.likes);
       setLikedBy(data.likePost.likedBy);
+      await refetch(); // Refetch the posts to get the updated likedBy data
+    },
+    onError: (err) => {
+      console.error("Error liking post:", err);
     },
   });
 
@@ -89,20 +100,27 @@ const Post = ({ post }) => {
     try {
       await likePost({ variables: { postId: post._id } });
     } catch (err) {
-      console.error(err);
+      console.error("Error liking post:", err);
     }
   };
 
   const sortedComments = [...post.comments].reverse();
 
-  const isLikedByCurrentUser = likedBy && likedBy.includes(Auth.getProfile().data._id);
+  const isLikedByCurrentUser = likedBy.some(
+    (user) => user._id === Auth.getProfile().data._id
+  );
 
   return (
     <div className="relative bg-gray-100 dark:bg-gray-800 shadow-md rounded-lg p-4 mb-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-sm md:text-md lg:text-lg xl:text-xl">
-          {post?.postAuthor}
-        </h3>
+        <Link
+          className="flex items-center hover:no-underline hover:text-dark dark:hover:text-white"
+          to={`/profiles/${post.userId}`}
+        >
+          <h3 className="text-sm md:text-md lg:text-lg xl:text-xl">
+            {post?.postAuthor}
+          </h3>
+        </Link>
         {Auth.loggedIn() && Auth.getProfile().data._id === post.userId && (
           <div className="absolute top-3 right-3 flex space-x-2">
             <PencilAltIcon
@@ -157,29 +175,42 @@ const Post = ({ post }) => {
         )}
 
         <div className="flex space-x-2 items-center">
-          <HeartIcon
-            className={`h-5 w-5 cursor-pointer ${
-              isLikedByCurrentUser ? "text-green-500" : "text-red-500"
-            }`}
-            title={isLikedByCurrentUser ? "Dislike" : "Like"}
-            onClick={handleLike}
-          />
+          <div className="relative flex items-center">
+            <HeartIcon
+              className={`h-5 w-5 cursor-pointer ${
+                isLikedByCurrentUser ? "text-green-500" : "text-red-500"
+              }`}
+              title={isLikedByCurrentUser ? "Dislike" : "Like"}
+              onClick={handleLike}
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+            />
+            {showTooltip && likedBy.length > 0 && (
+              <div className="absolute top-0 left-full ml-2 w-max bg-green-200 text-black text-sm rounded p-2 z-10">
+                {likedBy.map((user) => (
+                  <li key={user._id}>{user.name}</li>
+                ))}
+              </div>
+            )}
+          </div>
           <span className="text-gray-700 dark:text-white">{likes}</span>
-     
+
           <ChatAltIcon
             className="h-5 w-5 text-green-500 cursor-pointer"
             title="Comment"
             onClick={handleComment}
           />
-        
+
           {!showComments ? (
-         <>
-            <ChatAltIcon
-              className="h-5 w-5 text-blue-500 cursor-pointer"
-              title="Show Comments"
-              onClick={toggleComments}
-            />
-            <span className="text-gray-700 dark:text-white">{sortedComments.length}</span> 
+            <>
+              <ChatAltIcon
+                className="h-5 w-5 text-blue-500 cursor-pointer"
+                title="Show Comments"
+                onClick={toggleComments}
+              />
+              <span className="text-gray-700 dark:text-white">
+                {sortedComments.length}
+              </span>
             </>
           ) : (
             <XIcon

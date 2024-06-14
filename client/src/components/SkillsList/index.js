@@ -37,7 +37,7 @@ const SkillsList = ({ profile, skills, isLoggedInUser = false, isDarkMode }) => 
   };
 
   if (!skills.length) {
-    return <h3 className="text-center">No endorsed Skill yet</h3>;
+    return <h3 className="text-center font-bold text-sm md:text-lg lg:text-xl xl:text-2xl">No endorsed Skill yet</h3>;
   }
 
   // Calculate total number of pages

@@ -106,7 +106,7 @@ const ProfileList = ({ profiles, title }) => {
               </button>
               {/* Player info button */}
               <Link
-                className="flex items-center hover:no-underline"
+                className="flex items-center hover:no-underline "
                 to={`/profiles/${profile._id}`}
               >
                 <RiProfileLine className={`mr-2 text-2xl ${isDarkMode ? 'text-white' : 'text-black'}`} />

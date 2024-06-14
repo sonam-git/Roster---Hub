@@ -39,7 +39,7 @@ scalar Upload
     comments: [Comment]
     userId: ID!
     likes: Int
-    likedBy: [ID]
+    likedBy: [Profile]
   }
 
   type Comment {

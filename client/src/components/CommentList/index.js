@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { PencilAltIcon, TrashIcon } from "@heroicons/react/solid";
 import { REMOVE_COMMENT, UPDATE_COMMENT } from "../../utils/mutations";
@@ -114,9 +115,14 @@ const CommentList = ({ post, comments }) => {
               </div>
             ) : (
               <>
+                <Link
+                className="flex items-center hover:no-underline dark:hover:text-white"
+                to={`/profiles/${post.userId}`}
+              >
                 <h4 className="text-sm font-semibold text-left">
                   {comment.commentAuthor}
                 </h4>
+                </Link>
                 <p className="text-gray-600 dark:text-gray-300 mt-1 text-left text-sm sm:text-base">
                   {comment.commentText}
                 </p>
