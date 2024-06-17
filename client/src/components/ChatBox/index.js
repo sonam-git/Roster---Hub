@@ -67,13 +67,13 @@ const ChatBox = ({ recipient, onCloseModal, isDarkMode }) => {
       <>
         {!messageSent && (
           <Modal showModal={!messageSent} onClose={handleCloseModal}>
-            <div className={`rounded-lg shadow-md p-6 dark:bg-gray-300 `}>
+            <div className={`rounded-lg shadow-md p-6 ${isDarkMode ? 'bg-gray-200 text-white' : 'bg-white text-black'} `}>
               <h3 className="text-xl font-bold mb-4 card-header bg-dark text-light p-2 m-0 rounded-md">
                 Chat with{" "}
                 {recipient.name[0].toUpperCase() + recipient.name.slice(1)}
               </h3>
               {/* Container with fixed height and vertical scrolling */}
-              <div className={`conversation-container p-2 max-h-80 overflow-y-auto ${isDarkMode ? 'bg-gray-500 text-white' : 'bg-white text-black'}`}>
+              <div className={`conversation-container p-2 max-h-80 overflow-y-auto ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
                 {/* Reverse the order of messages to display the latest at the bottom */}
                 {messages.map((msg, index) => (
                   <div key={index} className="mb-2">
@@ -97,7 +97,7 @@ const ChatBox = ({ recipient, onCloseModal, isDarkMode }) => {
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Type your message..."
                 rows={3}
-                className="text-dark w-full p-2 border border-gray-300 rounded-md mb-4"
+                className="text-dark w-full p-2 border border-gray-300 rounded-md mt-2 mb-4"
               />
               <div className="flex justify-end">
                 <button

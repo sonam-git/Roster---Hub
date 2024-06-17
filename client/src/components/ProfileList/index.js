@@ -138,11 +138,11 @@ const ProfileList = ({ profiles, title }) => {
       </div>
       {/* Render the chat box if a user is selected */}
       {selectedUser && (
-        <ChatBox recipient={selectedUser} onCloseModal={handleModalClose} />
+        <ChatBox recipient={selectedUser} onCloseModal={handleModalClose} isDarkMode={isDarkMode} />
       )}
       {/* Render the rating modal if a profile is selected for rating */}
       {ratingProfile && (
-        <RatingModal profile={ratingProfile} onClose={handleRatingModalClose} />
+        <RatingModal profile={ratingProfile} onClose={handleRatingModalClose} isDarkMode={isDarkMode} />
       )}
     </div>
   );

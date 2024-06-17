@@ -158,7 +158,7 @@ const Post = ({ post }) => {
         </div>
       ) : (
         <>
-          <p className="text-gray-700 dark:text-white mt-2">{post?.postText}</p>
+          <p className="text-gray-700 dark:text-white text-sm md:text-sm lg:text-md xl:text-lg mt-2">{post?.postText}</p>
           {isEdited && (
             <small className="text-gray-500">
               Edited: {new Date().toLocaleString()}
