@@ -33,7 +33,7 @@ const RatingModal = ({ profile, onClose, isDarkMode }) => {
           isDarkMode ? "bg-gray-900 text-white" : "bg-white text-black"
         } p-6 rounded-lg shadow-lg`}
       >
-        <h3 className=" dark:bg-black p-2 text-lg font-bold mb-4">
+        <h3 className="bg-gray-200 dark:bg-black p-2 text-lg font-bold mb-4">
           Rate {profile.name}
         </h3>
         <div className="flex justify-center mb-4 ">
