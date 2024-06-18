@@ -58,23 +58,23 @@ const SkillsList = ({ profile, skills, isLoggedInUser = false, isDarkMode }) => 
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 my-4">
-        {paginatedSkills.map((skill) => (
-          <div key={skill._id} className="col-span-1">
+        {paginatedSkills?.map((skill) => (
+          <div key={skill?._id} className="col-span-1">
             <div className={`card mb-1 shadow-2xl rounded-md ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}>
               <div className="card-header text-light p-2">
                 <div className={`mb-2 font-bold p-2 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
-                  <span>{skill.skillText[0].toUpperCase() + skill.skillText.slice(1)}</span>
+                  <span>{skill?.skillText[0].toUpperCase() + skill?.skillText.slice(1)}</span>
                 </div>
                 <div className="flex justify-between text-gray-500">
                   <div>
                     <span className="mr-1 text-xs">
-                      By : {skill.skillAuthor[0].toUpperCase() + skill.skillAuthor.slice(1)} on {skill?.createdAt}
+                      By : {skill?.skillAuthor[0].toUpperCase() + skill?.skillAuthor.slice(1)} on {skill?.createdAt}
                     </span>
                   </div>
                   {isLoggedInUser && (
                     <button
                       className="btn btn-sm btn-danger hover:bg-red-700 transition duration-300"
-                      onClick={() => handleRemoveSkill(skill._id)}
+                      onClick={() => handleRemoveSkill(skill?._id)}
                     >
                       <AiOutlineDelete />
                     </button>

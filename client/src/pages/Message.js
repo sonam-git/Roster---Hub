@@ -5,7 +5,7 @@ import { QUERY_ME, QUERY_SINGLE_PROFILE } from "../utils/queries";
 import MessageList from "../components/MessageList";
 import "@fortawesome/fontawesome-free/css/all.css";
 
-const Message = ({ isLoggedInUser ,isDarkMode }) => {
+const Message = ({ isDarkMode }) => {
   const { profileId } = useParams();
   // If there is no `profileId` in the URL as a parameter, execute the `QUERY_ME` query instead for the logged in user's information
   const { loading, data, error } = useQuery(
