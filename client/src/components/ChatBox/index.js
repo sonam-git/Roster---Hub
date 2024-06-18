@@ -32,8 +32,7 @@ const ChatBox = ({ recipient, onCloseModal, isDarkMode }) => {
       const sortedMessages = filteredMessages.sort(
         (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
       );
-      // Reverse the order to display the latest message at the bottom
-      setMessages(sortedMessages.reverse());
+      setMessages(sortedMessages);
     }
   }, [loading, data, recipient]);
 
@@ -74,7 +73,6 @@ const ChatBox = ({ recipient, onCloseModal, isDarkMode }) => {
               </h3>
               {/* Container with fixed height and vertical scrolling */}
               <div className={`conversation-container p-2 max-h-80 overflow-y-auto ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
-                {/* Reverse the order of messages to display the latest at the bottom */}
                 {messages.map((msg, index) => (
                   <div key={index} className="mb-2">
                     <p className="font-semibold">
