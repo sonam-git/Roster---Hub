@@ -272,3 +272,55 @@ query Comment($commentId: ID!) {
   }
 }`;
 
+export const GET_ALL_CHATS = gql`
+query GetAllChats {
+  getAllChats {
+    id
+    content
+    createdAt
+    from {
+      _id
+      name
+    }
+    to {
+      _id
+      name
+    }
+  }
+}`;
+
+export const GET_CHATS_BETWEEN_USERS = gql`
+query GetChatsBetweenUsers($userId1: ID!, $userId2: ID!) {
+  getChatsBetweenUsers(userId1: $userId1, userId2: $userId2) {
+    id
+    from {
+      _id
+      name
+    }
+    to {
+      _id
+      name
+    }
+    content
+    createdAt
+  }
+}
+`;
+
+export const GET_CHAT_BY_ID = gql`
+query GetChatById($getChatByIdId: ID!) {
+  getChatById(id: $getChatByIdId) {
+    id
+    from {
+      _id
+      name
+    }
+    to {
+      _id
+      name
+    }
+    content
+    createdAt
+  }
+}
+`;

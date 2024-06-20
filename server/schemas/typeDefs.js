@@ -58,12 +58,21 @@ scalar Upload
     createdAt: String!
   }
 
+type Chat {
+    id: ID!
+    from: Profile
+    to: Profile
+    content: String
+    createdAt: String!
+  }
+
   type SocialMediaLink {
     _id: ID!
     userId: ID!
     type: String!
     link: String!
   }
+
   type ResponseMessage {
     message: String!
   }
@@ -90,7 +99,10 @@ scalar Upload
     post(postId: ID!): Post
     comments:[Comment]
     comment(commentId : ID!): Comment
-   getPlayerRating(profileId: ID!): Float
+    getPlayerRating(profileId: ID!): Float
+    getChatById(id: ID!): Chat
+    getAllChats: [Chat]
+    getChatsBetweenUsers(userId1: ID!, userId2: ID!): [Chat]
   }
  
   type Mutation {
@@ -116,6 +128,7 @@ scalar Upload
     resetPassword(token: String!, newPassword: String!): ResponseMessage!
     likePost(postId: ID!): Post
     ratePlayer(profileId: ID!, ratingInput: RatingInput!): Profile
+    createChat(from: ID!, to: ID!, content: String!): Chat
   }
 `;
 

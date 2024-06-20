@@ -12,6 +12,7 @@ const {
   SocialMediaLink,
   Post,
   Comment,
+  Chat,
 } = require("../models");
 const { signToken } = require("../utils/auth");
 const cloudinary = require("../utils/cloudinary");
@@ -116,7 +117,8 @@ const resolvers = {
       try {
         const posts = await Post.find()
           .sort({ createdAt: -1 })
-          .populate("comments").populate("likedBy");
+          .populate("comments")
+          .populate("likedBy");
         return posts;
       } catch (err) {
         throw new Error(err);
@@ -125,7 +127,9 @@ const resolvers = {
     // finds a post by its posttId
     post: async (parent, { postId }) => {
       try {
-        const post = await Post.findById(postId).populate("comments").populate("likedBy");
+        const post = await Post.findById(postId)
+          .populate("comments")
+          .populate("likedBy");
         if (post) {
           return post;
         } else {
@@ -174,6 +178,22 @@ const resolvers = {
         0
       );
       return profile.ratings.length ? totalRatings / profile.ratings.length : 0;
+    },
+
+    // ************************** QUERY CHAT *******************************************//
+    getChatById: async (parent, { id }) => {
+      return await Chat.findById(id).populate("from to");
+    },
+    getAllChats: async () => {
+      return await Chat.find().populate("from to");
+    },
+    getChatsBetweenUsers: async (parent, { userId1, userId2 }) => {
+      return await Chat.find({
+        $or: [
+          { from: userId1, to: userId2 },
+          { from: userId2, to: userId1 },
+        ],
+      }).populate("from to");
     },
   },
   // ########## MUTAIIONS ########### //
@@ -260,27 +280,8 @@ const resolvers = {
 
         return profile;
       }
-      throw new AuthenticationError('You need to be logged in!');
+      throw new AuthenticationError("You need to be logged in!");
     },
-    // ratePlayer: async (_, { profileId, ratingInput }) => {
-    //   const { user, rating } = ratingInput;
-    //   const profile = await Profile.findById(profileId);
-    //   if (!profile) {
-    //     throw new Error("Profile not found");
-    //   }
-
-    //   const existingRating = profile.ratings.find(
-    //     (r) => r.user.toString() === user
-    //   );
-    //   if (existingRating) {
-    //     existingRating.rating = rating;
-    //   } else {
-    //     profile.ratings.push({ user, rating });
-    //   }
-
-    //   await profile.save();
-    //   return profile;
-    // },
 
     // ************************** UPLOAD PROFILE PIC USING CLOUDINARY  *******************************************//
     uploadProfilePic: async (_, { profileId, profilePic }, context) => {
@@ -423,6 +424,13 @@ const resolvers = {
         throw new Error("Error deleting Message.");
       }
     },
+    // ************************** CREATE CHAT AND SEND CHAT  *******************************************//
+    createChat: async (parent, { from, to, content }) => {
+      const newChat = new Chat({ from, to, content });
+      await newChat.save();
+      return await Chat.findById(newChat._id).populate("from to");
+    },
+
     // ************************** SAVE SOCIAL MEDIA LINK  *******************************************//
     saveSocialMediaLink: async (_, { userId, type, link }) => {
       try {
@@ -782,6 +790,14 @@ const resolvers = {
           );
         }
       }
+    },
+  },
+  Chat: {
+    from: async (chat) => {
+      return await Profile.findById(chat.from);
+    },
+    to: async (chat) => {
+      return await Profile.findById(chat.to);
     },
   },
 };

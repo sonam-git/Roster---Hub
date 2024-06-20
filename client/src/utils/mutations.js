@@ -271,3 +271,39 @@ export const RATE_PLAYER = gql`
     }
   }
 `;
+
+export const CREATE_CHAT = gql`
+mutation CreateChat($from: ID!, $to: ID!, $content: String!) {
+  createChat(from: $from, to: $to, content: $content) {
+    id
+    from {
+      _id
+      name
+    }
+    to {
+      _id
+      name
+    }
+    content
+    createdAt
+  }
+}
+`;
+
+
+
+export const CHAT_SUBSCRIPTION = gql`
+  subscription onChatMessageSent {
+    chatMessageSent {
+      _id
+      messages {
+        sender {
+          _id
+          name
+        }
+        text
+        createdAt
+      }
+    }
+  }
+`;
