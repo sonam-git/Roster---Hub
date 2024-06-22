@@ -22,7 +22,7 @@ const RecentSkillsList = () => {
 
   return (
     <>
-      <div className={`sticky top-0 mb-2 shadow-md p-2 rounded-md z-10 ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}>
+      <div className={` top-0 mb-2 shadow-md p-2 rounded-md z-10 ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}>
         <h3 className="text-center font-bold mb-2 text-sm md:text-xl lg:text-2xl xl:text-2xl text-gray-800 dark:text-gray-200">Latest Skills</h3>
       </div>
 

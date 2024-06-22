@@ -40,8 +40,12 @@ class AuthService {
   }
 
   // Remove token from local storage and reload page
-  logout() {
+  logout(callback) {
     localStorage.removeItem('id_token');
+    if (callback) {
+      callback();
+    }
+    window.location.reload();
   }
 }
 

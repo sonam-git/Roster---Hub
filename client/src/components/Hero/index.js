@@ -7,7 +7,7 @@ import heroImageDark from "../../assets/images/roster-hub-logo.png";
 const Hero = () => {
   const { isDarkMode } = useContext(ThemeContext); // Access isDarkMode from ThemeContext
   return (
-    <main className="container min-h-screen flex items-center justify-center px-4">
+    <main className="container min-h-screen flex items-center justify-center px-2">
       <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-7xl">
         <div className="md:w-1/2 flex flex-col items-center text-center mb-10 md:mb-0">
           <h1 className="text-5xl font-bold mb-2">Roster Hub</h1>
@@ -19,7 +19,7 @@ const Hero = () => {
           />
         </div>
         <div className="md:w-1/2 flex flex-col items-center">
-          <div className="bg-gray-200 shadow-xl  px-8 pt-6 pb-8 mb-4 dark:bg-gray-800 w-full max-w-md rounded-xl">
+          <div className="bg-gray-200 shadow-xl  px-4 pt-6 pb-8 mb-4 dark:bg-gray-800 w-full max-w-lg rounded-xl">
             <h4 className="text-center text-2xl font-bold text-gray-900 mb-6 dark:text-white">
               Create Your Profile.
             </h4>

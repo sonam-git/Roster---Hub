@@ -1,4 +1,5 @@
 require("dotenv").config();
+const { PubSub } = require('graphql-subscriptions');
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const {
@@ -17,6 +18,8 @@ const {
 const { signToken } = require("../utils/auth");
 const cloudinary = require("../utils/cloudinary");
 const secret = process.env.JWT_SECRET;
+
+const pubsub = new PubSub();
 
 const resolvers = {
   // ############ QUERIES ########## //
@@ -425,12 +428,25 @@ const resolvers = {
       }
     },
     // ************************** CREATE CHAT AND SEND CHAT  *******************************************//
-    createChat: async (parent, { from, to, content }) => {
-      const newChat = new Chat({ from, to, content });
-      await newChat.save();
-      return await Chat.findById(newChat._id).populate("from to");
-    },
+    createChat: async (parent, { from, to, content }, context) => {
+      if (!context.user) {
+        throw new AuthenticationError("You need to be logged in to create a chat!");
+      }
+      try {
+        const newChat = new Chat({ from, to, content });
+        await newChat.save();
+        const populatedChat = await Chat.findById(newChat._id).populate("from to");
 
+        // Publish the new chat event
+        pubsub.publish('CHAT_CREATED', { chatCreated: populatedChat });
+
+        return populatedChat;
+      } catch (error) {
+        console.error("Error creating chat:", error);
+        throw new Error("Failed to create chat");
+      }
+    },
+    
     // ************************** SAVE SOCIAL MEDIA LINK  *******************************************//
     saveSocialMediaLink: async (_, { userId, type, link }) => {
       try {
@@ -792,6 +808,17 @@ const resolvers = {
       }
     },
   },
+  Subscription: {
+    chatCreated: {
+      subscribe: (parent, args, context) => {
+        if (!context.user) {
+          throw new AuthenticationError("You need to be logged in to subscribe!");
+        }
+        return pubsub.asyncIterator(['CHAT_CREATED']);
+      },
+    },
+  },
+  
   Chat: {
     from: async (chat) => {
       return await Profile.findById(chat.from);

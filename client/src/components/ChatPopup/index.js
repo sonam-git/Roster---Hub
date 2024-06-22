@@ -1,114 +1,164 @@
-import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
-import { QUERY_PROFILES, GET_CHATS_BETWEEN_USERS } from '../../utils/queries';
-import { CREATE_CHAT } from '../../utils/mutations';
-import Auth from '../../utils/auth';
+import React, { useState, useEffect, useRef } from 'react';
+import { useQuery, useMutation, useSubscription } from '@apollo/client';
+import { GET_CHATS_BETWEEN_USERS, QUERY_PROFILES } from '../../utils/queries';
+import { CREATE_CHAT, CHAT_SUBSCRIPTION } from '../../utils/mutations';
+import { FaPaperPlane } from 'react-icons/fa';
 
-const ChatPopup = () => {
-  const loggedInUserId = Auth.getProfile().data._id; 
- 
-  const [isOpen, setIsOpen] = useState(false);
+const ChatPopup = ({ currentUser, isDarkMode }) => {
+  const [chatPopupOpen, setChatPopupOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [message, setMessage] = useState('');
-  const [recipientId, setRecipientId] = useState(null);
-
-  const { data: profilesData, loading: profilesLoading } = useQuery(QUERY_PROFILES);
-
-  const { data, loading, refetch } = useQuery(GET_CHATS_BETWEEN_USERS, {
-    variables: { userId1: loggedInUserId, userId2: recipientId },
-    skip: !recipientId || !isOpen,
+  const [errorMessage, setErrorMessage] = useState('');
+  const chatEndRef = useRef(null);
+  
+  const { data: profilesData } = useQuery(QUERY_PROFILES);
+  const { data: chatsData, refetch: refetchChats } = useQuery(GET_CHATS_BETWEEN_USERS, {
+    variables: { userId1: currentUser._id, userId2: selectedUser?._id },
+    skip: !selectedUser,
   });
-  const [createChat] = useMutation(CREATE_CHAT);
+  const [createChat] = useMutation(CREATE_CHAT, {
+    onCompleted: () => refetchChats(),
+    onError: (error) => console.error('Error creating chat:', error.message),
+  });
+
+  useSubscription(CHAT_SUBSCRIPTION, {
+    onSubscriptionData: () => {
+      if (selectedUser) {
+        refetchChats();
+      }
+    },
+  });
 
   useEffect(() => {
-    if (isOpen && recipientId) {
-      refetch();
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [isOpen, recipientId, refetch]);
+  }, [chatsData]);
 
-  const handleSend = async () => {
-    if (message.trim() === '') return;
-    await createChat({ variables: { from: loggedInUserId, to: recipientId, content: message } });
-    setMessage('');
-    refetch();
-  };
+  const handleSendMessage = async () => {
+    if (!message.trim()) {
+      setErrorMessage('Please write a message first to send.');
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 2000);
+      return;
+    }
 
-  const handleUserClick = (selectedUserId) => {
-    setIsOpen(true);
-    setRecipientId(selectedUserId);
+    try {
+      await createChat({
+        variables: {
+          from: currentUser._id,
+          to: selectedUser._id,
+          content: message,
+        },
+        optimisticResponse: {
+          createChat: {
+            id: Math.random().toString(),
+            from: { _id: currentUser._id, name: currentUser.name, __typename: 'Profile' },
+            to: { _id: selectedUser._id, name: selectedUser.name, __typename: 'Profile' },
+            content: message,
+            createdAt: new Date().toISOString(),
+            seen: false,
+            __typename: 'Chat',
+          },
+        },
+        update: (cache, { data: { createChat } }) => {
+          const data = cache.readQuery({
+            query: GET_CHATS_BETWEEN_USERS,
+            variables: { userId1: currentUser._id, userId2: selectedUser._id },
+          });
+
+          if (data) {
+            cache.writeQuery({
+              query: GET_CHATS_BETWEEN_USERS,
+              variables: { userId1: currentUser._id, userId2: selectedUser._id },
+              data: {
+                getChatsBetweenUsers: [...data.getChatsBetweenUsers, createChat],
+              },
+            });
+          }
+        },
+      });
+      setMessage('');
+      setErrorMessage('');
+    } catch (error) {
+      console.error('Error sending message:', error.message);
+    }
   };
 
   return (
-    <div className="fixed bottom-4 right-4 bg-white p-4 rounded-full shadow-lg z-50">
-      {!isOpen && (
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-full cursor-pointer"
-          onClick={() => setIsOpen(true)}
-        >
-          Open Chat
-        </button>
-      )}
-      {isOpen && (
-        <div className="fixed bottom-20 right-4 w-96 max-w-full lg:max-w-xl bg-white border border-gray-300 rounded-lg shadow-lg z-50">
-          <div className="flex h-full">
-            {/* User List Column */}
-            <div className="w-1/3 bg-gray-200 p-4 h-full overflow-y-auto">
-              <h2 className="text-lg font-semibold mb-4">Users</h2>
-              {profilesLoading ? (
-                <p>Loading...</p>
-              ) : (
-                profilesData?.profiles.map((profile) => (
-                  profile.id !== loggedInUserId && (
-                    <div
-                      key={profile.id}
-                      className="cursor-pointer p-2 hover:bg-gray-300 mb-2 rounded"
-                      onClick={() => handleUserClick(profile.id)}
-                    >
-                      {profile.name}
-                    </div>
-                  )
-                ))
-              )}
+    <div className={`fixed bottom-0 right-2 w-80 bg-white border border-gray-300 rounded-t-lg shadow-lg`}>
+      <div
+        className={` font-semibold ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-blue-600 text-white'} p-2 cursor-pointer rounded-t-lg flex justify-between items-center`}
+        onClick={() => setChatPopupOpen(!chatPopupOpen)}
+      >
+        <span>Chat Box</span>
+        <span>{chatPopupOpen ? '▼' : '▲'}</span>
+      </div>
+      {chatPopupOpen && (
+        <div className={`flex flex-col h-86 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
+          {!selectedUser ? (
+            <div className="flex-1 border-b border-gray-300 p-2 overflow-y-auto">
+              <h3 className="text-lg font-semibold mb-2">Players List</h3>
+              {profilesData?.profiles
+                .filter((user) => user._id !== currentUser._id)
+                .map((user) => (
+                  <div
+                    key={user._id}
+                    className={`p-1 cursor-pointer hover:bg-gray-100 dark:hover:text-black ${selectedUser?._id === user._id ? 'bg-gray-200' : ''}`}
+                    onClick={() => setSelectedUser(user)}
+                  >
+                    {user.name}
+                  </div>
+                ))}
             </div>
-            {/* Chat History and Input Column */}
-            <div className="w-2/3 bg-white rounded-lg">
-              <div className="bg-blue-500 text-white p-4 rounded-t-lg">
-                <h2 className="text-lg">Chat with {profilesData?.profiles.find(p => p.id === recipientId)?.name}</h2>
+          ) : (
+            <div className="flex-1 flex flex-col">
+              <div className="flex justify-between  font-semibold items-center p-2 border-b border-gray-300">
+                <span>{selectedUser.name}</span>
+                <button
+                  className="text-red-500"
+                  onClick={() => setSelectedUser(null)}
+                >
+                  Close
+                </button>
               </div>
-              <div className="p-4 h-64 overflow-y-auto">
-                {loading ? (
-                  <p>Loading...</p>
-                ) : (
-                  data?.getChatsBetweenUsers.map((chat) => (
+              <div className="flex-1 overflow-y-auto p-2" style={{ maxHeight: '300px' }}>
+                {chatsData?.getChatsBetweenUsers.map((chat) => (
+                  <div
+                    key={chat.id}
+                    className={`p-1 my-1 ${chat.from._id === currentUser._id ? 'text-right' : 'text-left'}`}
+                  >
                     <div
-                      key={chat.id}
-                      className={`mb-4 p-2 rounded ${
-                        chat.from.id === loggedInUserId ? 'bg-blue-100 text-right' : 'bg-gray-100 text-left'
-                      }`}
+                      className={`inline-block p-2 rounded-lg ${chat.from._id === currentUser._id ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'}`}
                     >
-                      <p className="font-bold">{chat.from.name}</p>
-                      <p>{chat.content}</p>
-                      <span className="text-xs text-gray-500">{new Date(chat.createdAt).toLocaleTimeString()}</span>
+                      {chat.content}
                     </div>
-                  ))
-                )}
+                    <div className="text-xs text-gray-500 mt-1">
+                      {new Date(parseInt(chat.createdAt)).toLocaleString()}
+                    </div>
+                  </div>
+                ))}
+                <div ref={chatEndRef} />
               </div>
-              <div className="p-4 flex items-center justify-between border-t border-gray-300">
-                <input
-                  type="text"
-                  className="flex-grow p-2 border border-gray-300 rounded-l-lg focus:outline-none"
+              {errorMessage && <div className="text-red-500 p-2">{errorMessage}</div>}
+              <div className="border-t border-gray-300 p-2 flex">
+                <textarea
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Type a message..."
+                  className="flex-1 p-2 border border-gray-300 dark:bg-gray-800 rounded-lg mr-2 resize-none dark:text-white"
+                  placeholder="Type your message..."
+                  rows="3"
                 />
                 <button
-                  className="bg-blue-500 text-white p-2 rounded-r-lg ml-2"
-                  onClick={handleSend}
+                  onClick={handleSendMessage}
+                  className="bg-blue-600 text-white p-2 rounded-lg flex items-center justify-center"
                 >
-                  Send
+                  <FaPaperPlane />
                 </button>
               </div>
             </div>
-          </div>
+          )}
         </div>
       )}
     </div>

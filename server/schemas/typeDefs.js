@@ -63,6 +63,7 @@ type Chat {
     from: Profile
     to: Profile
     content: String
+    seen: Boolean
     createdAt: String!
   }
 
@@ -129,6 +130,9 @@ type Chat {
     likePost(postId: ID!): Post
     ratePlayer(profileId: ID!, ratingInput: RatingInput!): Profile
     createChat(from: ID!, to: ID!, content: String!): Chat
+  }
+  type Subscription {
+    chatCreated: Chat
   }
 `;
 
