@@ -184,9 +184,32 @@ const resolvers = {
     },
 
     // ************************** QUERY CHAT *******************************************//
-    getChatById: async (parent, { id }) => {
-      return await Chat.findById(id).populate("from to");
+    getChatByUser : async (parent, { to }, context) => {
+      const userId = context.user._id;
+      // console.log(userId)
+      // Check if user is authenticated
+      if (!userId) {
+        throw new AuthenticationError(
+          "You need to be logged in to view chat conversation"
+        );
+      }
+    
+      try {
+        // Query for chat using Chat model
+        const chat = await Chat.find({
+          $or: [
+            { from: userId, to },
+            { from: to, to: userId }
+          ]
+        }).populate('from to'); // Assuming 'from' and 'to' are references to User model
+    
+        return chat;
+      } catch (error) {
+        console.error('Error fetching chat:', error);
+        throw new Error('Failed to fetch chat');
+      }
     },
+
     getAllChats: async () => {
       return await Chat.find().populate("from to");
     },
@@ -427,25 +450,37 @@ const resolvers = {
         throw new Error("Error deleting Message.");
       }
     },
-    // ************************** CREATE CHAT AND SEND CHAT  *******************************************//
-    createChat: async (parent, { from, to, content }, context) => {
-      if (!context.user) {
-        throw new AuthenticationError("You need to be logged in to create a chat!");
-      }
-      try {
-        const newChat = new Chat({ from, to, content });
-        await newChat.save();
-        const populatedChat = await Chat.findById(newChat._id).populate("from to");
+   
+// ************************** CREATE CHAT AND SEND CHAT  *******************************************//
+createChat: async (parent, { from, to, content }, context) => {
+  if (!context.user) {
+    throw new AuthenticationError("You need to be logged in to create a chat!");
+  }
+  try {
+    // Ensure the from, to, and content fields are provided
+    if (!from || !to || !content) {
+      throw new Error("All fields (from, to, content) are required.");
+    }
 
-        // Publish the new chat event
-        pubsub.publish('CHAT_CREATED', { chatCreated: populatedChat });
+    // Create the new chat document
+    const newChat = await Chat.create({
+      from,
+      to,
+      content
+    });
 
-        return populatedChat;
-      } catch (error) {
-        console.error("Error creating chat:", error);
-        throw new Error("Failed to create chat");
-      }
-    },
+    const populatedChat = await Chat.findById(newChat._id).populate("from to");
+
+    // Publish the new chat event
+    pubsub.publish('CHAT_CREATED', { chatCreated: populatedChat });
+
+    return populatedChat;
+  } catch (error) {
+    console.error("Error creating chat:", error);
+    throw new Error("Failed to create chat");
+  }
+},
+
     
     // ************************** SAVE SOCIAL MEDIA LINK  *******************************************//
     saveSocialMediaLink: async (_, { userId, type, link }) => {
@@ -810,12 +845,7 @@ const resolvers = {
   },
   Subscription: {
     chatCreated: {
-      subscribe: (parent, args, context) => {
-        if (!context.user) {
-          throw new AuthenticationError("You need to be logged in to subscribe!");
-        }
-        return pubsub.asyncIterator(['CHAT_CREATED']);
-      },
+      subscribe: () => pubsub.asyncIterator(['CHAT_CREATED']) 
     },
   },
   

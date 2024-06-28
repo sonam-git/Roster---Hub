@@ -307,20 +307,22 @@ query GetChatsBetweenUsers($userId1: ID!, $userId2: ID!) {
 }
 `;
 
-export const GET_CHAT_BY_ID = gql`
-query GetChatById($getChatByIdId: ID!) {
-  getChatById(id: $getChatByIdId) {
+export const GET_CHAT_BY_USER = gql`
+query GetChatByUser($to: ID!) {
+  getChatByUser(to: $to) {
     id
+    content
+    createdAt
     from {
       _id
       name
+      profilePic
     }
     to {
       _id
       name
+      profilePic
     }
-    content
-    createdAt
   }
 }
 `;

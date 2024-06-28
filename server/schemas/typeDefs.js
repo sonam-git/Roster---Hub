@@ -101,7 +101,7 @@ type Chat {
     comments:[Comment]
     comment(commentId : ID!): Comment
     getPlayerRating(profileId: ID!): Float
-    getChatById(id: ID!): Chat
+    getChatByUser(to: ID!): [Chat]
     getAllChats: [Chat]
     getChatsBetweenUsers(userId1: ID!, userId2: ID!): [Chat]
   }
