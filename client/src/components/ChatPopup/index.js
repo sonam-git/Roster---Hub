@@ -14,10 +14,10 @@ const ChatPopup = ({ currentUser, isDarkMode }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const chatEndRef = useRef(null);
 
-  // get userId from currently loggedin user
+  // get userId from currently logged-in user
   const userId = currentUser._id;
- 
-// query profiles to get the selected userId for chat
+
+  // query profiles to get the selected userId for chat
   const { data: profilesData } = useQuery(QUERY_PROFILES);
 
   // query chat between users
@@ -32,14 +32,17 @@ const ChatPopup = ({ currentUser, isDarkMode }) => {
   // create chat mutation
   const [createChat] = useMutation(CREATE_CHAT);
 
-// Subscription 
+  // Subscription
   useSubscription(CHAT_SUBSCRIPTION, {
-    onSubscriptionData: ({ subscriptionData: { data } }) => {
+    onData: ({ data }) => {
+      const chatData = data?.data?.chatCreated;
+
       if (
-        (data.chatCreated.to._id === selectedUser?._id && data.chatCreated.from._id === userId) ||
-        (data.chatCreated.to._id === userId && data.chatCreated.from._id === selectedUser?._id)
+        chatData &&
+        ((chatData.to._id === selectedUser?._id && chatData.from._id === userId) ||
+          (chatData.to._id === userId && chatData.from._id === selectedUser?._id))
       ) {
-        setMessages((prevMessages) => [...prevMessages, data.chatCreated]);
+        setMessages((prevMessages) => [...prevMessages, chatData]);
         if (chatEndRef.current) {
           chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
@@ -54,7 +57,7 @@ const ChatPopup = ({ currentUser, isDarkMode }) => {
     }
   }, [messages]);
 
-  // handle the messagesent
+  // handle the message sent
   const handleSendMessage = async () => {
     if (!text.trim()) {
       setErrorMessage('Please write a message first to send.');
@@ -92,27 +95,27 @@ const ChatPopup = ({ currentUser, isDarkMode }) => {
       {chatPopupOpen && (
         <div className={`flex flex-col h-86 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
           {!selectedUser ? (
-        <div className="flex-1 border-b border-gray-300 p-2 overflow-y-auto">
-        <h3 className="text-lg font-semibold mb-2">Players List</h3>
-        {profilesData?.profiles
-          .filter((user) => user._id !== userId)
-          .map((user) => (
-            <div
-              key={user._id}
-              className={`p-1 cursor-pointer hover:bg-gray-100 dark:hover:text-black flex items-center ${
-                selectedUser?._id === user._id ? 'bg-gray-200' : ''
-              }`}
-              onClick={() => setSelectedUser(user)}
-            >
-              <img
-                src={user.profilePic || ProfileAvatar}
-                alt="avatar"
-                className="w-8 h-8 rounded-full mr-2"
-              />
-              <span>{user.name}</span>
+            <div className="flex-1 border-b border-gray-300 p-2 overflow-y-auto">
+              <h3 className="text-lg font-semibold mb-2">Players List</h3>
+              {profilesData?.profiles
+                .filter((user) => user._id !== userId)
+                .map((user) => (
+                  <div
+                    key={user._id}
+                    className={`p-1 cursor-pointer hover:bg-gray-100 dark:hover:text-black flex items-center ${
+                      selectedUser?._id === user._id ? 'bg-gray-200' : ''
+                    }`}
+                    onClick={() => setSelectedUser(user)}
+                  >
+                    <img
+                      src={user.profilePic || ProfileAvatar}
+                      alt="avatar"
+                      className="w-8 h-8 rounded-full mr-2"
+                    />
+                    <span>{user.name}</span>
+                  </div>
+                ))}
             </div>
-          ))}
-      </div>
           ) : (
             <div className="flex-1 flex flex-col">
               <div className="flex justify-between font-semibold items-center p-2 border-b border-gray-300">
@@ -134,7 +137,7 @@ const ChatPopup = ({ currentUser, isDarkMode }) => {
                         className="w-8 h-8 rounded-full mr-2"
                       />
                     )}
-                    <div>
+                    <div className="flex flex-col max-w-xs">
                       <div
                         className={`inline-block p-2 rounded-lg ${
                           chat.from._id === userId ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'
@@ -150,7 +153,7 @@ const ChatPopup = ({ currentUser, isDarkMode }) => {
                       <img
                         src={currentUser.profilePic || ProfileAvatar}
                         alt="avatar"
-                        className="w-8 h-8 rounded-full "
+                        className="w-8 h-8 rounded-full ml-2"
                       />
                     )}
                   </div>
