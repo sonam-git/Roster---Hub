@@ -92,22 +92,27 @@ const ChatPopup = ({ currentUser, isDarkMode }) => {
       {chatPopupOpen && (
         <div className={`flex flex-col h-86 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
           {!selectedUser ? (
-            <div className="flex-1 border-b border-gray-300 p-2 overflow-y-auto">
-              <h3 className="text-lg font-semibold mb-2">Players List</h3>
-              {profilesData?.profiles
-                .filter((user) => user._id !== userId)
-                .map((user) => (
-                  <div
-                    key={user._id}
-                    className={`p-1 cursor-pointer hover:bg-gray-100 dark:hover:text-black ${
-                      selectedUser?._id === user._id ? 'bg-gray-200' : ''
-                    }`}
-                    onClick={() => setSelectedUser(user)}
-                  >
-                    {user.name}
-                  </div>
-                ))}
+        <div className="flex-1 border-b border-gray-300 p-2 overflow-y-auto">
+        <h3 className="text-lg font-semibold mb-2">Players List</h3>
+        {profilesData?.profiles
+          .filter((user) => user._id !== userId)
+          .map((user) => (
+            <div
+              key={user._id}
+              className={`p-1 cursor-pointer hover:bg-gray-100 dark:hover:text-black flex items-center ${
+                selectedUser?._id === user._id ? 'bg-gray-200' : ''
+              }`}
+              onClick={() => setSelectedUser(user)}
+            >
+              <img
+                src={user.profilePic || ProfileAvatar}
+                alt="avatar"
+                className="w-8 h-8 rounded-full mr-2"
+              />
+              <span>{user.name}</span>
             </div>
+          ))}
+      </div>
           ) : (
             <div className="flex-1 flex flex-col">
               <div className="flex justify-between font-semibold items-center p-2 border-b border-gray-300">
@@ -120,7 +125,7 @@ const ChatPopup = ({ currentUser, isDarkMode }) => {
                 {messages.map((chat) => (
                   <div
                     key={chat._id}
-                    className={`p-1 my-1 flex ${chat.from._id === userId ? 'justify-end' : 'justify-start'}`}
+                    className={`p-1 my-1 flex ${chat.from._id === userId ? 'justify-end ' : 'justify-start'}`}
                   >
                     {chat.from._id !== userId && (
                       <img
@@ -145,7 +150,7 @@ const ChatPopup = ({ currentUser, isDarkMode }) => {
                       <img
                         src={currentUser.profilePic || ProfileAvatar}
                         alt="avatar"
-                        className="w-8 h-8 rounded-full ml-2"
+                        className="w-8 h-8 rounded-full "
                       />
                     )}
                   </div>
