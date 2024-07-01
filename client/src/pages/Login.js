@@ -62,6 +62,7 @@ const Login = () => {
               <form onSubmit={handleFormSubmit} className="space-y-6">
                 <div>
                   <label
+                  aria-autocomplete="list"
                     htmlFor="email"
                     className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
                   >

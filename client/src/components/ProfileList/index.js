@@ -74,7 +74,7 @@ const ProfileList = ({ profiles, title }) => {
                 {/* Display star rating below jersey number */}
                 <div className="mt-2">
                   {renderStars(profile.averageRating)}
-                  <p className="text-sm">{profile.averageRating.toFixed(1)} / 5</p>
+                  <p className="text-sm font-bold">{profile.averageRating.toFixed(1)} / 5</p>
                 </div>
               </div>
               {/* Column 2: Image */}
@@ -93,12 +93,12 @@ const ProfileList = ({ profiles, title }) => {
                 className="flex items-center"
                 onClick={() => handleChatClick(profile)}
               >
-                <AiOutlineMessage className={`mr-2 text-2xl ${isDarkMode ? 'text-white' : 'text-black'}`} />
-                <span className='text-sm md:text-md lg:text-lg xl:text-xl'>{isDarkMode ? 'Chat' : 'Chat'}</span>
+                <AiOutlineMessage className={`mr-2 text-2xl ${isDarkMode ? 'text-white ' : 'text-black'}`} />
+                <span className='text-sm md:text-md lg:text-lg xl:text-xl'>{isDarkMode ? 'Text' : 'Text'}</span>
               </button>
               {/* Rate button */}
               <button
-                className="flex items-center"
+                className="flex items-center "
                 onClick={() => handleRatingClick(profile)}
               >
                 <AiFillStar className={`mr-2 text-2xl ${isDarkMode ? 'text-white' : 'text-black'}`} />
@@ -106,11 +106,11 @@ const ProfileList = ({ profiles, title }) => {
               </button>
               {/* Player info button */}
               <Link
-                className="flex items-center hover:no-underline "
+                className={`flex items-center   hover:underline-offset-4  ${isDarkMode ? 'text-white '  : 'text-black'} `}
                 to={`/profiles/${profile._id}`}
               >
-                <RiProfileLine className={`mr-2 text-2xl ${isDarkMode ? 'text-white' : 'text-black'}`} />
-                <span className={`mr-2 text-sm md:text-md lg:text-lg xl:text-xl ${isDarkMode ? 'text-white hover:text-blue-300' : 'text-black hover:text-blue-700'}`}>
+                <RiProfileLine className={`mr-2 text-2xl`} />
+                <span className={`mr-2 text-sm md:text-md lg:text-lg xl:text-xl `}>
                   {isDarkMode ? 'View Profile' : 'View Profile'}
                 </span>
               </Link>

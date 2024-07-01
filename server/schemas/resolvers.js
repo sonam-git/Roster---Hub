@@ -422,7 +422,6 @@ const resolvers = {
         await Profile.findByIdAndUpdate(recipientId, {
           $push: { receivedMessages: savedMessage._id },
         });
-
         return savedMessage;
       } catch (error) {
         console.error("Error sending message:", error);
