@@ -7,6 +7,7 @@ import { GET_POSTS } from "../../utils/queries";
 import Auth from "../../utils/auth";
 
 const CommentList = ({ post, comments }) => {
+  console.log('line 10',post)
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [commentText, setCommentText] = useState("");
   const [deleteSuccessMessage, setDeleteSuccessMessage] = useState("");
@@ -80,6 +81,7 @@ const CommentList = ({ post, comments }) => {
   };
 
   return (
+    
     <div className="mt-4 border-t pt-4">
       {deleteSuccessMessage && (
         <p className="text-red-500">{deleteSuccessMessage}</p>
@@ -117,8 +119,9 @@ const CommentList = ({ post, comments }) => {
               <>
                 <Link
                 className="flex items-center hover:no-underline dark:hover:text-white"
-                to={`/profiles/${post.userId}`}
+                to={`/profiles/${comment.userId}`}
               >
+               
                 <h4 className="text-sm font-semibold text-left">
                   {comment.commentAuthor}
                 </h4>

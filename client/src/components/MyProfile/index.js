@@ -44,7 +44,7 @@ const MyProfile = () => {
     <>
       <div
         className={`md:flex md:space-x-2 mb-6 md:mb-0 rounded-lg p-3 ${
-          isDarkMode ? "bg-gray-500 text-white" : "bg-blue-100 text-black"
+          isDarkMode ? "bg-gray-500 text-white" : "bg-gray-200 text-black"
         }`}
       >
         <div className={`md:w-2/5 md:mb-0 p-2 `}>

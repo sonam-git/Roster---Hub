@@ -29,6 +29,7 @@ const Post = ({ post }) => {
   const [likes, setLikes] = useState(post.likes);
   const [likedBy, setLikedBy] = useState(post.likedBy || []);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [removePost] = useMutation(REMOVE_POST, {
     refetchQueries: [{ query: GET_POSTS }],
@@ -78,6 +79,13 @@ const Post = ({ post }) => {
   };
 
   const handleAddComment = async () => {
+    if(!commentText){
+      setErrorMessage('Please write a comment.');
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 2000);
+      return;
+    }
     try {
       await addComment({ variables: { postId: post._id, commentText } });
       setIsCommenting(false);
@@ -221,6 +229,7 @@ const Post = ({ post }) => {
           )}
         </div>
       </div>
+       {errorMessage && <div className="text-red-500 p-2">{errorMessage}</div>}
       {isCommenting && (
         <div>
           <textarea

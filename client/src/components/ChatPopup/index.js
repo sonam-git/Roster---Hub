@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
-import { useQuery, useMutation, useSubscription } from "@apollo/client";
-import { QUERY_PROFILES, GET_CHAT_BY_USER } from "../../utils/queries";
-import { CREATE_CHAT } from "../../utils/mutations";
-import { CHAT_SUBSCRIPTION } from "../../utils/subscription";
-import ChatMessage from "../ChatMessage";
-import { FaPaperPlane } from "react-icons/fa";
+import React, { useState, useEffect, useRef } from 'react';
+import { useQuery, useMutation, useSubscription } from '@apollo/client';
+import { QUERY_PROFILES, GET_CHAT_BY_USER } from '../../utils/queries';
+import { CREATE_CHAT } from '../../utils/mutations';
+import { CHAT_SUBSCRIPTION } from '../../utils/subscription';
+import ChatMessage from '../ChatMessage';
+import { FaPaperPlane } from 'react-icons/fa';
 import ProfileAvatar from "../../assets/images/profile-avatar.png";
 
 const ChatPopup = ({ currentUser, isDarkMode }) => {
@@ -13,7 +12,8 @@ const ChatPopup = ({ currentUser, isDarkMode }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [text, setText] = useState("");
   const [messages, setMessages] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [notifications, setNotifications] = useState({});
+  const [errorMessage, setErrorMessage] = useState('');
   const chatEndRef = useRef(null);
 
   const userId = currentUser._id;
@@ -21,15 +21,18 @@ const ChatPopup = ({ currentUser, isDarkMode }) => {
 
   const { data: profilesData } = useQuery(QUERY_PROFILES);
 
-  const {
-    data: chatsData,
-    loading,
-    refetch,
-  } = useQuery(GET_CHAT_BY_USER, {
+  const { loading, refetch } = useQuery(GET_CHAT_BY_USER, {
     variables: { to: selectedUserId },
-    skip: !selectedUser,
+    skip: !selectedUserId,
     onCompleted: (data) => {
       setMessages(data.getChatByUser);
+      // Clear notifications when user is selected and messages are loaded
+      if (selectedUserId) {
+        setNotifications((prevNotifications) => ({
+          ...prevNotifications,
+          [selectedUserId]: 0,
+        }));
+      }
     },
   });
 
@@ -38,14 +41,16 @@ const ChatPopup = ({ currentUser, isDarkMode }) => {
   useSubscription(CHAT_SUBSCRIPTION, {
     onData: ({ data }) => {
       const chatData = data?.data?.chatCreated;
-      if (
-        chatData &&
-        ((chatData.to._id === selectedUserId && chatData.from._id === userId) ||
-          (chatData.to._id === userId && chatData.from._id === selectedUserId))
-      ) {
+      if (chatData && (chatData.to._id === userId || chatData.from._id === userId)) {
         setMessages((prevMessages) => [...prevMessages, chatData]);
         if (chatEndRef.current) {
-          chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+          chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+        if (chatData.from._id !== userId) {
+          setNotifications((prevNotifications) => ({
+            ...prevNotifications,
+            [chatData.from._id]: (prevNotifications[chatData.from._id] || 0) + 1,
+          }));
         }
       }
     },
@@ -53,15 +58,21 @@ const ChatPopup = ({ currentUser, isDarkMode }) => {
 
   useEffect(() => {
     if (chatEndRef.current) {
-      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages]);
 
+  useEffect(() => {
+    if (selectedUserId) {
+      refetch();
+    }
+  }, [selectedUserId, refetch]);
+
   const handleSendMessage = async () => {
     if (!text.trim()) {
-      setErrorMessage("Please write a message first to send.");
+      setErrorMessage('Please write a message first to send.');
       setTimeout(() => {
-        setErrorMessage("");
+        setErrorMessage('');
       }, 2000);
       return;
     }
@@ -74,32 +85,35 @@ const ChatPopup = ({ currentUser, isDarkMode }) => {
           content: text,
         },
       });
-      setText("");
-      setErrorMessage("");
+      setText('');
+      setErrorMessage('');
       refetch();
     } catch (error) {
-      console.error("Error sending message:", error.message);
+      console.error('Error sending message:', error.message);
     }
   };
+
+  const handleUserSelect = (user) => {
+    setSelectedUser(user);
+    setNotifications((prevNotifications) => ({
+      ...prevNotifications,
+      [user._id]: 0,
+    }));
+    // Immediately fetch the chat messages for the selected user
+    refetch({ to: user._id });
+  };
+
   return (
-    <div
-      className={`fixed bottom-0 right-2 w-80 bg-white border border-gray-300 rounded-t-lg shadow-lg`}
-    >
+    <div className={`fixed bottom-0 right-2 w-80 bg-white border border-gray-300 rounded-t-lg shadow-lg`}>
       <div
-        className={`font-semibold ${
-          isDarkMode ? "bg-gray-700 text-white" : "bg-blue-600 text-white"
-        } p-2 cursor-pointer rounded-t-lg flex justify-between items-center`}
+        className={`font-semibold ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-blue-600 text-white'} p-2 cursor-pointer rounded-t-lg flex justify-between items-center`}
         onClick={() => setChatPopupOpen(!chatPopupOpen)}
       >
         <span>Chat Box</span>
-        <span>{chatPopupOpen ? "▼" : "▲"}</span>
+        <span>{chatPopupOpen ? '▼' : '▲'}</span>
       </div>
       {chatPopupOpen && (
-        <div
-          className={`flex flex-col h-86 ${
-            isDarkMode ? "bg-gray-900 text-white" : "bg-white text-black"
-          }`}
-        >
+        <div className={`flex flex-col h-86 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
           {!selectedUser ? (
             <div className="flex-1 border-b border-gray-300 p-2 overflow-y-auto">
               <h3 className="text-lg font-semibold mb-2">Players List</h3>
@@ -109,9 +123,9 @@ const ChatPopup = ({ currentUser, isDarkMode }) => {
                   <div
                     key={user._id}
                     className={`p-1 cursor-pointer hover:bg-gray-100 dark:hover:text-black flex items-center ${
-                      selectedUser?._id === user._id ? "bg-gray-200" : ""
+                      selectedUser?._id === user._id ? 'bg-gray-200' : ''
                     }`}
-                    onClick={() => setSelectedUser(user)}
+                    onClick={() => handleUserSelect(user)}
                   >
                     <img
                       src={user.profilePic || ProfileAvatar}
@@ -119,6 +133,11 @@ const ChatPopup = ({ currentUser, isDarkMode }) => {
                       className="w-8 h-8 rounded-full mr-2"
                     />
                     <span>{user.name}</span>
+                    {notifications[user._id] > 0 && (
+                      <span className="ml-2 bg-red-500 text-white rounded-full px-2 text-xs">
+                        {notifications[user._id]}
+                      </span>
+                    )}
                   </div>
                 ))}
             </div>
@@ -130,44 +149,29 @@ const ChatPopup = ({ currentUser, isDarkMode }) => {
                   alt="avatar"
                   className="w-8 h-8 rounded-full mr-2"
                 />
-                <Link
-          className="flex items-center hover:no-underline hover:text-dark dark:hover:text-white"
-          to={`/profiles/${selectedUserId}`}
-        >
                 <span>{selectedUser.name}</span>
-                </Link>
-                <button
-                  className="text-red-500"
-                  onClick={() => setSelectedUser(null)}
-                >
+                <button className="text-red-500" onClick={() => setSelectedUser(null)}>
                   Close
                 </button>
               </div>
-              <ul
-                className="flex-1 overflow-y-auto p-2"
-                style={{ maxHeight: "300px" }}
-              >
+              <ul className="flex-1 overflow-y-auto p-2" style={{ maxHeight: '300px' }}>
                 {loading ? (
-                  <p>Loading chat</p>
+                  <p>Loading chat...</p>
                 ) : (
-                  messages?.map((chat) => (
-                    <li key={chat.id}>
-                      <ChatMessage
-                        chat={chat}
-                        userId={userId}
-                        selectedUserId={selectedUserId}
-                        currentUser={currentUser}
-                        isDarkMode={isDarkMode}
-                      />
-                    </li>
+                  messages.map((chat) => (
+                    <ChatMessage
+                      key={chat.id}
+                      chat={chat}
+                      userId={userId}
+                      selectedUserId={selectedUserId}
+                      currentUser={currentUser}
+                      isDarkMode={isDarkMode}
+                    />
                   ))
                 )}
                 <div ref={chatEndRef} />
               </ul>
-              {errorMessage && (
-                <div className="text-red-500 p-2">{errorMessage}</div>
-              )}
-
+              {errorMessage && <div className="text-red-500 p-2">{errorMessage}</div>}
               <div className="border-t border-gray-300 p-2 flex">
                 <textarea
                   value={text}
