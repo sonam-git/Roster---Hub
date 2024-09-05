@@ -37,6 +37,9 @@ npm install
 (or Navigate to the root folder and simply npm i )
 4. then npm run develop
 
+## The following animation demonstrates the application functionality:
+![Application Gif](./client/src/assets/videos/Roster-hub.gif)
+
 
 ## License & Copyright ©
 
