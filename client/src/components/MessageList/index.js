@@ -82,7 +82,7 @@ const MessageList = ({ messages, isLoggedInUser = false, isDarkMode }) => {
                     className="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-800 transition duration-300"
                     onClick={() => handleReply(message?.sender)}
                   >
-                    <FaReply />
+                     <FaReply />
                   </button>
                 )}
 

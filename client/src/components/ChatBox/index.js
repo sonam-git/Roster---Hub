@@ -68,7 +68,7 @@ const ChatBox = ({ recipient, onCloseModal, isDarkMode }) => {
           <Modal showModal={!messageSent} onClose={handleCloseModal}>
             <div className={`rounded-lg shadow-md p-6 ${isDarkMode ? 'bg-gray-200 text-white' : 'bg-white text-black'} `}>
               <h3 className="text-xl font-bold mb-4 card-header bg-dark text-light p-2 m-0 rounded-md">
-                Chat with{" "}
+                Send Message to {" "}
                 {recipient.name[0].toUpperCase() + recipient.name.slice(1)}
               </h3>
               {/* Container with fixed height and vertical scrolling */}
