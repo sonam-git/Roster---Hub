@@ -40,6 +40,8 @@ npm install
 ## The following animation demonstrates the application functionality:
 ![Application Gif](./client/src/assets/videos/Roster-hub.gif)
 
+## Deployed Heroku URl : (https://roster-hub-app-3c54f52bb1fb.herokuapp.com/)
+
 
 ## License & Copyright ©
 
