@@ -84,7 +84,7 @@ const Header = () => {
                   !open && "scale-0"
                 }`}
               >
-                RosterHub
+                RosterHub 
               </h1>
             </Link>
           </div>
