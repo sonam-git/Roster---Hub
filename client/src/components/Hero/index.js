@@ -23,7 +23,7 @@ const Hero = () => {
             <h4 className="text-center text-2xl font-bold text-gray-900 mb-6 dark:text-white">
               Create Your Profile.
             </h4>
-            <p className="text-sm sm:text-base text-justify">
+            <p className="text-sm">
             Our platform empowers team members to build comprehensive profiles, upload photos, 
             and update details such as positions, names, jersey numbers, and more. It facilitates 
             skill endorsements and star ratings among teammates. Additionally, users can engage in 

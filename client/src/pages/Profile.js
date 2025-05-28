@@ -46,7 +46,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="container mt-5">
+    <div className="container">
       {profileId ? (
         <UserProfile profile={profile} />
       ) : (

@@ -1,6 +1,5 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
-
 import Hero from "../components/Hero"; // Import your Hero component
 import { QUERY_ME } from "../utils/queries";
 import Auth from "../utils/auth"; // Import your Auth utility
@@ -8,7 +7,11 @@ import Welcome from "../components/Welcome";
 import PostsList from "../components/PostsList";
 import RecentSkillsList from "../components/RecentSkillsList";
 
+
+
+
 const Home = () => {
+
   const { loading, data } = useQuery(QUERY_ME);
   const profile = data?.me || [];
   
@@ -17,9 +20,10 @@ const Home = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
-  
+
+
   return (
-    <main className="container mx-auto p-4">
+    <main className="container mx-auto ">
       <div className="flex flex-col items-center">
         {/* Welcome component taking full width */}
         {isLoggedIn ? (

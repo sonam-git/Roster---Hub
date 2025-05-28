@@ -10,8 +10,12 @@ const ChatBox = ({ recipient, onCloseModal, isDarkMode }) => {
   const [messages, setMessages] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [messageSent, setMessageSent] = useState(false);
-  const [sendMessage] = useMutation(SEND_MESSAGE);
-
+  // const [sendMessage] = useMutation(SEND_MESSAGE);
+  const [sendMessage] = useMutation(SEND_MESSAGE, {
+    refetchQueries: [{ query: QUERY_ME }],
+    awaitRefetchQueries: true,
+  });
+  
   // Fetch all messages between current user and recipient
   const { loading, data } = useQuery(QUERY_ME);
 

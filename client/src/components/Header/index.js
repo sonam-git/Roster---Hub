@@ -51,6 +51,7 @@ const Header = () => {
         isDarkMode ? "bg-gray-800 text-white" : "bg-gray-200 text-black"
       }`}
     >
+  
       <div
         className={`fixed lg:static top-0 left-0 h-full p-5 pt-2 transition-all duration-300 z-50 ${
           open ? "w-55" : "hidden lg:block lg:w-28"
@@ -65,32 +66,33 @@ const Header = () => {
           alt="toggle menu"
         />
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <Link
-              to={"/"}
-              className="flex items-center w-full no-underline"
-              style={{ textDecoration: "none" }}
-            >
-              <img
-                src={isDarkMode ? darkLogo : lightLogo}
-                className={`dark:text-white cursor-pointer duration-500 w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 pt-5 ${
-                  open && "rotate-[360deg]"
-                }`}
-                alt="logo"
-              />
-              <h1
-                className={`dark:text-white origin-left mt-5 font-medium text-sm lg:text-2xl duration-200 ${
-                  !open && "scale-0"
-                }`}
-              >
-                RosterHub 
-              </h1>
-            </Link>
-          </div>
-        </div>
+<div className="hidden md:flex items-center justify-between">
+  <div className="flex items-center">
+    <Link
+      to={"/"}
+      className="flex items-center w-full no-underline"
+      style={{ textDecoration: "none" }}
+    >
+      <img
+        src={isDarkMode ? darkLogo : lightLogo}
+        className={`dark:text-white cursor-pointer duration-500 w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 pt-5 ${
+          open && "rotate-[360deg]"
+        }`}
+        alt="logo"
+      />
+      <h1
+        className={`dark:text-white origin-left mt-5 font-medium text-sm lg:text-2xl duration-200 ${
+          !open && "scale-0"
+        }`}
+      >
+        RosterHub
+      </h1>
+    </Link>
+  </div>
+</div>
 
-        <ul className="pt-6">
+
+        <ul className="pt-6 mt-8">
           <li
             className={`flex rounded-md p-2 cursor-pointer items-center gap-x-4 mt-2 ${
               isDarkMode ? "bg-gray-700 text-white" : "bg-gray-300 text-black"
@@ -169,14 +171,13 @@ const Header = () => {
       <div className="flex-1">
         <div></div>
         <button
-          className={`fixed justify-center top-2 left-4 lg:hidden p-2 rounded-md ${
-            isDarkMode ? "bg-gray-800 text-white" : "bg-gray-200 text-black"
-          } z-50`}
-          onClick={toggleMenu}
-        >
-          <FontAwesomeIcon icon={open ? faTimes : faBars} />
-        </button>
-
+  className={`fixed justify-center top-4 left-6 lg:hidden p-2 rounded-md border border-black ${
+    isDarkMode ? "bg-gray-200 text-black" : " text-black rounded-md border border-black"
+  } z-50`}
+  onClick={toggleMenu}
+>
+  <FontAwesomeIcon icon={open ? faTimes : faBars} className="text-2xl" /> 
+</button>
         <Outlet />
       </div>
     </div>

@@ -55,7 +55,7 @@ const ProfileList = ({ profiles, title }) => {
 
   return (
     <div className={`p-6 rounded-lg ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
-      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-center">{title}</h3>
+      <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-center">{title}</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
         {currentProfiles.map((profile) => (
           <div

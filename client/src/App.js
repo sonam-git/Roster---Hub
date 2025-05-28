@@ -28,6 +28,8 @@ import ChatPopup from './components/ChatPopup';
 import { useQuery } from "@apollo/client";
 import { QUERY_ME } from "./utils/queries"; 
 import Auth from "./utils/auth";
+import MainHeader from "./components/MainHeader";
+
 
 // Construct request middleware that will attach the JWT token to every request as an 'authorization' header
 const authLink = setContext((_, { headers }) => {
@@ -103,10 +105,12 @@ function AppContent() {
 }
 
 function App() {
+  
   return (
     <ApolloProvider client={client}>
       <ThemeProvider>
         <Router>
+          <MainHeader/>  
           <AppContent />
         </Router>
       </ThemeProvider>
