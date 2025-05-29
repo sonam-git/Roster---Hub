@@ -1,44 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { SEND_MESSAGE } from "../../utils/mutations";
 import Modal from "../Modal";
 import MessageSentModal from "../MessageSentModal";
 import { QUERY_ME } from "../../utils/queries";
 
-const ChatBox = ({ recipient, onCloseModal, isDarkMode }) => {
+const ChatBox = ({ recipient, selectedMessage, onCloseModal, isDarkMode }) => {
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [messageSent, setMessageSent] = useState(false);
-  // const [sendMessage] = useMutation(SEND_MESSAGE);
-  const [sendMessage] = useMutation(SEND_MESSAGE, {
-    refetchQueries: [{ query: QUERY_ME }],
-    awaitRefetchQueries: true,
-  });
-  
-  // Fetch all messages between current user and recipient
-  const { loading, data } = useQuery(QUERY_ME);
-
-  useEffect(() => {
-    if (!loading && data && data.me && data.me.receivedMessages && recipient) {
-      // Combine received and sent messages
-      const allMessages = [
-        ...data.me.receivedMessages,
-        ...data.me.sentMessages,
-      ];
-      // Filter messages to include only those between current user and recipient
-      const filteredMessages = allMessages.filter(
-        (msg) =>
-          msg.sender._id === recipient._id ||
-          msg.recipient._id === recipient._id
-      );
-      // Sort messages by createdAt timestamp in ascending order
-      const sortedMessages = filteredMessages.sort(
-        (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
-      );
-      setMessages(sortedMessages);
-    }
-  }, [loading, data, recipient]);
+  const [sendMessage] = useMutation(SEND_MESSAGE);
+  const { data } = useQuery(QUERY_ME);
 
   const handleSendMessage = async () => {
     if (message.trim() === "") return;
@@ -65,35 +37,56 @@ const ChatBox = ({ recipient, onCloseModal, isDarkMode }) => {
     onCloseModal();
   };
 
+  const isSender = selectedMessage?.sender?._id === data?.me?._id;
+
   return (
     recipient && (
       <>
         {!messageSent && (
-          <Modal showModal={!messageSent} onClose={handleCloseModal}>
-            <div className={`rounded-lg shadow-md p-6 ${isDarkMode ? 'bg-gray-200 text-white' : 'bg-white text-black'} `}>
+          <Modal showModal={true} onClose={handleCloseModal}>
+            <div
+              className={`rounded-lg shadow-md p-6 ${
+                isDarkMode ? "bg-gray-200 text-white" : "bg-white text-black"
+              } `}
+            >
               <h3 className="text-xl font-bold mb-4 card-header bg-dark text-light p-2 m-0 rounded-md">
-                Send Message to {" "}
-                {recipient.name[0].toUpperCase() + recipient.name.slice(1)}
+                {selectedMessage
+                  ? `Reply to ${recipient.name[0].toUpperCase() + recipient.name.slice(1)}`
+                  : `Message ${recipient.name[0].toUpperCase() + recipient.name.slice(1)}`}
               </h3>
-              {/* Container with fixed height and vertical scrolling */}
-              <div className={`conversation-container p-2 max-h-80 overflow-y-auto ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
-                {messages.map((msg, index) => (
-                  <div key={index} className="mb-2">
+
+              {/* Display original message if replying */}
+              {selectedMessage ? (
+                <div
+                  className={`conversation-container p-2 max-h-80 overflow-y-auto ${
+                    isDarkMode ? "bg-gray-800 text-white" : "bg-white text-black"
+                  }`}
+                >
+                  <div className="mb-2">
                     <p className="font-semibold">
-                      {msg?.sender && msg?.sender.name
-                        ? msg.sender.name[0].toUpperCase() +
-                          msg.sender.name.slice(1)
+                      {selectedMessage.sender?.name
+                        ? selectedMessage.sender.name[0].toUpperCase() +
+                          selectedMessage.sender.name.slice(1)
                         : "Sender"}
                     </p>
-                    <p className="bg-gray-500 rounded-md text-white p-2">
-                      {msg.text}
+                    <p
+                      className={`rounded-md text-white p-2 ${
+                        isSender ? "bg-blue-500" : "bg-gray-500"
+                      }`}
+                    >
+                      {selectedMessage.text}
                     </p>
                     <p className="text-sm text-gray-500">
-                      {msg.createdAt || ""}
+                      {selectedMessage.createdAt || ""}
                     </p>
                   </div>
-                ))}
-              </div>
+                </div>
+              ) : (
+                <p className="mb-4 text-sm italic">
+                  You're starting a new message to {recipient.name}.
+                </p>
+              )}
+
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}

@@ -1,3 +1,5 @@
+/* *************  Chat Related Component **********/
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useSubscription } from '@apollo/client';
 import { QUERY_PROFILES, GET_CHAT_BY_USER } from '../../utils/queries';
@@ -103,13 +105,28 @@ const ChatPopup = ({ currentUser, isDarkMode }) => {
     refetch({ to: user._id });
   };
 
+  // calculate chat count
+  const totalNotifications = Object.values(notifications).reduce(
+    (acc, count) => acc + count,
+    0
+  );
+  
+
   return (
     <div className={`fixed bottom-0 right-2 w-80 bg-white border border-gray-300 rounded-t-lg shadow-lg`}>
       <div
         className={`font-semibold ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-blue-600 text-white'} p-2 cursor-pointer rounded-t-lg flex justify-between items-center`}
         onClick={() => setChatPopupOpen(!chatPopupOpen)}
       >
-        <span>Chat Box</span>
+       <span className="flex items-center gap-2">
+  Chat Box
+  {totalNotifications > 0 && (
+    <span className="bg-red-500 text-white text-xs font-bold rounded-full px-2 py-0.5">
+      {totalNotifications}
+    </span>
+  )}
+</span>
+
         <span>{chatPopupOpen ? '▼' : '▲'}</span>
       </div>
       {chatPopupOpen && (

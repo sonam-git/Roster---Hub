@@ -46,18 +46,17 @@ const SkillForm = ({ profileId, teamMate }) => {
 
   return (
     <div className="rounded-md bg-gray-300 dark:bg-gray-900 p-5">
-      <h4 className="text-xl lg:text-xl xl:text-2xl font-bold mb-2 ml-3 p-2">
-        {profileId !== authProfileId
-          ? `Endorse ${teamMate}`
-          : "Endorse Yourself"}
-      </h4>
-
+   <h4 className="text-sm md:text-md lg:text-lg xl:text-xl font-bold mb-2 ml-3 p-2">
+  {profileId !== authProfileId
+    ? `Endorse ${teamMate}`
+    : "Endorse Yourself"}
+</h4>
       {Auth.loggedIn() ? (
         <form
           className="flex-row justify-center justify-space-between-md align-center"
           onSubmit={handleFormSubmit}
         >
-          <div className="col-12 col-lg-9">
+          <div className="col-12 col-lg-9 text-sm md:text-md lg:text-lg ">
             <input
               placeholder="Endorse Your Team - mates"
               value={skill}

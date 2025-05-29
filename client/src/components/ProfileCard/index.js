@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import ProfileAvatar from "../../assets/images/profile-avatar.png";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaPhone, FaRegCommentDots } from "react-icons/fa";
 import { RiTShirt2Line } from "react-icons/ri";
-import { FaPhone } from "react-icons/fa";
 import renderStars from "../../utils/renderStars";
+import ChatBox from "../MessageBox"; // Make sure this path is correct
 
 const ProfileCard = ({ profile, isDarkMode }) => {
-  // Function to render social media icons with links
+  const [showMessageModal, setShowMessageModal] = useState(false);
+
+  const handleMessageClick = () => {
+    setShowMessageModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowMessageModal(false);
+  };
+
   const renderSocialMediaIcons = () => {
     return profile.socialMediaLinks.map((socialMedia) => {
       let iconClassName = "";
@@ -68,40 +77,59 @@ const ProfileCard = ({ profile, isDarkMode }) => {
               className="rounded-full w-40 h-40 mx-auto mb-4"
             />
           </div>
+          
         </div>
+        
         <div className="py-10 px-6 grid grid-cols-1 gap-6">
           <div className="flex flex-col items-center">
             <h3
-              className={`text-sm md:text-md lg:text-lg xl:text-xl font-semibold ${
+              className={` md:text-md lg:text-lg xl:text-xl font-semibold ${
                 isDarkMode ? "text-white" : "text-black-700"
               }`}
             >
               {profile.name[0].toUpperCase() + profile.name.slice(1)}
             </h3>
+            <div className="flex items-center space-x-2 mb-2 ">
+  <span className="flex items-center space-x-1">
+    <button
+      onClick={handleMessageClick}
+      className={`flex items-center space-x-1 transition ${
+        isDarkMode
+          ? "text-white hover:text-indigo-300"
+          : "text-indigo-500 hover:text-indigo-700"
+      }`}
+      title="Message"
+    >
+      <FaRegCommentDots className="text-xl w-4 h-5" />
+      <span className="text-sm font-medium">Send Message</span>
+    </button>
+  </span>
+</div>
+
+
             <div
               className={`flex items-center space-x-4 p-4 shadow-lg rounded-md dark:bg-gray-800`}
             >
-              <div className="flex">
-                <p
-                  className={`font-semibold flex items-center ${
-                    isDarkMode ? "text-gray-300" : "text-gray-700"
-                  }`}
-                >
-                  <FaUser className="mr-2 text-xl inline mb-1" />
-                  {profile.position}
-                </p>
-                <p
-                  className={`font-semibold flex items-center ml-4 ${
-                    isDarkMode ? "text-gray-300" : "text-gray-700"
-                  }`}
-                >
-                  <RiTShirt2Line className="mr-2 text-2xl inline" />{" "}
-                  {profile.jerseyNumber}
-                </p>
-              </div>
+              <p
+                className={`font-semibold flex items-center text-sm ${
+                  isDarkMode ? "text-gray-300" : "text-gray-700"
+                }`}
+              >
+                <FaUser className="mr-2 text-xl inline mb-1" />
+                {profile.position}
+              </p>
+              <p
+                className={`font-semibold flex items-center ml-4 text-sm ${
+                  isDarkMode ? "text-gray-300" : "text-gray-700"
+                }`}
+              >
+                <RiTShirt2Line className="mr-2 text-2xl inline" />
+                {profile.jerseyNumber}
+              </p>
+        
             </div>
-            {/* Display star rating below position and jersey number */}
-         {renderStars(profile.averageRating)}
+
+            {renderStars(profile.averageRating)}
           </div>
 
           <div className="flex items-center justify-center space-x-4 py-3 px-4 dark:bg-gray-800 shadow-lg rounded-md">
@@ -112,9 +140,19 @@ const ProfileCard = ({ profile, isDarkMode }) => {
             >
               <FaPhone className="w-4 h-5" />
             </a>
+
           </div>
         </div>
       </div>
+
+      {/* Modal for Chat */}
+      {showMessageModal && (
+        <ChatBox
+          recipient={profile}
+          onCloseModal={handleCloseModal}
+          isDarkMode={isDarkMode}
+        />
+      )}
     </div>
   );
 };

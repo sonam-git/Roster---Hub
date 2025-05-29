@@ -1,4 +1,7 @@
 import React, { useContext } from "react";
+import { useQuery } from "@apollo/client";
+import { QUERY_ME } from "../../utils/queries";
+
 import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
 import Auth from "../../utils/auth";
 import { ThemeContext } from "../ThemeContext";
@@ -21,6 +24,9 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isDarkMode, toggleDarkMode } = useContext(ThemeContext);
+
+  const { data } = useQuery(QUERY_ME);
+  const messageCount = data?.me?.receivedMessages?.length || 0;
 
   const handleLogout = () => {
     Auth.logout();
@@ -51,7 +57,6 @@ const Header = () => {
         isDarkMode ? "bg-gray-800 text-white" : "bg-gray-200 text-black"
       }`}
     >
-  
       <div
         className={`fixed lg:static top-0 left-0 h-full p-5 pt-2 transition-all duration-300 z-50 ${
           open ? "w-55" : "hidden lg:block lg:w-28"
@@ -59,38 +64,37 @@ const Header = () => {
       >
         <img
           src={controlImage}
-          className={`hidden md:block absolute cursor-pointer right-3 mt-2 w-6 md:w-8 lg:w-10 border-dark-blue border-2 rounded-full bg-white transform transition-transform duration-300 ${
+          className={`hidden lg:block absolute cursor-pointer right-3 mt-2 w-6 md:w-8 lg:w-10 border-dark-blue border-2 rounded-full bg-white transform transition-transform duration-300 ${
             open ? "" : "rotate-180"
           }`}
           onClick={toggleMenu}
           alt="toggle menu"
         />
 
-<div className="hidden md:flex items-center justify-between">
-  <div className="flex items-center">
-    <Link
-      to={"/"}
-      className="flex items-center w-full no-underline"
-      style={{ textDecoration: "none" }}
-    >
-      <img
-        src={isDarkMode ? darkLogo : lightLogo}
-        className={`dark:text-white cursor-pointer duration-500 w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 pt-5 ${
-          open && "rotate-[360deg]"
-        }`}
-        alt="logo"
-      />
-      <h1
-        className={`dark:text-white origin-left mt-5 font-medium text-sm lg:text-2xl duration-200 ${
-          !open && "scale-0"
-        }`}
-      >
-        RosterHub
-      </h1>
-    </Link>
-  </div>
-</div>
-
+        <div className="hidden lg:flex items-center justify-between">
+          <div className="flex items-center">
+            <Link
+              to={"/"}
+              className="flex items-center w-full no-underline"
+              style={{ textDecoration: "none" }}
+            >
+              <img
+                src={isDarkMode ? darkLogo : lightLogo}
+                className={`dark:text-white cursor-pointer duration-500 w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 pt-5 ${
+                  open && "rotate-[360deg]"
+                }`}
+                alt="logo"
+              />
+              <h1
+                className={`dark:text-white origin-left mt-5 font-medium text-sm lg:text-2xl duration-200 ${
+                  !open && "scale-0"
+                }`}
+              >
+                RosterHub
+              </h1>
+            </Link>
+          </div>
+        </div>
 
         <ul className="pt-6 mt-8">
           <li
@@ -140,9 +144,14 @@ const Header = () => {
                     <span
                       className={`${
                         !open && "hidden"
-                      } origin-left duration-200 text-sm md:text-base lg:text-lg hover:text-red-600 dark:hover:text-red-400 `}
+                      } origin-left duration-200 text-sm md:text-base lg:text-lg flex items-center gap-2 hover:text-red-600 dark:hover:text-red-400`}
                     >
                       {Menu.title}
+                      {Menu.title === "Message" && (
+                        <span className="bg-red-600 text-white text-xs font-bold rounded-full px-2 py-0.5 ml-1">
+                          {messageCount}
+                        </span>
+                      )}
                     </span>
                   </div>
                 </Link>
@@ -171,13 +180,18 @@ const Header = () => {
       <div className="flex-1">
         <div></div>
         <button
-  className={`fixed justify-center top-4 left-6 lg:hidden p-2 rounded-md border border-black ${
-    isDarkMode ? "bg-gray-200 text-black" : " text-black rounded-md border border-black"
-  } z-50`}
-  onClick={toggleMenu}
->
-  <FontAwesomeIcon icon={open ? faTimes : faBars} className="text-2xl" /> 
-</button>
+          className={`fixed justify-center top-4 left-6 lg:hidden p-2 rounded-md border border-black ${
+            isDarkMode
+              ? "bg-gray-200 text-black"
+              : " text-black rounded-md border border-black"
+          } z-50`}
+          onClick={toggleMenu}
+        >
+          <FontAwesomeIcon
+            icon={open ? faTimes : faBars}
+            className="text-2xl"
+          />
+        </button>
         <Outlet />
       </div>
     </div>

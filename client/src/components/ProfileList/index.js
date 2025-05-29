@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import ChatBox from '../ChatBox';
+import ChatBox from '../MessageBox';
 import { AiOutlineMessage, AiFillStar } from 'react-icons/ai'; // Import the chat and star icons
 import { RiProfileLine, RiTShirt2Line } from 'react-icons/ri';
 import Auth from '../../utils/auth';
@@ -11,6 +11,7 @@ import renderStars from "../../utils/renderStars";
 
 const ProfileList = ({ profiles, title }) => {
   const { isDarkMode } = useContext(ThemeContext);
+  const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [ratingProfile, setRatingProfile] = useState(null); // State for rating modal
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,10 +19,12 @@ const ProfileList = ({ profiles, title }) => {
 
   const handleChatClick = (user) => {
     setSelectedUser(user);
+    setShowModal(true);
   };
 
   const handleModalClose = () => {
     setSelectedUser(null); // Reset selectedUser state when modal is closed
+    setShowModal(false);
   };
 
   const handleRatingClick = (profile) => {
@@ -137,7 +140,7 @@ const ProfileList = ({ profiles, title }) => {
         </button>
       </div>
       {/* Render the chat box if a user is selected */}
-      {selectedUser && (
+      {selectedUser &&  showModal && (
         <ChatBox recipient={selectedUser} onCloseModal={handleModalClose} isDarkMode={isDarkMode} />
       )}
       {/* Render the rating modal if a profile is selected for rating */}

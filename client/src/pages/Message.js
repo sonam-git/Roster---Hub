@@ -12,6 +12,7 @@ const Message = ({ isDarkMode }) => {
     profileId ? QUERY_SINGLE_PROFILE : QUERY_ME,
     {
       variables: { profileId: profileId },
+      pollInterval: profileId ? undefined : 5000, // Only poll for logged-in user's inbox
     }
   );
   if (loading) {
@@ -26,7 +27,7 @@ const Message = ({ isDarkMode }) => {
   return (
     <>
       {/* Message List */}
-      <div className="container mt-5  m,m">
+      <div className="container mt-5">
         <MessageList
           messages={profile?.receivedMessages || []}
           isLoggedInUser={!profileId && true}

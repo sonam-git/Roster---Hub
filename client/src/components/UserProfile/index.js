@@ -27,12 +27,12 @@ const UserProfile = ({ profile }) => {
           </button>
         </div>
         {showSkills ? (
-          <>
+        <div className={`flex flex-col min-h-[500px] p-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
             <SkillsList skills={profile.skills || []} isDarkMode={isDarkMode} profile={profile} />
             <div className={`mt-4 ${isDarkMode ? 'bg-gray-500' : 'bg-white'}`}>
               <SkillForm profileId={profile._id} teamMate={profile.name} />
             </div>
-          </>
+          </div>
         ) : (
           <PostsList profileId={profile._id} isDarkMode={isDarkMode}  /> 
         )}

@@ -2,11 +2,16 @@ import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { REMOVE_SKILL } from "../../utils/mutations";
 import { QUERY_ME } from "../../utils/queries";
-import { AiOutlineDelete } from 'react-icons/ai';
+import { AiOutlineDelete } from "react-icons/ai";
 
-const PAGE_SIZE = 6; // Number of skills per page (2 columns x 3 rows)
 
-const SkillsList = ({ profile, skills, isLoggedInUser = false, isDarkMode }) => {
+
+const SkillsList = ({
+  profile,
+  skills,
+  isLoggedInUser = false,
+  isDarkMode,
+}) => {
   const [removeSkill, { error }] = useMutation(REMOVE_SKILL, {
     update(cache, { data: { removeSkill } }) {
       try {
@@ -37,8 +42,14 @@ const SkillsList = ({ profile, skills, isLoggedInUser = false, isDarkMode }) => 
   };
 
   if (!skills.length) {
-    return <h3 className="text-center font-bold text-sm md:text-lg lg:text-xl xl:text-2xl">No endorsed Skill yet</h3>;
+    return (
+      <h3 className="text-center font-bold text-sm md:text-lg ">
+        No endorsed Skill yet
+      </h3>
+    );
   }
+  // Number of skills per page (2 columns x 2 rows = 4)
+  const PAGE_SIZE = 4;
 
   // Calculate total number of pages
   const totalPages = Math.ceil(skills.length / PAGE_SIZE);
@@ -50,7 +61,7 @@ const SkillsList = ({ profile, skills, isLoggedInUser = false, isDarkMode }) => 
   return (
     <>
       {!isLoggedInUser && (
-        <h2 className="text-center mt-4 mb-2 font-bold text-lg">
+        <h2 className="text-center mt-4 mb-2 font-bold text-sm lg:text-lg">
           {profile.name}'s friends have endorsed these{" "}
           {profile?.skills ? profile?.skills.length : 0} skill
           {profile?.skills && profile?.skills.length === 1 ? "" : "s"}
@@ -60,15 +71,31 @@ const SkillsList = ({ profile, skills, isLoggedInUser = false, isDarkMode }) => 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 my-4">
         {paginatedSkills?.map((skill) => (
           <div key={skill?._id} className="col-span-1">
-            <div className={`card mb-1 shadow-2xl rounded-md ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}>
+            <div
+              className={`card mb-1 shadow-2xl rounded-md ${
+                isDarkMode ? "bg-gray-700 text-white" : "bg-white text-black"
+              }`}
+            >
               <div className="card-header text-light p-2">
-                <div className={`mb-2 font-bold p-2 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
-                  <span>{skill?.skillText[0].toUpperCase() + skill?.skillText.slice(1)}</span>
+                <div
+                  className={`mb-2 font-bold p-2 ${
+                    isDarkMode
+                      ? "bg-gray-800 text-white"
+                      : "bg-white text-black"
+                  }`}
+                >
+                  <span>
+                    {skill?.skillText[0].toUpperCase() +
+                      skill?.skillText.slice(1)}
+                  </span>
                 </div>
                 <div className="flex justify-between text-gray-500">
                   <div>
-                    <span className="mr-1 text-xs">
-                      By : {skill?.skillAuthor[0].toUpperCase() + skill?.skillAuthor.slice(1)} on {skill?.createdAt}
+                    <span className={`mr-1 text-xs text-white `}>
+                      By :{" "}
+                      {skill?.skillAuthor[0].toUpperCase() +
+                        skill?.skillAuthor.slice(1)}{" "}
+                      on {skill?.createdAt}
                     </span>
                   </div>
                   {isLoggedInUser && (
@@ -94,7 +121,11 @@ const SkillsList = ({ profile, skills, isLoggedInUser = false, isDarkMode }) => 
         {Array.from({ length: totalPages }, (_, index) => (
           <button
             key={index + 1}
-            className={`px-3 py-1 mx-1 ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'} rounded`}
+            className={`px-3 py-1 mx-1 ${
+              currentPage === index + 1
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-700"
+            } rounded`}
             onClick={() => setCurrentPage(index + 1)}
           >
             {index + 1}

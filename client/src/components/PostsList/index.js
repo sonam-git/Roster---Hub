@@ -21,7 +21,7 @@ const PostsList = ({ profileId }) => {
   }
 
   if (!data || !data.posts || !data.posts.length) {
-    return <h3 className='text-xl font-bold'>No posts yet </h3>;
+    return <h3 className='text-sm lg:text-lg font-bold'>No posts yet </h3>;
   }
 
   const userPost = data.posts.filter(post => post.userId === profileId);
@@ -35,7 +35,7 @@ const PostsList = ({ profileId }) => {
     if (postsToDisplay.length === 0) {
       return (
         <div className="p-4 bg-gray-200 rounded-lg shadow-lg dark:bg-gray-800">
-          <h3 className="text-center font-bold text-sm md:text-lg lg:text-xl xl:text-2xl">
+          <h3 className="text-center font-bold text-sm md:text-lg lg:text-lg xl:text-2xl">
             No posts yet
           </h3>
         </div>
@@ -65,7 +65,7 @@ const PostsList = ({ profileId }) => {
           <button
             key={index + 1}
             className={`px-3 py-1 mx-1 ${
-              currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
+              currentPage === index + 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
             } rounded`}
             onClick={() => goToPage(index + 1)}
           >

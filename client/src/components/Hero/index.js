@@ -9,9 +9,9 @@ const Hero = () => {
   return (
     <main className="container min-h-screen flex items-center justify-center px-2">
       <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-7xl">
-        <div className="md:w-1/2 flex flex-col items-center text-center mb-10 md:mb-0">
-          <h1 className="text-5xl font-bold mb-2">Roster Hub</h1>
-          <p className="text-xl mb-8">Create your team's hub with us</p>
+        <div className="md:w-1/2 flex flex-col items-center text-center md:mb-0">
+          <h1 className="text-5xl font-bold pb-2">Roster Hub</h1>
+          <p className="text-xl mb-3">Create your team's hub with us</p>
           <img
             src={isDarkMode ? heroImage : heroImageDark}
             alt="Roster Hub Logo"
@@ -31,7 +31,7 @@ const Hero = () => {
             and collaboration.
             </p>
           </div>
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-center mt-2 mb-2">
             <Link
               className="bg-gray-800 border border-gray-300 hover:bg-gray-100 text-gray-300 hover:text-black font-bold py-2 px-4 sm:py-3 sm:px-6 rounded-xl mr-4 hover:no-underline"
               to="/login"

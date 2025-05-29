@@ -1,3 +1,5 @@
+/* *************  Chat Related Component **********/
+
 import React from "react";
 import ProfileAvatar from "../../assets/images/profile-avatar.png";
 
