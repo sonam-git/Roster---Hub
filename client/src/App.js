@@ -51,7 +51,9 @@ const httpLink = createHttpLink({
 
 // Construct WebSocket link for subscriptions
 const wsLink = new GraphQLWsLink(createClient({
-  url: `ws://localhost:3001/graphql`,
+  url: process.env.NODE_ENV === 'production'
+    ? `wss://https://roster-hub-app-3c54f52bb1fb.herokuapp.com/graphql`
+    : `ws://localhost:3001/graphql`,
 }));
 
 // Use split to send data to each link based on the type of operation

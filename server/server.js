@@ -67,7 +67,15 @@ const server = new ApolloServer({
 // Start the Apollo server
 const startApolloServer = async () => {
   await server.start();
-  server.applyMiddleware({ app });
+  server.applyMiddleware({
+    app,
+    path: '/graphql',
+    cors: {
+      origin: '*', // or specify your frontend's domain
+      credentials: true,
+    },
+  });
+  
 
   // Start the Express server
   db.once('open', () => {
