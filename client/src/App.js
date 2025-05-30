@@ -105,7 +105,7 @@ function AppContent() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/roster" element={<Roster />} />
-            <Route path="/message" element={<Message />} />
+            <Route path="/message" element={<Message isDarkMode={isDarkMode} />} />
             <Route path="/skill" element={<Skill />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />

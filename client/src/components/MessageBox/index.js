@@ -45,45 +45,47 @@ const ChatBox = ({ recipient, selectedMessage, onCloseModal, isDarkMode }) => {
         {!messageSent && (
           <Modal showModal={true} onClose={handleCloseModal}>
             <div
-              className={`rounded-lg shadow-md p-6 ${
-                isDarkMode ? "bg-gray-200 text-white" : "bg-white text-black"
-              } `}
+              className={`rounded-lg shadow-lg p-6 border ${
+                isDarkMode
+                  ? "bg-gray-800 text-white border-gray-700"
+                  : "bg-white text-gray-900 border-gray-300"
+              }`}
             >
-              <h3 className="text-xl font-bold mb-4 card-header bg-dark text-light p-2 m-0 rounded-md">
+              <h3
+                className={`text-lg md:text-xl font-bold mb-4 p-3 rounded-md ${
+                  isDarkMode ? "bg-gray-700 text-white" : "bg-gray-100 text-black"
+                }`}
+              >
                 {selectedMessage
                   ? `Reply to ${recipient.name[0].toUpperCase() + recipient.name.slice(1)}`
                   : `Message ${recipient.name[0].toUpperCase() + recipient.name.slice(1)}`}
               </h3>
 
-              {/* Display original message if replying */}
               {selectedMessage ? (
                 <div
-                  className={`conversation-container p-2 max-h-80 overflow-y-auto ${
-                    isDarkMode ? "bg-gray-800 text-white" : "bg-white text-black"
+                  className={`p-3 rounded-md mb-4 max-h-56 overflow-y-auto ${
+                    isDarkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-black"
                   }`}
                 >
-                  <div className="mb-2">
-                    <p className="font-semibold">
-                      {selectedMessage.sender?.name
-                        ? selectedMessage.sender.name[0].toUpperCase() +
-                          selectedMessage.sender.name.slice(1)
-                        : "Sender"}
+                  <div className="mb-3">
+                    <p className="font-semibold mb-1">
+                      {selectedMessage.sender?.name || "Sender"}
                     </p>
                     <p
-                      className={`rounded-md text-white p-2 ${
-                        isSender ? "bg-blue-500" : "bg-gray-500"
+                      className={`p-2 rounded-md text-sm ${
+                        isSender ? "bg-blue-500 text-white" : "bg-gray-500 text-white"
                       }`}
                     >
                       {selectedMessage.text}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-xs mt-1 text-gray-400">
                       {selectedMessage.createdAt || ""}
                     </p>
                   </div>
                 </div>
               ) : (
                 <p className="mb-4 text-sm italic">
-                  You're starting a new message to {recipient.name}.
+                  You’re starting a new message to {recipient.name}.
                 </p>
               )}
 
@@ -92,17 +94,26 @@ const ChatBox = ({ recipient, selectedMessage, onCloseModal, isDarkMode }) => {
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Type your message..."
                 rows={3}
-                className="text-dark w-full p-2 border border-gray-300 rounded-md mt-2 mb-4"
+                className={`w-full p-2 rounded-md border focus:outline-none mb-4 ${
+                  isDarkMode
+                    ? "bg-gray-700 text-white border-gray-600 placeholder-gray-400"
+                    : "bg-white text-black border-gray-300 placeholder-gray-500"
+                }`}
               />
-              <div className="flex justify-end">
+
+              <div className="flex justify-end gap-2">
                 <button
-                  className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-800 mr-2"
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md"
                   onClick={handleSendMessage}
                 >
                   Send
                 </button>
                 <button
-                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400"
+                  className={`px-4 py-2 rounded-md ${
+                    isDarkMode
+                      ? "bg-gray-600 hover:bg-gray-700 text-white"
+                      : "bg-gray-300 hover:bg-gray-400 text-black"
+                  }`}
                   onClick={handleCloseModal}
                 >
                   Cancel

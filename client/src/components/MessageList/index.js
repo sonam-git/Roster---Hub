@@ -9,6 +9,7 @@ import ChatBox from "../MessageBox";
 import UserListModal from "../UserListModal";
 
 const MessageList = ({ messages, isLoggedInUser = false, isDarkMode }) => {
+  
   const [removeMessage] = useMutation(REMOVE_MESSAGE, {
     update(cache, { data: { removeMessage } }) {
       try {

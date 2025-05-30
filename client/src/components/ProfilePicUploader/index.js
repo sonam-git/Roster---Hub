@@ -73,7 +73,7 @@ const ProfilePicUploader = ({ profileId, profilePicUrl ,isDarkMode}) => {
         <button
           type="button"
           onClick={handleSubmit}
-          className={`bg-transparent hover:bg-indigo-600 text-dark-800 font-semibold hover:text-dark py-2 ml-2 px-4 border border-indigo-500 hover:border-transparent rounded ${isDarkMode ? 'bg-gray-800' : 'bg-gray-300 hover:text-white'}`}
+          className={`text-[12px] bg-transparent hover:bg-indigo-600 text-dark-800 font-semibold hover:text-dark py-2 ml-2 px-4 border border-indigo-500 hover:border-transparent rounded ${isDarkMode ? 'bg-gray-800' : 'bg-gray-300 hover:text-white'}`}
           disabled={loading}
         >
           {profilePicUrl ? "Change Image" : "Upload"}

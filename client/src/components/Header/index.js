@@ -24,13 +24,13 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isDarkMode, toggleDarkMode } = useContext(ThemeContext);
-
+// calculate message count
   const { data } = useQuery(QUERY_ME);
-  const messageCount = data?.me?.receivedMessages?.length || 0;
+  const messageCount = data?.me?.receivedMessages?.length  || 0;
 
   const handleLogout = () => {
     Auth.logout();
-    navigate("/login");
+    navigate("/", { replace: true });
   };
 
   const Menus = Auth.loggedIn()
@@ -141,18 +141,18 @@ const Header = () => {
                       alt={Menu.title}
                       className="w-8 md:w-8 lg:w-10 mr-2 p-1 dark:hover:bg-white hover:bg-gray-800 rounded-full transition-all duration-300"
                     />
-                    <span
-                      className={`${
-                        !open && "hidden"
-                      } origin-left duration-200 text-sm md:text-base lg:text-lg flex items-center gap-2 hover:text-red-600 dark:hover:text-red-400`}
-                    >
-                      {Menu.title}
-                      {Menu.title === "Message" && (
-                        <span className="bg-red-600 text-white text-xs font-bold rounded-full px-2 py-0.5 ml-1">
-                          {messageCount}
-                        </span>
-                      )}
-                    </span>
+               <span
+  className={`${
+    !open && "hidden"
+  } origin-left duration-200 text-sm md:text-base lg:text-lg flex items-center gap-2 hover:text-red-600 dark:hover:text-red-400`}
+>
+  {Menu.title}
+  {Menu.title === "Message" && messageCount > 0 && (
+    <span className="bg-red-600 text-white text-xs font-bold rounded-full px-2 py-0.5 ml-1">
+      {messageCount}
+    </span>
+  )}
+</span>
                   </div>
                 </Link>
               ) : (

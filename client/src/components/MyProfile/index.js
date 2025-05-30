@@ -74,7 +74,7 @@ const MyProfile = () => {
               />
               <div className="flex flex-col items-center">
                 <h3
-                  className={`text-sm md:text-md lg:text-lg xl:text-xl font-semibold ${
+                  className={`text-[18px] md:text-md lg:text-lg xl:text-xl font-semibold ${
                     isDarkMode ? "text-white" : "text-black-700"
                   }`}
                 >
@@ -83,45 +83,48 @@ const MyProfile = () => {
                 {/* Display rating */}
                 {renderStars(me.averageRating)}
                 {/* Display position and jersey number as two columns */}
-                <div className="grid grid-cols-2 gap-4 mt-4 ml-8 ">
-                  {me?.position && (
-                    <div className="flex items-center">
-                      <FaUser
-                        className={`mr-2 mb-4 text-xl ${
-                          isDarkMode ? "text-gray-300" : "text-gray-700"
-                        }`}
-                      />
-                      <p
-                        className={`font-semibold ${
-                          isDarkMode ? "text-gray-300" : "text-gray-700"
-                        }`}
-                      >
-                        {me?.position}
-                      </p>
-                    </div>
-                  )}
-                  {me?.jerseyNumber && (
-                    <div className="flex items-center">
-                      <RiTShirt2Line
-                        className={`mr-2 mb-3 text-2xl ${
-                          isDarkMode ? "text-gray-300" : "text-gray-700"
-                        }`}
-                      />
-                      <p
-                        className={`font-semibold ${
-                          isDarkMode ? "text-gray-300" : "text-gray-700"
-                        }`}
-                      >
-                        {me?.jerseyNumber}
-                      </p>
-                    </div>
-                  )}
-                </div>
+                <div className="flex justify-center items-center gap-6 mt-4">
+  {me?.position && (
+    <div className="flex items-center">
+      <FaUser
+        className={`mr-2 text-xl ${
+          isDarkMode ? "text-gray-300" : "text-gray-700"
+        }`}
+      />
+      <p
+        className={`text-[12px] md:text-base font-semibold mt-3 ${
+          isDarkMode ? "text-gray-300" : "text-gray-700"
+        }`}
+      >
+        {me?.position}
+      </p>
+    </div>
+  )}
+  {me?.jerseyNumber && (
+    <div className="flex items-center">
+      <RiTShirt2Line
+        className={`mr-2 text-2xl ${
+          isDarkMode ? "text-gray-300" : "text-gray-700"
+        }`}
+      />
+      <p
+        className={`text-[12px] md:text-base font-semibold mt-3 ${
+          isDarkMode ? "text-gray-300" : "text-gray-700"
+        }`}
+      >
+        {me?.jerseyNumber}
+      </p>
+    </div>
+  )}
+</div>
+
               </div>
             </div>
-            <div className={`flex items-center justify-center p-4 shadow-lg rounded-md ${
-                    isDarkMode ? "bg-gray-800" : "bg-gray-200"
-                  }`}>
+            <div
+              className={`flex items-center justify-center p-4 shadow-lg rounded-md ${
+                isDarkMode ? "bg-gray-800" : "bg-gray-200"
+              }`}
+            >
               <div className="grid grid-cols-2 gap-4 sm:flex sm:space-x-4">
                 <span
                   className={`cursor-pointer mx-2 w-[40px] h-[40px] rounded-full flex items-center justify-center ${
