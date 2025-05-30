@@ -5,12 +5,13 @@ import {
   ApolloProvider,
   createHttpLink,
   split,
+  useQuery,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { getMainDefinition } from "@apollo/client/utilities";
-import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
-import { createClient } from 'graphql-ws';
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+import { createClient } from "graphql-ws";
 
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
@@ -24,18 +25,27 @@ import Skill from "./pages/Skill";
 import ForgotPassword from "./pages/ForgetPassword";
 import PasswordReset from "./pages/PasswordReset";
 import { ThemeProvider, ThemeContext } from "./components/ThemeContext";
-import ChatPopup from './components/ChatPopup';
-import { useQuery } from "@apollo/client";
-import { QUERY_ME } from "./utils/queries"; 
+import ChatPopup from "./components/ChatPopup";
+import { QUERY_ME } from "./utils/queries";
 import Auth from "./utils/auth";
 import MainHeader from "./components/MainHeader";
 
+// --- Apollo Setup ---
 
-// Construct request middleware that will attach the JWT token to every request as an 'authorization' header
+// Define HTTP and WebSocket URIs based on environment
+const httpUri =
+  process.env.NODE_ENV === "production"
+    ? "https://roster-hub-app-3c54f52bb1fb.herokuapp.com/graphql"
+    : "http://localhost:3001/graphql";
+
+const wsUri =
+  process.env.NODE_ENV === "production"
+    ? "wss://roster-hub-app-3c54f52bb1fb.herokuapp.com/graphql"
+    : "ws://localhost:3001/graphql";
+
+// Auth middleware for HTTP requests
 const authLink = setContext((_, { headers }) => {
-  // Getting token from local storage if exists
   const token = localStorage.getItem("id_token");
-  // Return the header to the context so httplink can read them
   return {
     headers: {
       ...headers,
@@ -44,35 +54,39 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-// Construct our main GraphQL API endpoint
-const httpLink = createHttpLink({
-  uri: "/graphql",
-});
+// HTTP Link
+const httpLink = createHttpLink({ uri: httpUri });
 
-// Construct WebSocket link for subscriptions
-const wsLink = new GraphQLWsLink(createClient({
-  url: process.env.NODE_ENV === 'production'
-    ? `wss://https://roster-hub-app-3c54f52bb1fb.herokuapp.com/graphql`
-    : `ws://localhost:3001/graphql`,
-}));
+// WebSocket Link for subscriptions
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: wsUri,
+    connectionParams: () => ({
+      authorization: `Bearer ${localStorage.getItem("id_token") || ""}`,
+    }),
+  })
+);
 
-// Use split to send data to each link based on the type of operation
+// Split Link to route queries/mutations vs subscriptions
 const splitLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query);
     return (
-      definition.kind === 'OperationDefinition' &&
-      definition.operation === 'subscription'
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
     );
   },
   wsLink,
-  authLink.concat(httpLink),
+  authLink.concat(httpLink)
 );
 
+// Apollo Client instance
 const client = new ApolloClient({
-  link: splitLink, 
+  link: splitLink,
   cache: new InMemoryCache(),
 });
+
+// --- App Content with Routing ---
 
 function AppContent() {
   const { isDarkMode } = useContext(ThemeContext);
@@ -82,7 +96,9 @@ function AppContent() {
   return (
     <>
       <div
-        className={`flex min-h-screen ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-300 text-black"}`}
+        className={`flex min-h-screen ${
+          isDarkMode ? "bg-gray-900 text-white" : "bg-gray-300 text-black"
+        }`}
       >
         <Header />
         <div className="flex-1 mt-10">
@@ -98,7 +114,9 @@ function AppContent() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<PasswordReset />} />
           </Routes>
-          {Auth.loggedIn() && currentUser && <ChatPopup currentUser={currentUser} isDarkMode={isDarkMode} />} 
+          {Auth.loggedIn() && currentUser && (
+            <ChatPopup currentUser={currentUser} isDarkMode={isDarkMode} />
+          )}
         </div>
       </div>
       <Footer />
@@ -106,13 +124,14 @@ function AppContent() {
   );
 }
 
+// --- Main App ---
+
 function App() {
-  
   return (
     <ApolloProvider client={client}>
       <ThemeProvider>
         <Router>
-          <MainHeader/>  
+          <MainHeader />
           <AppContent />
         </Router>
       </ThemeProvider>
