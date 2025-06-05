@@ -24,12 +24,10 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isDarkMode, toggleDarkMode } = useContext(ThemeContext);
-
   // calculate message count
   const { data } = useQuery(QUERY_ME);
   const messageCount = data?.me?.receivedMessages?.length || 0;
 
-  // handle logout
   const handleLogout = () => {
     navigate("/", {
       replace: true,
@@ -37,6 +35,7 @@ const Header = () => {
     });
     Auth.logout();
   };
+  
 
   const Menus = Auth.loggedIn()
     ? [
@@ -127,16 +126,12 @@ const Header = () => {
           {Menus.map((Menu, index) => (
             <li
               key={index}
-              className={`flex rounded-md p-2 cursor-pointer items-center gap-x-4 mt-2
-      ${
-        location.pathname === Menu.path
-          ? "bg-gray-800 text-white dark:bg-gray-600"
-          : " text-black  dark:text-white"
-      } // 
-      
-       
-    `}
-              onClick={Menu.action ? Menu.action : undefined}
+              className={`flex rounded-md p-2 cursor-pointer items-center gap-x-4 mt-2 ${
+                location.pathname === Menu.path
+                  ? "bg-gray-800 dark:bg-gray-100"
+                  : "text-gray-400 dark:text-gray-100"
+              }`}
+              onClick={Menu.action ? Menu.action : null}
             >
               {Menu.path ? (
                 <Link
@@ -148,12 +143,12 @@ const Header = () => {
                     <img
                       src={Menu.src}
                       alt={Menu.title}
-                      className="w-8 md:w-8 lg:w-10 mr-2 p-1  dark:hover:text-red hover:bg-gray-800 rounded-full transition-all duration-300"
+                      className="w-8 md:w-8 lg:w-10 mr-2 p-1 dark:hover:bg-white hover:bg-gray-800 rounded-full transition-all duration-300"
                     />
                     <span
                       className={`${
                         !open && "hidden"
-                      } origin-left duration-200 md:text-base lg:text-lg flex items-center gap-2 hover:text-red-600 dark:hover:text-red-400 dark:text-white text-lg font-bold`}
+                      } origin-left duration-200 text-sm md:text-base lg:text-lg flex items-center gap-2 hover:text-red-600 dark:hover:text-red-400`}
                     >
                       {Menu.title}
                       {Menu.title === "Message" && messageCount > 0 && (
@@ -170,20 +165,19 @@ const Header = () => {
                     <img
                       src={Menu.src}
                       alt={Menu.title}
-                      className="w-6 md:w-8 lg:w-10 mr-2 p-1 hover:bg-gray-800 rounded-full transition-all duration-300"
+                      className="w-6 md:w-8 lg:w-10 mr-2 p-1 hover:bg-gray-800 dark:hover:bg-white rounded-full transition-all duration-300"
                     />
-                    <span
-                      className={`${
-                        !open && "hidden"
-                      } origin-left duration-200 text-sm md:text-base lg:text-lg px-3 py-1 rounded 
-    ${
-      Menu.title === "Logout"
-        ? "bg-red-600 text-white hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
-        : "text-blue-500 hover:text-red-500"
-    }`}
-                    >
-                      {Menu.title}
-                    </span>
+                 <span
+  className={`${
+    !open && "hidden"
+  } origin-left duration-200 text-sm md:text-base lg:text-lg px-3 py-1 rounded 
+    ${Menu.title === "Logout" 
+      ? "bg-red-600 text-white hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600" 
+      : "text-blue-500 hover:text-red-500"}`}
+>
+  {Menu.title}
+</span>
+
                   </div>
                 </div>
               )}
